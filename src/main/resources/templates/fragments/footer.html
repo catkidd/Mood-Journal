@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="mood-footer mt-auto">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span style="font-size:1.2rem;">🌿</span>
+                <span class="fw-semibold">MoodJournal</span>
+            </div>
+            <p class="mb-0 text-center" style="font-size:0.85rem; opacity:0.85;">
+                Track your emotions, grow your mind &mdash; &copy; 2026
+            </p>
+            <div class="d-flex gap-3" style="font-size:0.85rem; opacity:0.85;">
+                <a th:href="@{/dashboard}" class="footer-link">Dashboard</a>
+                <a th:href="@{/entries/new}" class="footer-link">Add Entry</a>
+                <a th:href="@{/export}" class="footer-link">Export</a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
