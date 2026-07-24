@@ -7,7 +7,6 @@ WORKDIR /app
 
 # Copy dependency manifests first for better layer caching
 COPY pom.xml .
-COPY .mvn/ .mvn/
 # Download dependencies (cached unless pom.xml changes)
 RUN apk add --no-cache maven && \
     mvn dependency:go-offline -B
