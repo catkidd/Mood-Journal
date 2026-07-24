@@ -3,10 +3,14 @@ package com.moodjournal.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import jakarta.validation.constraints.Pattern;
+
 public class RegistrationForm {
 
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 50, message = "Username must be 3-50 characters")
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$",
+             message = "Username can only contain letters, numbers, underscores, and hyphens (no spaces)")
     private String username;
 
     @NotBlank(message = "Password is required")
