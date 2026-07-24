@@ -33,10 +33,13 @@
                     Good <span th:text="${greeting}">Day</span>,
                     <span sec:authentication="name" class="text-gradient">User</span>!
                 </h1>
-                <p class="text-muted mb-0">Here's your mood snapshot for today.</p>
+                <p class="text-muted mb-0" th:if="${hasTodaysEntry}">Here's your mood snapshot for today.</p>
+                <p class="text-muted mb-0" th:unless="${hasTodaysEntry}">You haven't logged today's mood yet. Your previous entries are safe! 👇</p>
             </div>
-            <a th:href="@{/entries/new}" class="btn btn-mood-primary btn-lg d-inline-flex align-items-center gap-2">
-                <i class="bi bi-plus-circle-fill"></i> Log Today's Mood
+            <a th:href="@{/entries/new}" class="btn btn-mood-primary btn-lg d-inline-flex align-items-center gap-2"
+               th:classappend="${!hasTodaysEntry} ? 'btn-pulse' : ''">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span th:text="${hasTodaysEntry} ? 'Log Another Entry' : 'Log Today\'s Mood'">Log Today's Mood</span>
             </a>
         </div>
 
@@ -59,7 +62,7 @@
                         </span>
                     </div>
                     <div class="stat-value" th:text="${todaysMood != null ? todaysMood : 'Not yet'}"></div>
-                    <div class="stat-label">Today's Mood</div>
+                    <div class="stat-label" th:text="${hasTodaysEntry} ? 'Today\'s Mood' : 'Not logged today'">Today's Mood</div>
                 </div>
             </div>
             <!-- Streak -->
@@ -114,6 +117,16 @@
                         <a th:href="@{/entries}" class="btn btn-sm btn-outline-custom">View All</a>
                     </div>
                     <div class="p-3">
+                        <!-- Prompt to log today's mood if not done yet -->
+                        <div th:if="${!hasTodaysEntry and !#lists.isEmpty(recentEntries)}"
+                             class="alert alert-info d-flex align-items-center gap-2 mb-3" role="alert">
+                            <i class="bi bi-bell-fill"></i>
+                            <div>
+                                <strong>Don't forget today!</strong>
+                                Your past entries are all here. Log today's mood to keep your streak going.
+                                <a th:href="@{/entries/new}" class="alert-link ms-1">Log now →</a>
+                            </div>
+                        </div>
                         <div th:if="${#lists.isEmpty(recentEntries)}" class="empty-state text-center py-4">
                             <div class="empty-icon">📔</div>
                             <p class="text-muted mt-2 mb-0">No entries yet. Start your journey!</p>

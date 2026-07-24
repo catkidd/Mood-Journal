@@ -37,10 +37,11 @@ public class DashboardController {
         model.addAttribute("greeting", greeting);
 
         // Today's mood
-        String todaysMood = journalEntryService.getTodaysEntry(user)
-                .map(e -> e.getMood())
-                .orElse(null);
+        var todaysEntry = journalEntryService.getTodaysEntry(user);
+        String todaysMood = todaysEntry.map(e -> e.getMood()).orElse(null);
+        boolean hasTodaysEntry = todaysEntry.isPresent();
         model.addAttribute("todaysMood", todaysMood);
+        model.addAttribute("hasTodaysEntry", hasTodaysEntry);
 
         // Streak
         int streak = journalEntryService.calculateStreak(user);

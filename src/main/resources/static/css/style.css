@@ -933,3 +933,14 @@ body {
 .input-group .form-control { border-radius: 10px 0 0 10px !important; }
 .input-group .btn          { border-radius: 0 10px 10px 0 !important; }
 .input-group-text          { border-radius: 0; border: 1.5px solid var(--border); }
+
+/* ============================================================
+   PULSE ANIMATION — "Log Today's Mood" CTA when no entry yet
+   ============================================================ */
+@keyframes mood-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(91, 143, 191, 0.55); }
+    50%       { box-shadow: 0 0 0 10px rgba(91, 143, 191, 0); }
+}
+.btn-pulse {
+    animation: mood-pulse 1.8s ease-in-out infinite;
+}
