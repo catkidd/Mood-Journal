@@ -21,6 +21,9 @@ public class User {
     @Column(length = 20)
     private String role = "USER";
 
+    @Column(unique = true, length = 255)
+    private String email;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
@@ -47,6 +50,9 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
     public List<JournalEntry> getJournalEntries() { return journalEntries; }
     public void setJournalEntries(List<JournalEntry> journalEntries) { this.journalEntries = journalEntries; }
