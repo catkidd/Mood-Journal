@@ -88,8 +88,8 @@ public class AuthController {
         try {
             passwordResetService.initiatePasswordReset(email.trim().toLowerCase());
         } catch (Exception e) {
-            // Log the technical error internally but surface a generic message
-            log.error("Error initiating password reset: {}", e.getMessage());
+            // Log the full exception so SMTP errors are visible in the server console
+            log.error("Error initiating password reset for email [{}]: {}", email, e.getMessage(), e);
         }
         // Always redirect with the same message — prevents user enumeration
         redirectAttributes.addFlashAttribute("successMessage",
