@@ -51,11 +51,14 @@ public class AuthController {
         if (!result.hasFieldErrors("username") && userService.usernameExists(form.getUsername())) {
             result.rejectValue("username", "error.form", "Username is already taken.");
         }
+        if (!result.hasFieldErrors("email") && userService.emailExists(form.getEmail())) {
+            result.rejectValue("email", "error.form", "An account with this email already exists.");
+        }
         if (result.hasErrors()) {
             return "auth/register";
         }
         try {
-            userService.register(form.getUsername(), form.getPassword());
+            userService.register(form.getUsername(), form.getEmail(), form.getPassword());
             redirectAttributes.addFlashAttribute("successMessage",
                     "Account created successfully! Please log in.");
             return "redirect:/login";

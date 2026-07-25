@@ -89,6 +89,17 @@
             icon.className = 'bi bi-eye';
         }
     }
+
+    // Auto-dismiss all alerts after 5 seconds with a smooth fade-out
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.alert').forEach(function (alert) {
+            setTimeout(function () {
+                alert.style.transition = 'opacity 0.6s ease';
+                alert.style.opacity = '0';
+                setTimeout(function () { alert.remove(); }, 650);
+            }, 5000);
+        });
+    });
 </script>
 </body>
 </html>

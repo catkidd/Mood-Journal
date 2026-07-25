@@ -33,12 +33,13 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public User register(String username, String rawPassword) {
+    public User register(String username, String email, String rawPassword) {
         if (userRepository.existsByUsername(username)) {
             throw new RuntimeException("Username '" + username + "' is already taken.");
         }
         User user = new User();
         user.setUsername(username);
+        user.setEmail(email.trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("USER");
         return userRepository.save(user);
@@ -53,5 +54,10 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public boolean usernameExists(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email.trim().toLowerCase()).isPresent();
     }
 }
