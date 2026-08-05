@@ -646,6 +646,14 @@ function runBreathPhase() {
     const subtextEl = document.getElementById('breathSubtext');
     if (subtextEl) subtextEl.textContent = currentPhase.text;
 
+    const card = document.querySelector('.breath-card-animated');
+    if (card) {
+        card.classList.remove('inhale-bg', 'hold-bg', 'exhale-bg');
+        if (currentPhase.class) {
+            card.classList.add(currentPhase.class + '-bg');
+        }
+    }
+
     const circle = document.getElementById('breathCircle');
     if (circle) {
         circle.style.transition = `transform ${currentPhase.duration}s cubic-bezier(0.4, 0, 0.2, 1), background 1.2s ease, box-shadow 1.2s ease`;

@@ -308,6 +308,100 @@
 .mem-stat .val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
 .mem-stat .lbl { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
 
+/* ── ANIMATED BREATHING CARD BACKGROUND & AMBIENT ORBS ───── */
+.breath-card-animated {
+    background: linear-gradient(135deg, #090d16 0%, #151b2e 40%, #1e1b4b 70%, #0d1322 100%) !important;
+    background-size: 300% 300% !important;
+    animation: zenCosmicFlow 16s ease-in-out infinite alternate;
+    position: relative;
+    overflow: hidden;
+    color: #ffffff;
+    border: 1px solid rgba(125,144,204,0.3) !important;
+    box-shadow: 0 12px 36px rgba(15,23,42,0.4) !important;
+}
+
+@keyframes zenCosmicFlow {
+    0%   { background-position: 0% 30%; }
+    50%  { background-position: 100% 70%; }
+    100% { background-position: 0% 30%; }
+}
+
+.breath-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(55px);
+    pointer-events: none;
+    opacity: 0.45;
+    transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.breath-bg-orb-1 {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, #5B8FBF 0%, rgba(91,143,191,0) 70%);
+    top: -60px;
+    left: -60px;
+    animation: floatOrb1 14s ease-in-out infinite alternate;
+}
+.breath-bg-orb-2 {
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, #9B7DB5 0%, rgba(155,125,181,0) 70%);
+    bottom: -90px;
+    right: -70px;
+    animation: floatOrb2 18s ease-in-out infinite alternate;
+}
+.breath-bg-orb-3 {
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, #7DBD7D 0%, rgba(125,189,125,0) 70%);
+    top: 35%;
+    right: 12%;
+    animation: floatOrb3 12s ease-in-out infinite alternate;
+}
+.breath-bg-orb-4 {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, #6366f1 0%, rgba(99,102,241,0) 70%);
+    bottom: 15%;
+    left: 8%;
+    animation: floatOrb4 16s ease-in-out infinite alternate;
+}
+
+@keyframes floatOrb1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(45px, 55px) scale(1.2); } }
+@keyframes floatOrb2 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-55px, -45px) scale(1.25); } }
+@keyframes floatOrb3 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-35px, 50px) scale(0.85); } }
+@keyframes floatOrb4 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40px, -35px) scale(1.18); } }
+
+/* Dynamic Phase Atmosphere Shift */
+.breath-card-animated.inhale-bg .breath-bg-orb-3 { opacity: 0.85; transform: scale(1.4); }
+.breath-card-animated.hold-bg   .breath-bg-orb-2 { opacity: 0.85; transform: scale(1.4); }
+.breath-card-animated.exhale-bg .breath-bg-orb-1 { opacity: 0.85; transform: scale(1.4); }
+
+.breath-card-header {
+    background: rgba(255,255,255,0.06) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.12) !important;
+}
+.breath-card-header h2 { color: #ffffff !important; }
+
+/* Subtext & Mode Pills in Dark Zen Background */
+.breath-subtext { color: #cbd5e1 !important; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+.breath-card-animated .breath-mode-btn {
+    background: rgba(255,255,255,0.1) !important;
+    color: #e2e8f0 !important;
+    border-color: rgba(255,255,255,0.2) !important;
+}
+.breath-card-animated .breath-mode-btn:hover {
+    background: rgba(255,255,255,0.2) !important;
+    color: #ffffff !important;
+    border-color: #5B8FBF !important;
+}
+.breath-card-animated .breath-mode-btn.active {
+    background: linear-gradient(135deg, #5B8FBF, #9B7DB5) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 16px rgba(91,143,191,0.4) !important;
+}
+
 /* ── ANIMATIC BREATHING EXERCISE STYLES ────────────────── */
 .breath-container {
     position: relative;
