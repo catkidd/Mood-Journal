@@ -98,6 +98,7 @@
             padding: 2px 9px;
             font-size: 0.72rem;
             font-weight: 700;
+            pointer-events: none;
         }
         .games-nav .nav-link:not(.active) .game-plays-badge {
             background: rgba(102,126,234,0.12);
@@ -372,23 +373,23 @@
             <!-- Left Column: Games -->
             <div class="col-lg-8">
                 <!-- Nav Tabs -->
-                <ul class="nav games-nav gap-2 mb-3" id="gameTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link active" id="snake-tab" onclick="window.switchGameTab('snake')">
+                <ul class="nav games-nav gap-2 mb-3" id="gameTabs">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link active" id="snake-tab" onclick="openTab('snake')">
                             🐍 Snake
                             <span class="game-plays-badge" id="snakePlaysPill"
                                   th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" id="tictactoe-tab" onclick="window.switchGameTab('tictactoe')">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" id="tictactoe-tab" onclick="openTab('tictactoe')">
                             ❌ Tic-Tac-Toe
                             <span class="game-plays-badge" id="tictactoePlaysPill"
                                   th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" id="memory-tab" onclick="window.switchGameTab('memory')">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" id="memory-tab" onclick="openTab('memory')">
                             🃏 Memory Match
                             <span class="game-plays-badge" id="memoryPlaysPill"
                                   th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
@@ -400,7 +401,7 @@
                 <div class="tab-content">
 
                     <!-- ════════════════════════════════════════════ SNAKE -->
-                    <div class="tab-pane fade show active" id="snake-pane" role="tabpanel">
+                    <div class="tab-pane active" id="snake-pane" style="display: block;">
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>🐍 Snake</h2>
@@ -414,7 +415,7 @@
                                 <div class="game-over-banner" id="snakeBanner"></div>
 
                                 <div class="game-controls mt-3">
-                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn" onclick="window.snakeStart()">
+                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn" onclick="snakeStart()">
                                         <i class="bi bi-play-fill me-1"></i>Start Game
                                     </button>
                                 </div>
@@ -422,13 +423,13 @@
                                 <!-- D-Pad Controls -->
                                 <div class="dpad mt-3">
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadUp" onclick="window.snakeChangeDir(0,-1)" title="Up"><i class="bi bi-arrow-up"></i></button>
+                                    <button type="button" id="dpadUp" onclick="snakeChangeDir(0,-1)" title="Up"><i class="bi bi-arrow-up"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadLeft" onclick="window.snakeChangeDir(-1,0)" title="Left"><i class="bi bi-arrow-left"></i></button>
+                                    <button type="button" id="dpadLeft" onclick="snakeChangeDir(-1,0)" title="Left"><i class="bi bi-arrow-left"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadRight" onclick="window.snakeChangeDir(1,0)" title="Right"><i class="bi bi-arrow-right"></i></button>
+                                    <button type="button" id="dpadRight" onclick="snakeChangeDir(1,0)" title="Right"><i class="bi bi-arrow-right"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadDown" onclick="window.snakeChangeDir(0,1)" title="Down"><i class="bi bi-arrow-down"></i></button>
+                                    <button type="button" id="dpadDown" onclick="snakeChangeDir(0,1)" title="Down"><i class="bi bi-arrow-down"></i></button>
                                     <div class="empty"></div>
                                 </div>
                             </div>
@@ -436,7 +437,7 @@
                     </div>
 
                     <!-- ════════════════════════════════════════════ TIC-TAC-TOE -->
-                    <div class="tab-pane fade" id="tictactoe-pane" role="tabpanel">
+                    <div class="tab-pane" id="tictactoe-pane" style="display: none;">
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>❌ Tic-Tac-Toe</h2>
@@ -459,18 +460,18 @@
                                 </div>
                                 <div class="ttt-status" id="tttStatus">Click any square to start!</div>
                                 <div class="ttt-board" id="tttBoard">
-                                    <div class="ttt-cell" id="ttt0" onclick="window.tttClick(0)"></div>
-                                    <div class="ttt-cell" id="ttt1" onclick="window.tttClick(1)"></div>
-                                    <div class="ttt-cell" id="ttt2" onclick="window.tttClick(2)"></div>
-                                    <div class="ttt-cell" id="ttt3" onclick="window.tttClick(3)"></div>
-                                    <div class="ttt-cell" id="ttt4" onclick="window.tttClick(4)"></div>
-                                    <div class="ttt-cell" id="ttt5" onclick="window.tttClick(5)"></div>
-                                    <div class="ttt-cell" id="ttt6" onclick="window.tttClick(6)"></div>
-                                    <div class="ttt-cell" id="ttt7" onclick="window.tttClick(7)"></div>
-                                    <div class="ttt-cell" id="ttt8" onclick="window.tttClick(8)"></div>
+                                    <div class="ttt-cell" id="ttt0" onclick="tttClick(0)"></div>
+                                    <div class="ttt-cell" id="ttt1" onclick="tttClick(1)"></div>
+                                    <div class="ttt-cell" id="ttt2" onclick="tttClick(2)"></div>
+                                    <div class="ttt-cell" id="ttt3" onclick="tttClick(3)"></div>
+                                    <div class="ttt-cell" id="ttt4" onclick="tttClick(4)"></div>
+                                    <div class="ttt-cell" id="ttt5" onclick="tttClick(5)"></div>
+                                    <div class="ttt-cell" id="ttt6" onclick="tttClick(6)"></div>
+                                    <div class="ttt-cell" id="ttt7" onclick="tttClick(7)"></div>
+                                    <div class="ttt-cell" id="ttt8" onclick="tttClick(8)"></div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-game-primary" id="tttResetBtn" onclick="window.tttReset()">
+                                    <button type="button" class="btn btn-game-primary" id="tttResetBtn" onclick="tttReset()">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -479,7 +480,7 @@
                     </div>
 
                     <!-- ════════════════════════════════════════════ MEMORY MATCH -->
-                    <div class="tab-pane fade" id="memory-pane" role="tabpanel">
+                    <div class="tab-pane" id="memory-pane" style="display: none;">
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>🃏 Memory Match</h2>
@@ -503,7 +504,7 @@
                                 <div class="memory-grid" id="memoryGrid"></div>
                                 <div class="game-over-banner game-over-win" id="memoryBanner"></div>
                                 <div class="text-center mt-3">
-                                    <button type="button" class="btn btn-game-primary" id="memoryResetBtn" onclick="window.memoryStart()">
+                                    <button type="button" class="btn btn-game-primary" id="memoryResetBtn" onclick="memoryStart()">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -613,45 +614,40 @@
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   GLOBAL FUNCTIONS ATTACHED TO WINDOW (Explicit Global Scope)
+   100% BULLETPROOF TAB SWITCHER
 ══════════════════════════════════════════════════════════════ */
-window.switchGameTab = function(gameKey) {
-    const snakeTab = document.getElementById('snake-tab');
-    const tttTab   = document.getElementById('tictactoe-tab');
-    const memTab   = document.getElementById('memory-tab');
+function openTab(tabName) {
+    const tabs = ['snake', 'tictactoe', 'memory'];
+    tabs.forEach(function(name) {
+        const btn  = document.getElementById(name + '-tab');
+        const pane = document.getElementById(name + '-pane');
 
-    const snakePane = document.getElementById('snake-pane');
-    const tttPane   = document.getElementById('tictactoe-pane');
-    const memPane   = document.getElementById('memory-pane');
-
-    [snakeTab, tttTab, memTab].forEach(btn => {
-        if (btn) {
-            btn.classList.remove('active');
-            btn.setAttribute('aria-selected', 'false');
+        if (name === tabName) {
+            if (btn) btn.classList.add('active');
+            if (pane) {
+                pane.style.display = 'block';
+                pane.classList.add('active', 'show');
+            }
+        } else {
+            if (btn) btn.classList.remove('active');
+            if (pane) {
+                pane.style.display = 'none';
+                pane.classList.remove('active', 'show');
+            }
         }
     });
 
-    [snakePane, tttPane, memPane].forEach(pane => {
-        if (pane) {
-            pane.classList.remove('show', 'active');
-        }
-    });
+    // Trigger game resets on tab open
+    if (tabName === 'snake' && window.initSnake) window.initSnake();
+    if (tabName === 'tictactoe' && window.tttReset) window.tttReset();
+    if (tabName === 'memory' && window.memoryStart) window.memoryStart();
+}
+window.openTab = openTab;
+window.switchGameTab = openTab;
 
-    if (gameKey === 'tictactoe') {
-        if (tttTab)  { tttTab.classList.add('active'); tttTab.setAttribute('aria-selected', 'true'); }
-        if (tttPane) { tttPane.classList.add('show', 'active'); }
-        if (window.tttReset) window.tttReset();
-    } else if (gameKey === 'memory') {
-        if (memTab)  { memTab.classList.add('active'); memTab.setAttribute('aria-selected', 'true'); }
-        if (memPane) { memPane.classList.add('show', 'active'); }
-        if (window.memoryStart) window.memoryStart();
-    } else {
-        if (snakeTab)  { snakeTab.classList.add('active'); snakeTab.setAttribute('aria-selected', 'true'); }
-        if (snakePane) { snakePane.classList.add('show', 'active'); }
-        if (window.initSnake) window.initSnake();
-    }
-};
-
+/* ══════════════════════════════════════════════════════════════
+   SHARED UTILITIES
+══════════════════════════════════════════════════════════════ */
 function getCsrfHeader() {
     const el = document.querySelector('meta[name="_csrf_header"]');
     return el ? el.getAttribute('content') : 'X-CSRF-TOKEN';
@@ -697,493 +693,450 @@ function showBadgeToast(name) {
 
 
 /* ══════════════════════════════════════════════════════════════
-   1. SNAKE GAME
+   SNAKE GAME
 ══════════════════════════════════════════════════════════════ */
-(function() {
-    const CELL = 20, COLS = 20, ROWS = 20;
-    let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
+const CELL = 20, COLS = 20, ROWS = 20;
+let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
 
-    function getHighScore() {
-        try { return parseInt(localStorage.getItem('snakeHigh') || '0'); }
-        catch (e) { return 0; }
+function getHighScore() {
+    try { return parseInt(localStorage.getItem('snakeHigh') || '0'); }
+    catch (e) { return 0; }
+}
+function setHighScore(val) {
+    try { localStorage.setItem('snakeHigh', val.toString()); }
+    catch (e) {}
+}
+
+function initSnake() {
+    canvas = document.getElementById('snakeCanvas');
+    if (!canvas) return;
+    ctx = canvas.getContext('2d');
+    canvas.width  = COLS * CELL;
+    canvas.height = ROWS * CELL;
+    highScore = getHighScore();
+    const scoreEl = document.getElementById('snakeHigh');
+    if (scoreEl) scoreEl.textContent = highScore;
+    drawIdle();
+}
+window.initSnake = initSnake;
+
+function drawIdle() {
+    if (!ctx) return;
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#a78bfa';
+    ctx.font = 'bold 24px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🐍 SNAKE GAME', canvas.width / 2, canvas.height / 2 - 20);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '16px Inter, sans-serif';
+    ctx.fillText('Click "Start Game" below to play!', canvas.width / 2, canvas.height / 2 + 15);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '13px Inter, sans-serif';
+    ctx.fillText('Controls: Arrow Keys, WASD, or D-Pad', canvas.width / 2, canvas.height / 2 + 45);
+}
+
+function snakeStart() {
+    initSnake();
+    if (loopTimer) clearInterval(loopTimer);
+
+    snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
+    dir     = {x:1, y:0};
+    nextDir = {x:1, y:0};
+    score   = 0;
+    running = true;
+
+    const scoreEl = document.getElementById('snakeScore');
+    if (scoreEl) scoreEl.textContent = '0';
+    const banner = document.getElementById('snakeBanner');
+    if (banner) banner.classList.remove('show');
+
+    placeFood();
+    draw();
+    loopTimer = setInterval(gameLoop, 120);
+
+    const btn = document.getElementById('snakeStartBtn');
+    if (btn) btn.innerHTML = '<i class="bi bi-arrow-counterclockwise me-1"></i>Restart Game';
+}
+window.snakeStart = snakeStart;
+
+function snakeChangeDir(x, y) {
+    if (!running) return;
+    if (x !== 0 && dir.x === 0) nextDir = {x, y};
+    if (y !== 0 && dir.y === 0) nextDir = {x, y};
+}
+window.snakeChangeDir = snakeChangeDir;
+
+function placeFood() {
+    let pos;
+    do {
+        pos = {x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS)};
+    } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+    food = pos;
+}
+
+function gameLoop() {
+    if (!running) return;
+    dir = nextDir;
+    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+
+    // Check wall collision
+    if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
+        endGame();
+        return;
     }
-    function setHighScore(val) {
-        try { localStorage.setItem('snakeHigh', val.toString()); }
-        catch (e) {}
+
+    // Check self collision
+    if (snake.some(s => s.x === head.x && s.y === head.y)) {
+        endGame();
+        return;
     }
 
-    window.initSnake = function() {
-        canvas = document.getElementById('snakeCanvas');
-        if (!canvas) return;
-        ctx = canvas.getContext('2d');
-        canvas.width  = COLS * CELL;
-        canvas.height = ROWS * CELL;
-        highScore = getHighScore();
-        const scoreEl = document.getElementById('snakeHigh');
-        if (scoreEl) scoreEl.textContent = highScore;
-        drawIdle();
-    };
+    snake.unshift(head);
 
-    function drawIdle() {
-        if (!ctx) return;
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = '#a78bfa';
-        ctx.font = 'bold 24px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('🐍 SNAKE GAME', canvas.width / 2, canvas.height / 2 - 20);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '16px Inter, sans-serif';
-        ctx.fillText('Click "Start Game" below to play!', canvas.width / 2, canvas.height / 2 + 15);
-
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '13px Inter, sans-serif';
-        ctx.fillText('Controls: Arrow Keys, WASD, or D-Pad', canvas.width / 2, canvas.height / 2 + 45);
-    }
-
-    window.snakeStart = function() {
-        window.initSnake();
-        if (loopTimer) clearInterval(loopTimer);
-
-        snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
-        dir     = {x:1, y:0};
-        nextDir = {x:1, y:0};
-        score   = 0;
-        running = true;
-
+    // Check food collision
+    if (food && head.x === food.x && head.y === food.y) {
+        score++;
         const scoreEl = document.getElementById('snakeScore');
-        if (scoreEl) scoreEl.textContent = '0';
-        const banner = document.getElementById('snakeBanner');
-        if (banner) banner.classList.remove('show');
-
+        if (scoreEl) scoreEl.textContent = score;
         placeFood();
-        draw();
-        loopTimer = setInterval(gameLoop, 120);
-
-        const btn = document.getElementById('snakeStartBtn');
-        if (btn) btn.innerHTML = '<i class="bi bi-arrow-counterclockwise me-1"></i>Restart Game';
-    };
-
-    window.snakeChangeDir = function(x, y) {
-        if (!running) return;
-        if (x !== 0 && dir.x === 0) nextDir = {x, y};
-        if (y !== 0 && dir.y === 0) nextDir = {x, y};
-    };
-
-    function placeFood() {
-        let pos;
-        do {
-            pos = {x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS)};
-        } while (snake.some(s => s.x === pos.x && s.y === pos.y));
-        food = pos;
+    } else {
+        snake.pop();
     }
 
-    function gameLoop() {
-        if (!running) return;
-        dir = nextDir;
-        const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+    draw();
+}
 
-        // Check wall collision
-        if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
-            endGame();
-            return;
+function draw() {
+    if (!ctx) return;
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    for (let x = 0; x < COLS; x++) {
+        for (let y = 0; y < ROWS; y++) {
+            ctx.fillRect(x * CELL + CELL / 2 - 1, y * CELL + CELL / 2 - 1, 2, 2);
         }
-
-        // Check self collision
-        if (snake.some(s => s.x === head.x && s.y === head.y)) {
-            endGame();
-            return;
-        }
-
-        snake.unshift(head);
-
-        // Check food collision
-        if (food && head.x === food.x && head.y === food.y) {
-            score++;
-            const scoreEl = document.getElementById('snakeScore');
-            if (scoreEl) scoreEl.textContent = score;
-            placeFood();
-        } else {
-            snake.pop();
-        }
-
-        draw();
     }
 
-    function draw() {
-        if (!ctx) return;
-        // Background
-        ctx.fillStyle = '#1a1a2e';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (food) {
+        ctx.fillStyle = '#f093fb';
+        ctx.beginPath();
+        ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
 
-        // Grid
-        ctx.fillStyle = 'rgba(255,255,255,0.05)';
-        for (let x = 0; x < COLS; x++) {
-            for (let y = 0; y < ROWS; y++) {
-                ctx.fillRect(x * CELL + CELL / 2 - 1, y * CELL + CELL / 2 - 1, 2, 2);
+    snake.forEach((s, i) => {
+        ctx.fillStyle = (i === 0) ? '#a78bfa' : '#667eea';
+        ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
+    });
+}
+
+function endGame() {
+    if (loopTimer) clearInterval(loopTimer);
+    running = false;
+
+    if (score > highScore) {
+        highScore = score;
+        setHighScore(highScore);
+        const highEl = document.getElementById('snakeHigh');
+        if (highEl) highEl.textContent = highScore;
+    }
+
+    const banner = document.getElementById('snakeBanner');
+    if (banner) {
+        banner.className = 'game-over-banner game-over-loss show';
+        banner.textContent = `💀 Game Over! Score: ${score}`;
+    }
+    recordPlay('snake');
+}
+
+document.addEventListener('keydown', function(e) {
+    const keyMap = {
+        ArrowUp: {x:0, y:-1}, KeyW: {x:0, y:-1},
+        ArrowDown: {x:0, y:1}, KeyS: {x:0, y:1},
+        ArrowLeft: {x:-1, y:0}, KeyA: {x:-1, y:0},
+        ArrowRight: {x:1, y:0}, KeyD: {x:1, y:0}
+    };
+    if (keyMap[e.code] && running) {
+        e.preventDefault();
+        snakeChangeDir(keyMap[e.code].x, keyMap[e.code].y);
+    }
+});
+
+
+/* ══════════════════════════════════════════════════════════════
+   TIC-TAC-TOE GAME
+══════════════════════════════════════════════════════════════ */
+let board = Array(9).fill(''), gameActive = true, isAiThinking = false;
+let wins = 0, draws = 0, losses = 0;
+const WIN_LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+function checkWinner(b) {
+    for (const [a, c, d] of WIN_LINES) {
+        if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a];
+    }
+    return b.includes('') ? null : 'draw';
+}
+
+function minimax(b, isMax) {
+    const result = checkWinner(b);
+    if (result === 'O') return 10;
+    if (result === 'X') return -10;
+    if (result === 'draw') return 0;
+
+    let best = isMax ? -Infinity : Infinity;
+    for (let i = 0; i < 9; i++) {
+        if (!b[i]) {
+            b[i] = isMax ? 'O' : 'X';
+            const val = minimax(b, !isMax);
+            b[i] = '';
+            best = isMax ? Math.max(best, val) : Math.min(best, val);
+        }
+    }
+    return best;
+}
+
+function getBestMove(b) {
+    let bestScore = -Infinity, move = -1;
+    for (let i = 0; i < 9; i++) {
+        if (!b[i]) {
+            b[i] = 'O';
+            const score = minimax(b, false);
+            b[i] = '';
+            if (score > bestScore) {
+                bestScore = score;
+                move = i;
             }
         }
+    }
+    return move;
+}
 
-        // Food
-        if (food) {
-            ctx.fillStyle = '#f093fb';
-            ctx.beginPath();
-            ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
-            ctx.fill();
-        }
+function tttClick(i) {
+    if (!gameActive || isAiThinking || board[i] !== '') return;
 
-        // Snake
-        snake.forEach((s, i) => {
-            ctx.fillStyle = (i === 0) ? '#a78bfa' : '#667eea';
-            ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
-        });
+    board[i] = 'X';
+    renderBoard();
+
+    const result = checkWinner(board);
+    if (result) {
+        endTTT(result);
+        return;
     }
 
-    function endGame() {
-        if (loopTimer) clearInterval(loopTimer);
-        running = false;
+    isAiThinking = true;
+    const statusEl = document.getElementById('tttStatus');
+    if (statusEl) statusEl.textContent = '🤖 AI is thinking...';
 
-        if (score > highScore) {
-            highScore = score;
-            setHighScore(highScore);
-            const highEl = document.getElementById('snakeHigh');
-            if (highEl) highEl.textContent = highScore;
+    setTimeout(() => {
+        const aiMove = getBestMove(board);
+        if (aiMove >= 0) {
+            board[aiMove] = 'O';
+            renderBoard();
+            const aiResult = checkWinner(board);
+            if (aiResult) {
+                endTTT(aiResult);
+            } else if (statusEl) {
+                statusEl.textContent = 'Your turn (X)!';
+            }
         }
+        isAiThinking = false;
+    }, 280);
+}
+window.tttClick = tttClick;
 
-        const banner = document.getElementById('snakeBanner');
-        if (banner) {
-            banner.className = 'game-over-banner game-over-loss show';
-            banner.textContent = `💀 Game Over! Score: ${score}`;
-        }
-        recordPlay('snake');
-    }
+function renderBoard() {
+    board.forEach((v, i) => {
+        const cell = document.getElementById('ttt' + i);
+        if (!cell) return;
 
-    document.addEventListener('keydown', e => {
-        const keyMap = {
-            ArrowUp: {x:0, y:-1}, KeyW: {x:0, y:-1},
-            ArrowDown: {x:0, y:1}, KeyS: {x:0, y:1},
-            ArrowLeft: {x:-1, y:0}, KeyA: {x:-1, y:0},
-            ArrowRight: {x:1, y:0}, KeyD: {x:1, y:0}
-        };
-        if (keyMap[e.code] && running) {
-            e.preventDefault();
-            window.snakeChangeDir(keyMap[e.code].x, keyMap[e.code].y);
+        cell.textContent = v;
+        if (v === 'X') {
+            cell.className = 'ttt-cell taken x-cell';
+        } else if (v === 'O') {
+            cell.className = 'ttt-cell taken o-cell';
+        } else {
+            cell.className = 'ttt-cell';
         }
     });
-})();
+}
 
+function endTTT(result) {
+    gameActive = false;
+    isAiThinking = false;
+    let statusMsg = '';
 
-/* ══════════════════════════════════════════════════════════════
-   2. TIC-TAC-TOE GAME
-══════════════════════════════════════════════════════════════ */
-(function() {
-    let board = Array(9).fill(''), gameActive = true, isAiThinking = false;
-    let wins = 0, draws = 0, losses = 0;
-    const WIN_LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-
-    function checkWinner(b) {
-        for (const [a, c, d] of WIN_LINES) {
-            if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a];
-        }
-        return b.includes('') ? null : 'draw';
+    if (result === 'X') {
+        wins++;
+        statusMsg = '🎉 You Win!';
+        highlightWinner('X');
+        recordPlay('tictactoe');
+    } else if (result === 'O') {
+        losses++;
+        statusMsg = '🤖 AI Wins!';
+        highlightWinner('O');
+        recordPlay('tictactoe');
+    } else {
+        draws++;
+        statusMsg = '🤝 It\'s a Draw!';
+        recordPlay('tictactoe');
     }
 
-    function minimax(b, isMax) {
-        const result = checkWinner(b);
-        if (result === 'O') return 10;
-        if (result === 'X') return -10;
-        if (result === 'draw') return 0;
+    const statusEl = document.getElementById('tttStatus');
+    if (statusEl) statusEl.textContent = statusMsg;
+    const winsEl = document.getElementById('tttWins');
+    if (winsEl) winsEl.textContent = wins;
+    const drawsEl = document.getElementById('tttDraws');
+    if (drawsEl) drawsEl.textContent = draws;
+    const lossesEl = document.getElementById('tttLosses');
+    if (lossesEl) lossesEl.textContent = losses;
+}
 
-        let best = isMax ? -Infinity : Infinity;
-        for (let i = 0; i < 9; i++) {
-            if (!b[i]) {
-                b[i] = isMax ? 'O' : 'X';
-                const val = minimax(b, !isMax);
-                b[i] = '';
-                best = isMax ? Math.max(best, val) : Math.min(best, val);
-            }
+function highlightWinner(mark) {
+    for (const [a, b, c] of WIN_LINES) {
+        if (board[a] === mark && board[b] === mark && board[c] === mark) {
+            [a, b, c].forEach(idx => {
+                const cell = document.getElementById('ttt' + idx);
+                if (cell) cell.classList.add('winner');
+            });
+            break;
         }
-        return best;
-    }
-
-    function getBestMove(b) {
-        let bestScore = -Infinity, move = -1;
-        for (let i = 0; i < 9; i++) {
-            if (!b[i]) {
-                b[i] = 'O';
-                const score = minimax(b, false);
-                b[i] = '';
-                if (score > bestScore) {
-                    bestScore = score;
-                    move = i;
-                }
-            }
-        }
-        return move;
-    }
-
-    window.tttClick = function(i) {
-        if (!gameActive || isAiThinking || board[i] !== '') return;
-
-        board[i] = 'X';
-        renderBoard();
-
-        const result = checkWinner(board);
-        if (result) {
-            endTTT(result);
-            return;
-        }
-
-        // AI turn
-        isAiThinking = true;
-        const statusEl = document.getElementById('tttStatus');
-        if (statusEl) statusEl.textContent = '🤖 AI is thinking...';
-
-        setTimeout(() => {
-            const aiMove = getBestMove(board);
-            if (aiMove >= 0) {
-                board[aiMove] = 'O';
-                renderBoard();
-                const aiResult = checkWinner(board);
-                if (aiResult) {
-                    endTTT(aiResult);
-                } else if (statusEl) {
-                    statusEl.textContent = 'Your turn (X)!';
-                }
-            }
-            isAiThinking = false;
-        }, 280);
-    };
-
-    function renderBoard() {
-        board.forEach((v, i) => {
-            const cell = document.getElementById('ttt' + i);
-            if (!cell) return;
-
-            cell.textContent = v;
-            if (v === 'X') {
-                cell.className = 'ttt-cell taken x-cell';
-            } else if (v === 'O') {
-                cell.className = 'ttt-cell taken o-cell';
-            } else {
-                cell.className = 'ttt-cell';
-            }
-        });
-    }
-
-    function endTTT(result) {
-        gameActive = false;
-        isAiThinking = false;
-        let statusMsg = '';
-
-        if (result === 'X') {
-            wins++;
-            statusMsg = '🎉 You Win!';
-            highlightWinner('X');
-            recordPlay('tictactoe');
-        } else if (result === 'O') {
-            losses++;
-            statusMsg = '🤖 AI Wins!';
-            highlightWinner('O');
-            recordPlay('tictactoe');
-        } else {
-            draws++;
-            statusMsg = '🤝 It\'s a Draw!';
-            recordPlay('tictactoe');
-        }
-
-        const statusEl = document.getElementById('tttStatus');
-        if (statusEl) statusEl.textContent = statusMsg;
-        const winsEl = document.getElementById('tttWins');
-        if (winsEl) winsEl.textContent = wins;
-        const drawsEl = document.getElementById('tttDraws');
-        if (drawsEl) drawsEl.textContent = draws;
-        const lossesEl = document.getElementById('tttLosses');
-        if (lossesEl) lossesEl.textContent = losses;
-    }
-
-    function highlightWinner(mark) {
-        for (const [a, b, c] of WIN_LINES) {
-            if (board[a] === mark && board[b] === mark && board[c] === mark) {
-                [a, b, c].forEach(idx => {
-                    const cell = document.getElementById('ttt' + idx);
-                    if (cell) cell.classList.add('winner');
-                });
-                break;
-            }
-        }
-    }
-
-    window.tttReset = function() {
-        board = Array(9).fill('');
-        gameActive = true;
-        isAiThinking = false;
-        const statusEl = document.getElementById('tttStatus');
-        if (statusEl) statusEl.textContent = 'Click any square to start!';
-        renderBoard();
-    };
-})();
-
-
-/* ══════════════════════════════════════════════════════════════
-   3. MEMORY MATCH GAME
-══════════════════════════════════════════════════════════════ */
-(function() {
-    const EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎'];
-    let cards = [], flipped = [], matchedCount = 0, moves = 0, timer = null, elapsed = 0;
-
-    window.memoryStart = function() {
-        if (timer) clearInterval(timer);
-        moves = 0; matchedCount = 0; elapsed = 0; flipped = [];
-
-        const movesEl   = document.getElementById('memMoves');
-        const matchedEl = document.getElementById('memMatched');
-        const timeEl    = document.getElementById('memTime');
-
-        if (movesEl)   movesEl.textContent   = '0';
-        if (matchedEl) matchedEl.textContent = '0';
-        if (timeEl)    timeEl.textContent    = '0s';
-
-        const banner = document.getElementById('memoryBanner');
-        if (banner) banner.classList.remove('show');
-
-        cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
-
-        const grid = document.getElementById('memoryGrid');
-        if (!grid) return;
-
-        grid.innerHTML = '';
-        cards.forEach((emoji, i) => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'mem-card';
-            btn.dataset.index = i.toString();
-            btn.innerHTML = `
-                <div class="card-face card-back">❓</div>
-                <div class="card-face card-front">${emoji}</div>
-            `;
-            btn.onclick = () => memFlip(i);
-            grid.appendChild(btn);
-        });
-
-        timer = setInterval(() => {
-            elapsed++;
-            const tEl = document.getElementById('memTime');
-            if (tEl) tEl.textContent = elapsed + 's';
-        }, 1000);
-    };
-
-    function memFlip(i) {
-        const card = document.querySelector(`.mem-card[data-index="${i}"]`);
-        if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length >= 2) {
-            return;
-        }
-
-        card.classList.add('flipped');
-        flipped.push(i);
-
-        if (flipped.length === 2) {
-            moves++;
-            const movesEl = document.getElementById('memMoves');
-            if (movesEl) movesEl.textContent = moves;
-            const [a, b] = flipped;
-
-            if (cards[a] === cards[b]) {
-                setTimeout(() => {
-                    [a, b].forEach(idx => {
-                        const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
-                        if (el) el.classList.add('matched');
-                    });
-                    matchedCount++;
-                    const matchedEl = document.getElementById('memMatched');
-                    if (matchedEl) matchedEl.textContent = matchedCount;
-                    flipped = [];
-
-                    if (matchedCount === EMOJIS.length) {
-                        clearInterval(timer);
-                        const banner = document.getElementById('memoryBanner');
-                        if (banner) {
-                            banner.className = 'game-over-banner game-over-win show';
-                            banner.textContent = `🎉 Solved in ${moves} moves and ${elapsed} seconds!`;
-                        }
-                        recordPlay('memory');
-                    }
-                }, 380);
-            } else {
-                setTimeout(() => {
-                    [a, b].forEach(idx => {
-                        const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
-                        if (el) el.classList.remove('flipped');
-                    });
-                    flipped = [];
-                }, 850);
-            }
-        }
-    }
-})();
-
-
-/* ══════════════════════════════════════════════════════════════
-   BOOT SEQUENCE & BINDINGS
-══════════════════════════════════════════════════════════════ */
-function bootGamesHub() {
-    // 1. Tab Listeners
-    const snakeTab = document.getElementById('snake-tab');
-    const tttTab   = document.getElementById('tictactoe-tab');
-    const memTab   = document.getElementById('memory-tab');
-
-    if (snakeTab) snakeTab.addEventListener('click', () => window.switchGameTab('snake'));
-    if (tttTab)   tttTab.addEventListener('click',   () => window.switchGameTab('tictactoe'));
-    if (memTab)   memTab.addEventListener('click',   () => window.switchGameTab('memory'));
-
-    // 2. Snake Buttons & D-Pad
-    const snakeStartBtn = document.getElementById('snakeStartBtn');
-    if (snakeStartBtn) snakeStartBtn.addEventListener('click', () => window.snakeStart());
-
-    const dpadUp    = document.getElementById('dpadUp');
-    const dpadDown  = document.getElementById('dpadDown');
-    const dpadLeft  = document.getElementById('dpadLeft');
-    const dpadRight = document.getElementById('dpadRight');
-
-    if (dpadUp)    dpadUp.addEventListener('click',    () => window.snakeChangeDir(0, -1));
-    if (dpadDown)  dpadDown.addEventListener('click',  () => window.snakeChangeDir(0, 1));
-    if (dpadLeft)  dpadLeft.addEventListener('click',  () => window.snakeChangeDir(-1, 0));
-    if (dpadRight) dpadRight.addEventListener('click', () => window.snakeChangeDir(1, 0));
-
-    // 3. Tic-Tac-Toe cells & Reset button
-    for (let i = 0; i < 9; i++) {
-        const cell = document.getElementById('ttt' + i);
-        if (cell) {
-            cell.addEventListener('click', () => window.tttClick(i));
-        }
-    }
-    const tttResetBtn = document.getElementById('tttResetBtn');
-    if (tttResetBtn) tttResetBtn.addEventListener('click', () => window.tttReset());
-
-    // 4. Memory Match Reset button
-    const memResetBtn = document.getElementById('memoryResetBtn');
-    if (memResetBtn) memResetBtn.addEventListener('click', () => window.memoryStart());
-
-    // 5. Initialize game canvases/boards
-    if (window.initSnake)   window.initSnake();
-    if (window.tttReset)    window.tttReset();
-    if (window.memoryStart) window.memoryStart();
-
-    // 6. Check URL highlight parameter
-    const dataEl = document.getElementById('gameHighlightData');
-    const highlight = (dataEl && dataEl.dataset) ? dataEl.dataset.highlight : '';
-    if (highlight) {
-        window.switchGameTab(highlight.toLowerCase());
     }
 }
 
-// Run boot sequence
+function tttReset() {
+    board = Array(9).fill('');
+    gameActive = true;
+    isAiThinking = false;
+    const statusEl = document.getElementById('tttStatus');
+    if (statusEl) statusEl.textContent = 'Click any square to start!';
+    renderBoard();
+}
+window.tttReset = tttReset;
+
+
+/* ══════════════════════════════════════════════════════════════
+   MEMORY MATCH GAME
+══════════════════════════════════════════════════════════════ */
+const EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎'];
+let cards = [], flipped = [], matchedCount = 0, moves = 0, timer = null, elapsed = 0;
+
+function memoryStart() {
+    if (timer) clearInterval(timer);
+    moves = 0; matchedCount = 0; elapsed = 0; flipped = [];
+
+    const movesEl   = document.getElementById('memMoves');
+    const matchedEl = document.getElementById('memMatched');
+    const timeEl    = document.getElementById('memTime');
+
+    if (movesEl)   movesEl.textContent   = '0';
+    if (matchedEl) matchedEl.textContent = '0';
+    if (timeEl)    timeEl.textContent    = '0s';
+
+    const banner = document.getElementById('memoryBanner');
+    if (banner) banner.classList.remove('show');
+
+    cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
+
+    const grid = document.getElementById('memoryGrid');
+    if (!grid) return;
+
+    grid.innerHTML = '';
+    cards.forEach((emoji, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mem-card';
+        btn.dataset.index = i.toString();
+        btn.innerHTML = `
+            <div class="card-face card-back">❓</div>
+            <div class="card-face card-front">${emoji}</div>
+        `;
+        btn.onclick = () => memFlip(i);
+        grid.appendChild(btn);
+    });
+
+    timer = setInterval(() => {
+        elapsed++;
+        const tEl = document.getElementById('memTime');
+        if (tEl) tEl.textContent = elapsed + 's';
+    }, 1000);
+}
+window.memoryStart = memoryStart;
+
+function memFlip(i) {
+    const card = document.querySelector(`.mem-card[data-index="${i}"]`);
+    if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length >= 2) {
+        return;
+    }
+
+    card.classList.add('flipped');
+    flipped.push(i);
+
+    if (flipped.length === 2) {
+        moves++;
+        const movesEl = document.getElementById('memMoves');
+        if (movesEl) movesEl.textContent = moves;
+        const [a, b] = flipped;
+
+        if (cards[a] === cards[b]) {
+            setTimeout(() => {
+                [a, b].forEach(idx => {
+                    const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
+                    if (el) el.classList.add('matched');
+                });
+                matchedCount++;
+                const matchedEl = document.getElementById('memMatched');
+                if (matchedEl) matchedEl.textContent = matchedCount;
+                flipped = [];
+
+                if (matchedCount === EMOJIS.length) {
+                    clearInterval(timer);
+                    const banner = document.getElementById('memoryBanner');
+                    if (banner) {
+                        banner.className = 'game-over-banner game-over-win show';
+                        banner.textContent = `🎉 Solved in ${moves} moves and ${elapsed} seconds!`;
+                    }
+                    recordPlay('memory');
+                }
+            }, 380);
+        } else {
+            setTimeout(() => {
+                [a, b].forEach(idx => {
+                    const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
+                    if (el) el.classList.remove('flipped');
+                });
+                flipped = [];
+            }, 850);
+        }
+    }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   BOOT INITIALIZATION
+══════════════════════════════════════════════════════════════ */
+function boot() {
+    initSnake();
+    tttReset();
+    memoryStart();
+
+    const dataEl = document.getElementById('gameHighlightData');
+    const highlight = (dataEl && dataEl.dataset) ? dataEl.dataset.highlight : '';
+    if (highlight) {
+        openTab(highlight.toLowerCase());
+    } else {
+        openTab('snake');
+    }
+}
+
 if (document.readyState !== 'loading') {
-    bootGamesHub();
+    boot();
 } else {
-    document.addEventListener('DOMContentLoaded', bootGamesHub);
+    document.addEventListener('DOMContentLoaded', boot);
 }
 </script>
 </body>
