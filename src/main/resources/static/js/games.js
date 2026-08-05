@@ -397,11 +397,27 @@ function tttReset() {
 window.tttReset = tttReset;
 
 /* ── 5. Memory Match Engine ─────────────────────────────────── */
-const EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎'];
-let cards = [], flipped = [], matchedCount = 0, moves = 0, timer = null, elapsed = 0;
+const ALL_EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎','🎯','🎨','🍦','🦄','🔥','⭐','🥑','🎧','🐼','🔮'];
+let memoryDifficulty = '4x4';
+let cards = [], flipped = [], matchedCount = 0, moves = 0, timer = null, elapsed = 0, timerStarted = false;
+
+function setMemoryDifficulty(diff) {
+    memoryDifficulty = diff;
+    ['4x4', '4x5', '6x6'].forEach(d => {
+        const btn = document.getElementById('btnMem' + d);
+        if (btn) {
+            if (d === diff) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
+    memoryStart();
+}
+window.setMemoryDifficulty = setMemoryDifficulty;
 
 function memoryStart() {
     if (timer) clearInterval(timer);
+    timer = null;
+    timerStarted = false;
     moves = 0; matchedCount = 0; elapsed = 0; flipped = [];
 
     const movesEl   = document.getElementById('memMoves');
@@ -415,12 +431,19 @@ function memoryStart() {
     const banner = document.getElementById('memoryBanner');
     if (banner) banner.classList.remove('show');
 
-    cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
+    let pairCount = 8;
+    if (memoryDifficulty === '4x5') pairCount = 10;
+    if (memoryDifficulty === '6x6') pairCount = 18;
+
+    const selected = ALL_EMOJIS.slice(0, pairCount);
+    cards = [...selected, ...selected].sort(() => Math.random() - 0.5);
 
     const grid = document.getElementById('memoryGrid');
     if (!grid) return;
 
+    grid.className = 'memory-grid grid-' + memoryDifficulty;
     grid.innerHTML = '';
+
     cards.forEach((emoji, i) => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -433,12 +456,6 @@ function memoryStart() {
         btn.onclick = () => memFlip(i);
         grid.appendChild(btn);
     });
-
-    timer = setInterval(() => {
-        elapsed++;
-        const tEl = document.getElementById('memTime');
-        if (tEl) tEl.textContent = elapsed + 's';
-    }, 1000);
 }
 window.memoryStart = memoryStart;
 
@@ -446,6 +463,17 @@ function memFlip(i) {
     const card = document.querySelector(`.mem-card[data-index="${i}"]`);
     if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length >= 2) {
         return;
+    }
+
+    // Start timer on the very first card click
+    if (!timerStarted) {
+        timerStarted = true;
+        if (timer) clearInterval(timer);
+        timer = setInterval(() => {
+            elapsed++;
+            const tEl = document.getElementById('memTime');
+            if (tEl) tEl.textContent = elapsed + 's';
+        }, 1000);
     }
 
     card.classList.add('flipped');
@@ -468,8 +496,9 @@ function memFlip(i) {
                 if (matchedEl) matchedEl.textContent = matchedCount;
                 flipped = [];
 
-                if (matchedCount === EMOJIS.length) {
-                    clearInterval(timer);
+                const totalPairs = cards.length / 2;
+                if (matchedCount === totalPairs) {
+                    if (timer) clearInterval(timer);
                     const banner = document.getElementById('memoryBanner');
                     if (banner) {
                         banner.className = 'game-over-banner game-over-win show';

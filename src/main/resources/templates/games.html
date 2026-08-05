@@ -157,6 +157,19 @@
                                 <span class="text-muted" style="font-size:0.85rem;">Find all 8 matching emoji pairs!</span>
                             </div>
                             <div class="game-body">
+                                <!-- Grid Difficulty Selector -->
+                                <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+                                    <button type="button" class="breath-mode-btn active" id="btnMem4x4" onclick="setMemoryDifficulty('4x4')">
+                                        ⚡ Easy (4x4)
+                                    </button>
+                                    <button type="button" class="breath-mode-btn" id="btnMem4x5" onclick="setMemoryDifficulty('4x5')">
+                                        🧠 Medium (4x5)
+                                    </button>
+                                    <button type="button" class="breath-mode-btn" id="btnMem6x6" onclick="setMemoryDifficulty('6x6')">
+                                        🔥 Hard (6x6)
+                                    </button>
+                                </div>
+
                                 <div class="memory-stats">
                                     <div class="mem-stat">
                                         <div class="val" id="memMoves">0</div>

@@ -239,12 +239,16 @@
 /* ── MEMORY MATCH ─────────────────────────────────────────────── */
 .memory-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    max-width: 400px;
+    gap: 10px;
     margin: 0 auto 1.25rem;
     perspective: 1000px;
 }
+.memory-grid.grid-4x4 { grid-template-columns: repeat(4, 1fr); max-width: 420px; }
+.memory-grid.grid-4x5 { grid-template-columns: repeat(5, 1fr); max-width: 500px; }
+.memory-grid.grid-6x6 { grid-template-columns: repeat(6, 1fr); max-width: 580px; }
+
+.memory-grid.grid-6x6 .mem-card .card-front { font-size: 1.5rem; }
+.memory-grid.grid-6x6 .mem-card .card-back  { font-size: 1.2rem; }
 .mem-card {
     aspect-ratio: 1;
     border-radius: 14px;
