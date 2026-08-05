@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+
     <!-- CSRF token for AJAX calls -->
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
@@ -21,7 +22,7 @@
         .games-hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             border-radius: 20px;
-            padding: 2.5rem 2rem;
+            padding: 2.2rem 2rem;
             color: #fff;
             margin-bottom: 2rem;
             position: relative;
@@ -33,11 +34,11 @@
             right: 2rem;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 6rem;
+            font-size: 5.5rem;
             opacity: 0.18;
         }
-        .games-hero h1 { font-weight: 800; font-size: 2rem; margin-bottom: 0.4rem; }
-        .games-hero p  { opacity: 0.9; margin: 0; }
+        .games-hero h1 { font-weight: 800; font-size: 2rem; margin-bottom: 0.3rem; }
+        .games-hero p  { opacity: 0.92; margin: 0; font-size: 1rem; }
 
         /* Badge progress */
         .badge-progress-card {
@@ -45,7 +46,7 @@
             border-radius: 16px;
             padding: 1.5rem;
             color: #fff;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         .badge-item {
             display: flex;
@@ -58,40 +59,42 @@
             transition: background 0.2s;
         }
         .badge-item:last-child { margin-bottom: 0; }
-        .badge-item.earned { background: rgba(102,126,234,0.25); }
+        .badge-item.earned { background: rgba(102,126,234,0.3); border: 1px solid rgba(102,126,234,0.5); }
         .badge-emoji { font-size: 1.8rem; min-width: 2.5rem; text-align: center; }
         .badge-info { flex: 1; }
-        .badge-info .badge-name { font-weight: 600; font-size: 0.95rem; }
-        .badge-info .badge-desc { font-size: 0.78rem; opacity: 0.7; }
+        .badge-info .badge-name { font-weight: 700; font-size: 0.95rem; }
+        .badge-info .badge-desc { font-size: 0.78rem; opacity: 0.75; }
         .badge-status { font-size: 1.2rem; }
 
         /* Game tabs nav */
         .games-nav .nav-link {
             border-radius: 12px !important;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            color: #555;
-            border: 2px solid transparent !important;
-            transition: all 0.2s;
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+            color: #4a5568;
+            background: #ffffff;
+            border: 2px solid #e2e8f0 !important;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .games-nav .nav-link:hover   { background: #f0f0ff; color: #667eea; }
+        .games-nav .nav-link:hover   { background: #f7fafc; color: #667eea; border-color: #cbd5e0 !important; }
         .games-nav .nav-link.active  {
             background: linear-gradient(135deg, #667eea, #764ba2) !important;
             color: #fff !important;
-            border: 2px solid transparent !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 12px rgba(102,126,234,0.25);
         }
         .game-plays-badge {
             background: rgba(255,255,255,0.3);
             border-radius: 20px;
-            padding: 1px 8px;
-            font-size: 0.7rem;
+            padding: 2px 9px;
+            font-size: 0.72rem;
             font-weight: 700;
         }
         .games-nav .nav-link:not(.active) .game-plays-badge {
-            background: rgba(102,126,234,0.15);
+            background: rgba(102,126,234,0.12);
             color: #667eea;
         }
 
@@ -100,6 +103,7 @@
             background: #fff;
             border-radius: 20px;
             box-shadow: 0 4px 24px rgba(102,126,234,0.10);
+            border: 1px solid rgba(102,126,234,0.12);
             overflow: hidden;
         }
         .game-card-header {
@@ -112,7 +116,7 @@
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        .game-card-header h2 { font-weight: 700; font-size: 1.2rem; margin: 0; color: #333; }
+        .game-card-header h2 { font-weight: 700; font-size: 1.25rem; margin: 0; color: #2d3748; }
         .game-body { padding: 1.5rem; }
 
         /* ── SNAKE GAME ─────────────────────────────────────── */
@@ -120,177 +124,204 @@
             display: block;
             margin: 0 auto;
             border-radius: 12px;
-            border: 3px solid rgba(102,126,234,0.2);
+            border: 3px solid #667eea;
             background: #1a1a2e;
             max-width: 100%;
             touch-action: none;
-        }
-        .game-controls {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
+            box-shadow: 0 4px 16px rgba(26,26,46,0.3);
         }
         .score-display {
             text-align: center;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: 800;
             color: #667eea;
         }
         .dpad {
             display: grid;
-            grid-template-columns: repeat(3, 48px);
-            grid-template-rows: repeat(3, 48px);
+            grid-template-columns: repeat(3, 52px);
+            grid-template-rows: repeat(3, 52px);
             gap: 6px;
             margin: 1rem auto 0;
             width: fit-content;
         }
         .dpad button {
-            width: 48px; height: 48px;
-            border-radius: 10px;
+            width: 52px; height: 52px;
+            border-radius: 12px;
             border: none;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: #fff;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             cursor: pointer;
             transition: transform 0.1s, opacity 0.1s;
             display: flex; align-items: center; justify-content: center;
             user-select: none;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.25);
         }
-        .dpad button:active { transform: scale(0.9); }
-        .dpad .empty { background: transparent; pointer-events: none; }
+        .dpad button:active { transform: scale(0.92); opacity: 0.85; }
+        .dpad .empty { background: transparent; pointer-events: none; box-shadow: none; }
 
         /* ── TIC TAC TOE ─────────────────────────────────────── */
         .ttt-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 290px;
+            gap: 12px;
+            max-width: 320px;
             margin: 0 auto 1.25rem;
         }
         .ttt-cell {
             aspect-ratio: 1;
-            border-radius: 14px;
-            border: none;
-            background: linear-gradient(135deg, #f0f0ff, #e8e8ff);
-            font-size: 2.5rem;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            background: #f8fafc;
+            font-size: 2.8rem;
             font-weight: 900;
             cursor: pointer;
-            transition: all 0.18s;
+            transition: all 0.18s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(102,126,234,0.10);
-            color: #333;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            user-select: none;
+            line-height: 1;
         }
-        .ttt-cell:hover:not(:disabled) { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; transform: scale(1.05); }
-        .ttt-cell:disabled { cursor: default; }
-        .ttt-cell.x-cell { color: #667eea; }
-        .ttt-cell.o-cell { color: #f093fb; }
-        .ttt-cell.winner { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff !important; animation: pop 0.3s ease; }
-        @keyframes pop { 0%{ transform:scale(1) } 50%{ transform:scale(1.15) } 100%{ transform:scale(1) } }
+        .ttt-cell:hover:not(.taken) {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #ffffff !important;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102,126,234,0.3);
+        }
+        .ttt-cell.taken { cursor: default; }
+        .ttt-cell.x-cell { color: #667eea !important; background: #f0f4ff; border-color: #c7d2fe; }
+        .ttt-cell.o-cell { color: #ec4899 !important; background: #fdf2f8; border-color: #fbcfe8; }
+        .ttt-cell.winner {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: #ffffff !important;
+            border-color: transparent !important;
+            animation: tttWinPulse 0.4s ease infinite alternate;
+        }
+        @keyframes tttWinPulse { 0% { transform: scale(1); } 100% { transform: scale(1.06); } }
+
         .ttt-status {
             text-align: center;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             margin-bottom: 1rem;
-            min-height: 1.6rem;
-            color: #667eea;
+            min-height: 1.7rem;
+            color: #4f46e5;
         }
         .ttt-scoreboard {
             display: flex;
             justify-content: center;
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
         .ttt-score-box {
             text-align: center;
-            padding: 0.5rem 1.5rem;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #f0f0ff, #e8e8ff);
+            padding: 0.6rem 1.4rem;
+            border-radius: 14px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
         }
-        .ttt-score-box .score-val { font-size: 1.6rem; font-weight: 800; color: #667eea; }
-        .ttt-score-box .score-label { font-size: 0.72rem; color: #888; font-weight: 600; }
+        .ttt-score-box .score-val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
+        .ttt-score-box .score-label { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
 
         /* ── MEMORY MATCH ─────────────────────────────────────── */
         .memory-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 380px;
+            gap: 12px;
+            max-width: 400px;
             margin: 0 auto 1.25rem;
             perspective: 1000px;
         }
         .mem-card {
             aspect-ratio: 1;
-            border-radius: 12px;
+            border-radius: 14px;
             border: none;
             cursor: pointer;
-            font-size: 1.6rem;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.4s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: transparent;
             padding: 0;
+            user-select: none;
         }
-        .mem-card.flipped  { transform: rotateY(180deg); }
-        .mem-card.matched  { transform: rotateY(180deg); cursor: default; }
+        .mem-card.flipped, .mem-card.matched { transform: rotateY(180deg); }
+        .mem-card.matched { cursor: default; }
+
         .mem-card .card-face {
-            position: absolute; inset: 0;
-            border-radius: 12px;
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
         }
         .mem-card .card-back {
             background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            font-size: 1.4rem;
+            color: #ffffff;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+        .mem-card:hover:not(.flipped):not(.matched) .card-back {
+            transform: scale(1.03);
+            box-shadow: 0 6px 16px rgba(102,126,234,0.35);
         }
         .mem-card .card-front {
-            background: linear-gradient(135deg, #f8f9ff, #ededff);
+            background: #ffffff;
             transform: rotateY(180deg);
-            font-size: 1.8rem;
-            box-shadow: 0 2px 8px rgba(102,126,234,0.15);
+            font-size: 2rem;
+            border-color: #e2e8f0;
         }
         .mem-card.matched .card-front {
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            border-color: transparent;
         }
+
         .memory-stats {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
+            gap: 2rem;
+            margin-bottom: 1.2rem;
         }
         .mem-stat { text-align: center; }
-        .mem-stat .val { font-size: 1.5rem; font-weight: 800; color: #667eea; }
-        .mem-stat .lbl { font-size: 0.72rem; color: #888; font-weight: 600; }
+        .mem-stat .val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
+        .mem-stat .lbl { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
 
-        /* Shared game UI */
+        /* Shared Game UI */
         .btn-game-primary {
             background: linear-gradient(135deg, #667eea, #764ba2);
             border: none;
             color: #fff;
             border-radius: 12px;
-            padding: 0.55rem 1.5rem;
+            padding: 0.65rem 1.6rem;
             font-weight: 700;
-            transition: all 0.2s;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
         }
-        .btn-game-primary:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+        .btn-game-primary:hover { opacity: 0.92; transform: translateY(-1px); color: #fff; box-shadow: 0 6px 18px rgba(102,126,234,0.4); }
+        .btn-game-primary:active { transform: translateY(0); }
+
         .game-over-banner {
             display: none;
             text-align: center;
-            padding: 1rem;
+            padding: 0.9rem 1.2rem;
             border-radius: 14px;
             margin-top: 1rem;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 1.1rem;
         }
         .game-over-banner.show { display: block; }
-        .game-over-loss { background: linear-gradient(135deg, #ff6b6b, #feca57); color: #fff; }
-        .game-over-win  { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; }
+        .game-over-loss { background: linear-gradient(135deg, #ef4444, #f59e0b); color: #fff; }
+        .game-over-win  { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
 
         /* Toast notification */
         #badgeToast {
@@ -298,7 +329,7 @@
             bottom: 2rem;
             right: 2rem;
             z-index: 9999;
-            min-width: 260px;
+            min-width: 280px;
         }
         .toast-badge-body {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -307,12 +338,13 @@
             padding: 1rem 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 8px 32px rgba(102,126,234,0.35);
+            gap: 0.85rem;
+            box-shadow: 0 10px 32px rgba(102,126,234,0.4);
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .toast-badge-emoji { font-size: 2rem; }
-        .toast-badge-text .title  { font-weight: 700; font-size: 0.85rem; opacity: 0.85; }
-        .toast-badge-text .name   { font-weight: 800; font-size: 1rem; }
+        .toast-badge-emoji { font-size: 2.2rem; }
+        .toast-badge-text .title { font-weight: 700; font-size: 0.82rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; }
+        .toast-badge-text .name  { font-weight: 800; font-size: 1.05rem; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -325,12 +357,12 @@
         <!-- Hero Banner -->
         <div class="games-hero">
             <h1>🎮 Games Hub</h1>
-            <p>Take a break and play a mini-game to lift your mood!</p>
+            <p>Take a relaxing break! Play a mini-game to boost your mood and earn badges.</p>
         </div>
 
         <div class="row g-4">
 
-            <!-- Left: Game Tabs -->
+            <!-- Left Column: Games -->
             <div class="col-lg-8">
                 <!-- Nav Tabs -->
                 <ul class="nav games-nav gap-2 mb-3" id="gameTabs" role="tablist">
@@ -338,7 +370,7 @@
                         <button class="nav-link active" id="snake-tab" data-bs-toggle="tab"
                                 data-bs-target="#snake-pane" type="button" role="tab" aria-selected="true">
                             🐍 Snake
-                            <span class="game-plays-badge"
+                            <span class="game-plays-badge" id="snakePlaysPill"
                                   th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
@@ -346,7 +378,7 @@
                         <button class="nav-link" id="tictactoe-tab" data-bs-toggle="tab"
                                 data-bs-target="#tictactoe-pane" type="button" role="tab" aria-selected="false">
                             ❌ Tic-Tac-Toe
-                            <span class="game-plays-badge"
+                            <span class="game-plays-badge" id="tictactoePlaysPill"
                                   th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
@@ -354,7 +386,7 @@
                         <button class="nav-link" id="memory-tab" data-bs-toggle="tab"
                                 data-bs-target="#memory-pane" type="button" role="tab" aria-selected="false">
                             🃏 Memory Match
-                            <span class="game-plays-badge"
+                            <span class="game-plays-badge" id="memoryPlaysPill"
                                   th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
@@ -368,19 +400,22 @@
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>🐍 Snake</h2>
-                                <span class="text-muted" style="font-size:0.82rem;">Use Arrow Keys / WASD or D-Pad</span>
+                                <span class="text-muted" style="font-size:0.85rem;">Use Arrow Keys / WASD or D-Pad below</span>
                             </div>
                             <div class="game-body text-center">
-                                <div class="score-display">Score: <span id="snakeScore">0</span>
-                                    &nbsp;|&nbsp; High: <span id="snakeHigh">0</span></div>
+                                <div class="score-display">
+                                    Score: <span id="snakeScore">0</span> &nbsp;|&nbsp; High: <span id="snakeHigh">0</span>
+                                </div>
                                 <canvas id="snakeCanvas" width="400" height="400"></canvas>
                                 <div class="game-over-banner" id="snakeBanner"></div>
-                                <div class="game-controls">
-                                    <button class="btn btn-game-primary" id="snakeStartBtn" onclick="snakeStart()">
+
+                                <div class="game-controls mt-3">
+                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn" onclick="snakeStart()">
                                         <i class="bi bi-play-fill me-1"></i>Start Game
                                     </button>
                                 </div>
-                                <!-- D-pad for mobile / quick click controls -->
+
+                                <!-- D-Pad Controls -->
                                 <div class="dpad mt-3">
                                     <div class="empty"></div>
                                     <button type="button" onclick="snakeChangeDir(0,-1)" title="Up"><i class="bi bi-arrow-up"></i></button>
@@ -401,13 +436,13 @@
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>❌ Tic-Tac-Toe</h2>
-                                <span class="text-muted" style="font-size:0.82rem;">You are X — play against the AI</span>
+                                <span class="text-muted" style="font-size:0.85rem;">You are X — play against the AI (O)</span>
                             </div>
                             <div class="game-body">
                                 <div class="ttt-scoreboard">
                                     <div class="ttt-score-box">
                                         <div class="score-val" id="tttWins">0</div>
-                                        <div class="score-label">You (X) Wins</div>
+                                        <div class="score-label">You (X)</div>
                                     </div>
                                     <div class="ttt-score-box">
                                         <div class="score-val" id="tttDraws">0</div>
@@ -415,10 +450,10 @@
                                     </div>
                                     <div class="ttt-score-box">
                                         <div class="score-val" id="tttLosses">0</div>
-                                        <div class="score-label">AI (O) Wins</div>
+                                        <div class="score-label">AI (O)</div>
                                     </div>
                                 </div>
-                                <div class="ttt-status" id="tttStatus">Click a cell to start!</div>
+                                <div class="ttt-status" id="tttStatus">Click any square to start!</div>
                                 <div class="ttt-board" id="tttBoard">
                                     <button type="button" class="ttt-cell" id="ttt0" onclick="tttClick(0)"></button>
                                     <button type="button" class="ttt-cell" id="ttt1" onclick="tttClick(1)"></button>
@@ -444,7 +479,7 @@
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>🃏 Memory Match</h2>
-                                <span class="text-muted" style="font-size:0.82rem;">Find all matching pairs!</span>
+                                <span class="text-muted" style="font-size:0.85rem;">Find all 8 matching emoji pairs!</span>
                             </div>
                             <div class="game-body">
                                 <div class="memory-stats">
@@ -454,7 +489,7 @@
                                     </div>
                                     <div class="mem-stat">
                                         <div class="val" id="memMatched">0</div>
-                                        <div class="lbl">Matched</div>
+                                        <div class="lbl">Pairs Found</div>
                                     </div>
                                     <div class="mem-stat">
                                         <div class="val" id="memTime">0s</div>
@@ -475,9 +510,9 @@
                 </div><!-- /tab-content -->
             </div><!-- /col-lg-8 -->
 
-            <!-- Right: Progress Sidebar -->
+            <!-- Right Column: Badges & Stats Sidebar -->
             <div class="col-lg-4">
-                <!-- Badge Progress -->
+                <!-- Badge Progress Card -->
                 <div class="badge-progress-card">
                     <h2 class="fw-700 mb-3" style="font-size:1.1rem;color:#fff;">
                         <i class="bi bi-trophy-fill me-2" style="color:#ffd700;"></i>Game Badges
@@ -486,7 +521,7 @@
                         <div class="badge-emoji">🎮</div>
                         <div class="badge-info">
                             <div class="badge-name">Game Explorer</div>
-                            <div class="badge-desc">Play your first game</div>
+                            <div class="badge-desc">Play your first mini-game</div>
                         </div>
                         <div class="badge-status">
                             <span th:if="${explorerEarned}">✅</span>
@@ -509,11 +544,11 @@
                             <span th:unless="${masterEarned}">🔒</span>
                         </div>
                     </div>
-                    <!-- Progress bar -->
+
                     <div th:unless="${masterEarned}" class="mt-3">
                         <div class="d-flex justify-content-between mb-1"
-                             style="font-size:0.75rem;color:rgba(255,255,255,0.7);">
-                            <span>Puzzle Master progress</span>
+                             style="font-size:0.75rem;color:rgba(255,255,255,0.75);">
+                            <span>Puzzle Master Progress</span>
                             <span th:text="${masterProgress} + '/5'">0/5</span>
                         </div>
                         <div class="progress" style="height:8px;border-radius:8px;background:rgba(255,255,255,0.15);">
@@ -526,27 +561,27 @@
 
                 <!-- Total Plays Card -->
                 <div class="mood-card p-4 mb-4 text-center">
-                    <div style="font-size:2.5rem;line-height:1;">🕹️</div>
-                    <div style="font-size:2rem;font-weight:800;color:#667eea;" th:text="${totalPlays}">0</div>
-                    <div style="font-size:0.85rem;color:#888;font-weight:600;">Total Games Played</div>
+                    <div style="font-size:2.5rem;line-height:1;margin-bottom:0.5rem;">🕹️</div>
+                    <div style="font-size:2.2rem;font-weight:800;color:#4f46e5;line-height:1.1;" th:text="${totalPlays}">0</div>
+                    <div style="font-size:0.85rem;color:#64748b;font-weight:700;margin-top:0.3rem;">Total Games Played</div>
                 </div>
 
-                <!-- Per-game stats -->
+                <!-- Per-game Stats -->
                 <div class="mood-card p-4">
                     <h2 class="card-section-title mb-3">
-                        <i class="bi bi-bar-chart me-2"></i>Your Stats
+                        <i class="bi bi-bar-chart-fill me-2"></i>Your Play Counts
                     </h2>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>🐍 Snake</span>
-                        <strong th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0}">0</strong>
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                        <span class="fw-semibold">🐍 Snake</span>
+                        <strong class="text-primary" th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0}">0</strong>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span>❌ Tic-Tac-Toe</span>
-                        <strong th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0}">0</strong>
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                        <span class="fw-semibold">❌ Tic-Tac-Toe</span>
+                        <strong class="text-primary" th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0}">0</strong>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <span>🃏 Memory Match</span>
-                        <strong th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0}">0</strong>
+                        <span class="fw-semibold">🃏 Memory Match</span>
+                        <strong class="text-primary" th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0}">0</strong>
                     </div>
                 </div>
             </div>
@@ -566,7 +601,7 @@
     </div>
 </div>
 
-<!-- Pass server-side 'highlight' value to JS safely via data attribute -->
+<!-- Pass server-side 'highlight' parameter safely via data attribute -->
 <span id="gameHighlightData" th:data-highlight="${highlight}" style="display:none;"></span>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
@@ -574,18 +609,28 @@
 
 <script>
 /* ══════════════════════════════════════════════════════════════
+   ROBUST READY HELPER — runs immediately if DOM is already parsed
+══════════════════════════════════════════════════════════════ */
+function onReady(fn) {
+    if (document.readyState !== 'loading') {
+        fn();
+    } else {
+        document.addEventListener('DOMContentLoaded', fn);
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
    SHARED UTILITIES
 ══════════════════════════════════════════════════════════════ */
 function getCsrfHeader() {
-    const metaHeader = document.querySelector('meta[name="_csrf_header"]');
-    return metaHeader ? metaHeader.getAttribute('content') : 'X-CSRF-TOKEN';
+    const el = document.querySelector('meta[name="_csrf_header"]');
+    return el ? el.getAttribute('content') : 'X-CSRF-TOKEN';
 }
 function getCsrfToken() {
-    const metaToken = document.querySelector('meta[name="_csrf"]');
-    return metaToken ? metaToken.getAttribute('content') : '';
+    const el = document.querySelector('meta[name="_csrf"]');
+    return el ? el.getAttribute('content') : '';
 }
 
-/** POST a play record to the server */
 function recordPlay(gameName) {
     const token = getCsrfToken();
     const header = getCsrfHeader();
@@ -602,32 +647,33 @@ function recordPlay(gameName) {
     .then(r => r.json())
     .then(data => {
         if (data && data.newBadge) showBadgeToast(data.newBadge);
-        // Refresh play-count badges in nav tabs
-        const tabId = gameName === 'tictactoe' ? 'tictactoe-tab' : gameName + '-tab';
-        const pill = document.querySelector('#' + tabId + ' .game-plays-badge');
+        const pillId = gameName === 'tictactoe' ? 'tictactoePlaysPill' : gameName + 'PlaysPill';
+        const pill = document.getElementById(pillId);
         if (pill) {
-            const n = parseInt(pill.textContent) + 1;
-            pill.textContent = n + ' play' + (n !== 1 ? 's' : '');
+            const count = parseInt(pill.textContent) + 1;
+            pill.textContent = count + ' play' + (count !== 1 ? 's' : '');
         }
     })
-    .catch(err => console.error('Play recording error:', err));
+    .catch(err => console.error('Error logging play:', err));
 }
 
 function showBadgeToast(name) {
     const inner = document.getElementById('badgeToastInner');
+    if (!inner) return;
     document.getElementById('toastBadgeName').textContent = name;
     inner.style.display = 'flex';
-    setTimeout(() => { inner.style.display = 'none'; }, 4000);
+    setTimeout(() => { inner.style.display = 'none'; }, 4500);
 }
+
 
 /* ══════════════════════════════════════════════════════════════
    SNAKE GAME
 ══════════════════════════════════════════════════════════════ */
 (function() {
     const CELL = 20, COLS = 20, ROWS = 20;
-    let canvas, ctx, snake, dir, nextDir, food, score, highScore, running, loopTimer;
+    let canvas, ctx, snake, dir, nextDir, food, score, highScore, running = false, loopTimer = null;
 
-    function snakeInit() {
+    function initSnake() {
         canvas = document.getElementById('snakeCanvas');
         if (!canvas) return;
         ctx = canvas.getContext('2d');
@@ -642,50 +688,72 @@ function showBadgeToast(name) {
         if (!ctx) return;
         ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         ctx.fillStyle = '#667eea';
-        ctx.font = '700 22px Inter, sans-serif';
+        ctx.font = 'bold 22px Inter, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Click Start to Play!', canvas.width / 2, canvas.height / 2);
+        ctx.fillText('Click "Start Game" to Play!', canvas.width / 2, canvas.height / 2 - 10);
+
+        ctx.fillStyle = '#a0aec0';
+        ctx.font = '14px Inter, sans-serif';
+        ctx.fillText('Use Arrow Keys, WASD, or D-Pad buttons', canvas.width / 2, canvas.height / 2 + 20);
     }
 
     window.snakeStart = function() {
-        if (!ctx) snakeInit();
-        clearInterval(loopTimer);
+        if (!ctx) initSnake();
+        if (loopTimer) clearInterval(loopTimer);
+
         snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
         dir     = {x:1, y:0};
         nextDir = {x:1, y:0};
         score   = 0;
         running = true;
-        document.getElementById('snakeScore').textContent = 0;
-        document.getElementById('snakeBanner').classList.remove('show');
+
+        document.getElementById('snakeScore').textContent = '0';
+        const banner = document.getElementById('snakeBanner');
+        if (banner) banner.classList.remove('show');
+
         placeFood();
+        draw();
         loopTimer = setInterval(gameLoop, 120);
         document.getElementById('snakeStartBtn').textContent = '↺ Restart';
     };
 
     window.snakeChangeDir = function(x, y) {
         if (!running) return;
-        // Prevent 180° reversal
+        // Prevent 180-degree immediate reversal
         if (x !== 0 && dir.x === 0) nextDir = {x, y};
         if (y !== 0 && dir.y === 0) nextDir = {x, y};
     };
 
     function placeFood() {
         let pos;
-        do { pos = {x: Math.floor(Math.random()*COLS), y: Math.floor(Math.random()*ROWS)}; }
-        while (snake.some(s => s.x === pos.x && s.y === pos.y));
+        do {
+            pos = {x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS)};
+        } while (snake.some(s => s.x === pos.x && s.y === pos.y));
         food = pos;
     }
 
     function gameLoop() {
+        if (!running) return;
         dir = nextDir;
         const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
-        // Wall collision
-        if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) { return endGame(); }
-        // Self collision
-        if (snake.some(s => s.x === head.x && s.y === head.y)) { return endGame(); }
+
+        // Check wall collision
+        if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
+            endGame();
+            return;
+        }
+
+        // Check self collision
+        if (snake.some(s => s.x === head.x && s.y === head.y)) {
+            endGame();
+            return;
+        }
 
         snake.unshift(head);
+
+        // Check food collision
         if (head.x === food.x && head.y === food.y) {
             score++;
             document.getElementById('snakeScore').textContent = score;
@@ -693,49 +761,54 @@ function showBadgeToast(name) {
         } else {
             snake.pop();
         }
+
         draw();
     }
 
     function draw() {
         if (!ctx) return;
+        // Dark Canvas background
         ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         // Grid dots
         ctx.fillStyle = 'rgba(255,255,255,0.05)';
         for (let x = 0; x < COLS; x++) {
             for (let y = 0; y < ROWS; y++) {
-                ctx.fillRect(x*CELL+CELL/2-1, y*CELL+CELL/2-1, 2, 2);
+                ctx.fillRect(x * CELL + CELL / 2 - 1, y * CELL + CELL / 2 - 1, 2, 2);
             }
         }
-        // Food
-        ctx.fillStyle = '#f093fb';
-        ctx.beginPath();
-        ctx.arc(food.x*CELL+CELL/2, food.y*CELL+CELL/2, CELL/2-2, 0, Math.PI*2);
-        ctx.fill();
-        // Snake
-        snake.forEach((s, i) => {
-            ctx.fillStyle = i === 0 ? '#a78bfa' : '#667eea';
+
+        // Food (Pink Circle)
+        if (food) {
+            ctx.fillStyle = '#f093fb';
             ctx.beginPath();
-            if (ctx.roundRect) {
-                ctx.roundRect(s.x*CELL+2, s.y*CELL+2, CELL-4, CELL-4, 4);
-            } else {
-                ctx.rect(s.x*CELL+2, s.y*CELL+2, CELL-4, CELL-4);
-            }
+            ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
             ctx.fill();
+        }
+
+        // Snake Body & Head
+        snake.forEach((s, i) => {
+            ctx.fillStyle = (i === 0) ? '#a78bfa' : '#667eea';
+            ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
         });
     }
 
     function endGame() {
-        clearInterval(loopTimer);
+        if (loopTimer) clearInterval(loopTimer);
         running = false;
+
         if (score > highScore) {
             highScore = score;
-            localStorage.setItem('snakeHigh', highScore);
+            localStorage.setItem('snakeHigh', highScore.toString());
             document.getElementById('snakeHigh').textContent = highScore;
         }
+
         const banner = document.getElementById('snakeBanner');
-        banner.className = 'game-over-banner game-over-loss show';
-        banner.textContent = `💀 Game Over! Score: ${score}`;
+        if (banner) {
+            banner.className = 'game-over-banner game-over-loss show';
+            banner.textContent = `💀 Game Over! Final Score: ${score}`;
+        }
         recordPlay('snake');
     }
 
@@ -752,25 +825,25 @@ function showBadgeToast(name) {
         }
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        snakeInit();
-        const snakeTab = document.getElementById('snake-tab');
-        if (snakeTab) snakeTab.addEventListener('shown.bs.tab', snakeInit);
+    onReady(() => {
+        initSnake();
+        const tab = document.getElementById('snake-tab');
+        if (tab) tab.addEventListener('shown.bs.tab', initSnake);
     });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
-   TIC-TAC-TOE  (vs Smart AI using minimax)
+   TIC-TAC-TOE GAME
 ══════════════════════════════════════════════════════════════ */
 (function() {
-    let board, gameActive, isAiThinking = false;
+    let board = Array(9).fill(''), gameActive = true, isAiThinking = false;
     let wins = 0, draws = 0, losses = 0;
     const WIN_LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
     function checkWinner(b) {
-        for (const [a,c,d] of WIN_LINES) {
-            if (b[a] && b[a]===b[c] && b[a]===b[d]) return b[a];
+        for (const [a, c, d] of WIN_LINES) {
+            if (b[a] && b[a] === b[c] && b[a] === b[d]) return b[a];
         }
         return b.includes('') ? null : 'draw';
     }
@@ -780,6 +853,7 @@ function showBadgeToast(name) {
         if (result === 'O') return 10;
         if (result === 'X') return -10;
         if (result === 'draw') return 0;
+
         let best = isMax ? -Infinity : Infinity;
         for (let i = 0; i < 9; i++) {
             if (!b[i]) {
@@ -792,75 +866,103 @@ function showBadgeToast(name) {
         return best;
     }
 
-    function bestMove(b) {
-        let best = -Infinity, move = -1;
+    function getBestMove(b) {
+        let bestScore = -Infinity, move = -1;
         for (let i = 0; i < 9; i++) {
             if (!b[i]) {
                 b[i] = 'O';
-                const val = minimax(b, false);
+                const score = minimax(b, false);
                 b[i] = '';
-                if (val > best) { best = val; move = i; }
+                if (score > bestScore) {
+                    bestScore = score;
+                    move = i;
+                }
             }
         }
         return move;
     }
 
     window.tttClick = function(i) {
-        if (!gameActive || isAiThinking || board[i]) return;
+        if (!gameActive || isAiThinking || board[i] !== '') return;
+
         board[i] = 'X';
         renderBoard();
-        const result = checkWinner(board);
-        if (result) { endTTT(result); return; }
 
-        // AI move
+        const result = checkWinner(board);
+        if (result) {
+            endTTT(result);
+            return;
+        }
+
+        // AI turn
         isAiThinking = true;
-        document.getElementById('tttStatus').textContent = 'AI is thinking...';
+        document.getElementById('tttStatus').textContent = '🤖 AI is thinking...';
+
         setTimeout(() => {
-            const ai = bestMove(board);
-            if (ai >= 0) {
-                board[ai] = 'O';
+            const aiMove = getBestMove(board);
+            if (aiMove >= 0) {
+                board[aiMove] = 'O';
                 renderBoard();
-                const r2 = checkWinner(board);
-                if (r2) {
-                    endTTT(r2);
+                const aiResult = checkWinner(board);
+                if (aiResult) {
+                    endTTT(aiResult);
                 } else {
                     document.getElementById('tttStatus').textContent = 'Your turn (X)!';
                 }
             }
             isAiThinking = false;
-        }, 300);
+        }, 280);
     };
 
     function renderBoard() {
-        if (!board) return;
         board.forEach((v, i) => {
             const cell = document.getElementById('ttt' + i);
             if (!cell) return;
+
             cell.textContent = v;
-            cell.className = 'ttt-cell' + (v === 'X' ? ' x-cell' : v === 'O' ? ' o-cell' : '');
-            cell.disabled = !!v || !gameActive || isAiThinking;
+            if (v === 'X') {
+                cell.className = 'ttt-cell taken x-cell';
+            } else if (v === 'O') {
+                cell.className = 'ttt-cell taken o-cell';
+            } else {
+                cell.className = 'ttt-cell';
+            }
         });
     }
 
     function endTTT(result) {
         gameActive = false;
         isAiThinking = false;
-        let status;
-        if (result === 'X')         { wins++;   status = '🎉 You Win!';  highlightWinner('X'); recordPlay('tictactoe'); }
-        else if (result === 'O')    { losses++;  status = '🤖 AI Wins!'; highlightWinner('O'); recordPlay('tictactoe'); }
-        else                        { draws++;   status = '🤝 Draw!';    recordPlay('tictactoe'); }
-        document.getElementById('tttStatus').textContent = status;
+        let statusMsg = '';
+
+        if (result === 'X') {
+            wins++;
+            statusMsg = '🎉 You Win!';
+            highlightWinner('X');
+            recordPlay('tictactoe');
+        } else if (result === 'O') {
+            losses++;
+            statusMsg = '🤖 AI Wins!';
+            highlightWinner('O');
+            recordPlay('tictactoe');
+        } else {
+            draws++;
+            statusMsg = '🤝 It\'s a Draw!';
+            recordPlay('tictactoe');
+        }
+
+        document.getElementById('tttStatus').textContent = statusMsg;
         document.getElementById('tttWins').textContent   = wins;
         document.getElementById('tttDraws').textContent  = draws;
         document.getElementById('tttLosses').textContent = losses;
     }
 
     function highlightWinner(mark) {
-        for (const [a,b,c] of WIN_LINES) {
-            if (board[a]===mark && board[b]===mark && board[c]===mark) {
-                [a,b,c].forEach(i => {
-                    const el = document.getElementById('ttt'+i);
-                    if (el) el.classList.add('winner');
+        for (const [a, b, c] of WIN_LINES) {
+            if (board[a] === mark && board[b] === mark && board[c] === mark) {
+                [a, b, c].forEach(idx => {
+                    const cell = document.getElementById('ttt' + idx);
+                    if (cell) cell.classList.add('winner');
                 });
                 break;
             }
@@ -875,59 +977,63 @@ function showBadgeToast(name) {
         renderBoard();
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
+    onReady(() => {
         tttReset();
-        const tttTab = document.getElementById('tictactoe-tab');
-        if (tttTab) tttTab.addEventListener('shown.bs.tab', tttReset);
+        const tab = document.getElementById('tictactoe-tab');
+        if (tab) tab.addEventListener('shown.bs.tab', tttReset);
     });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
-   MEMORY MATCH
+   MEMORY MATCH GAME
 ══════════════════════════════════════════════════════════════ */
 (function() {
     const EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎'];
-    let cards, flipped, matched, moves, timer, elapsed;
+    let cards = [], flipped = [], matchedCount = 0, moves = 0, timer = null, elapsed = 0;
 
     window.memoryStart = function() {
-        clearInterval(timer);
-        moves = 0; matched = 0; elapsed = 0; flipped = [];
-        const movesEl = document.getElementById('memMoves');
-        const matchedEl = document.getElementById('memMatched');
-        const timeEl = document.getElementById('memTime');
-        const bannerEl = document.getElementById('memoryBanner');
-        const grid = document.getElementById('memoryGrid');
+        if (timer) clearInterval(timer);
+        moves = 0; matchedCount = 0; elapsed = 0; flipped = [];
 
-        if (!movesEl || !grid) return;
+        document.getElementById('memMoves').textContent   = '0';
+        document.getElementById('memMatched').textContent = '0';
+        document.getElementById('memTime').textContent    = '0s';
 
-        movesEl.textContent   = 0;
-        matchedEl.textContent = 0;
-        timeEl.textContent    = '0s';
-        if (bannerEl) bannerEl.classList.remove('show');
+        const banner = document.getElementById('memoryBanner');
+        if (banner) banner.classList.remove('show');
 
-        // Shuffle pairs
+        // Create 8 duplicate pairs & shuffle
         cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
+
+        const grid = document.getElementById('memoryGrid');
+        if (!grid) return;
+
         grid.innerHTML = '';
         cards.forEach((emoji, i) => {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'mem-card';
-            btn.dataset.index = i;
-            btn.innerHTML = `<div class="card-face card-back">❓</div><div class="card-face card-front">${emoji}</div>`;
+            btn.dataset.index = i.toString();
+            btn.innerHTML = `
+                <div class="card-face card-back">❓</div>
+                <div class="card-face card-front">${emoji}</div>
+            `;
             btn.onclick = () => memFlip(i);
             grid.appendChild(btn);
         });
 
         timer = setInterval(() => {
             elapsed++;
-            if (timeEl) timeEl.textContent = elapsed + 's';
+            document.getElementById('memTime').textContent = elapsed + 's';
         }, 1000);
     };
 
     function memFlip(i) {
         const card = document.querySelector(`.mem-card[data-index="${i}"]`);
-        if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length === 2) return;
+        if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length >= 2) {
+            return;
+        }
 
         card.classList.add('flipped');
         flipped.push(i);
@@ -936,53 +1042,58 @@ function showBadgeToast(name) {
             moves++;
             document.getElementById('memMoves').textContent = moves;
             const [a, b] = flipped;
+
             if (cards[a] === cards[b]) {
+                // Match found!
                 setTimeout(() => {
                     [a, b].forEach(idx => {
                         const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
                         if (el) el.classList.add('matched');
                     });
-                    matched++;
-                    document.getElementById('memMatched').textContent = matched;
+                    matchedCount++;
+                    document.getElementById('memMatched').textContent = matchedCount;
                     flipped = [];
-                    if (matched === EMOJIS.length) {
+
+                    if (matchedCount === EMOJIS.length) {
                         clearInterval(timer);
                         const banner = document.getElementById('memoryBanner');
                         if (banner) {
                             banner.className = 'game-over-banner game-over-win show';
-                            banner.textContent = `🎉 Solved in ${moves} moves & ${elapsed}s!`;
+                            banner.textContent = `🎉 Solved in ${moves} moves and ${elapsed} seconds!`;
                         }
                         recordPlay('memory');
                     }
-                }, 400);
+                }, 380);
             } else {
+                // Not a match: flip back
                 setTimeout(() => {
                     [a, b].forEach(idx => {
-                        const c = document.querySelector(`.mem-card[data-index="${idx}"]`);
-                        if (c) c.classList.remove('flipped');
+                        const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
+                        if (el) el.classList.remove('flipped');
                     });
                     flipped = [];
-                }, 900);
+                }, 850);
             }
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    onReady(() => {
         memoryStart();
-        const memTab = document.getElementById('memory-tab');
-        if (memTab) memTab.addEventListener('shown.bs.tab', memoryStart);
+        const tab = document.getElementById('memory-tab');
+        if (tab) tab.addEventListener('shown.bs.tab', memoryStart);
     });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
-   TAB HIGHLIGHT — activate tab from URL param
+   TAB HIGHLIGHT — activate tab from URL query parameter
 ══════════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function() {
+onReady(function() {
     const dataEl = document.getElementById('gameHighlightData');
     const highlight = (dataEl && dataEl.dataset) ? dataEl.dataset.highlight : '';
     const tabMap = { snake: 'snake-tab', tictactoe: 'tictactoe-tab', memory: 'memory-tab' };
     const tabId  = tabMap[highlight.toLowerCase()];
+
     if (tabId) {
         const tabEl = document.getElementById(tabId);
         if (tabEl && window.bootstrap) {
