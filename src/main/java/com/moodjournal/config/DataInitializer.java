@@ -25,6 +25,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         initBadges();
+        initGameBadges();
         initRecommendations();
     }
 
@@ -38,6 +39,18 @@ public class DataInitializer implements CommandLineRunner {
                 new Badge("🎭 Mood Explorer", "Experienced and logged 5 different mood types!",        "ALL_MOODS")
             );
             badgeRepository.saveAll(badges);
+        }
+    }
+
+    /** Seeds game badges individually (safe to run even when other badges already exist). */
+    private void initGameBadges() {
+        seedBadgeIfMissing("🎮 Game Explorer", "Play your very first mini-game!",        "GAME_EXPLORER");
+        seedBadgeIfMissing("🧩 Puzzle Master",  "Play 5 mini-games to unlock this badge!", "PUZZLE_MASTER");
+    }
+
+    private void seedBadgeIfMissing(String name, String description, String criteria) {
+        if (badgeRepository.findByCriteria(criteria).isEmpty()) {
+            badgeRepository.save(new Badge(name, description, criteria));
         }
     }
 

@@ -61,6 +61,15 @@ public class DashboardController {
         Recommendation recommendation = recommendationService.getRandomByMood(moodForRec);
         model.addAttribute("recommendation", recommendation);
 
+        // Mood-based game suggestion
+        String recommendedGame = switch (todaysMood != null ? todaysMood : "") {
+            case "SAD",     "BORED"   -> "memory";
+            case "STRESSED","ANXIOUS" -> "snake";
+            case "ANGRY"              -> "tictactoe";
+            default                   -> null;
+        };
+        model.addAttribute("recommendedGame", recommendedGame);
+
         // Recent journal entries (last 5)
         model.addAttribute("recentEntries", journalEntryService.getRecentEntries(user, 5));
 

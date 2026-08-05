@@ -109,7 +109,24 @@
                           th:text="${recommendation.mood}"></span>
                 </div>
 
-                <!-- Recent Entries -->
+                <!-- Mood-Based Game Suggestion -->
+                <div th:if="${recommendedGame != null}" class="mb-4">
+                    <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;padding:1.25rem 1.5rem;color:#fff;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                        <div style="font-size:2.5rem;">🎮</div>
+                        <div style="flex:1;min-width:200px;">
+                            <div style="font-weight:700;font-size:1rem;margin-bottom:0.2rem;">Feeling down? A game might help!</div>
+                            <div style="opacity:0.85;font-size:0.85rem;"
+                                 th:text="${todaysMood == 'SAD' or todaysMood == 'BORED'}
+                                          ? 'Try Memory Match to keep your mind active'
+                                          : (${todaysMood == 'STRESSED' or todaysMood == 'ANXIOUS'}
+                                             ? 'Snake can help you focus and unwind'
+                                             : 'Challenge the AI in Tic-Tac-Toe!')">Play a game!</div>
+                        </div>
+                        <a th:href="@{/games(highlight=${recommendedGame})}" class="btn" style="background:#fff;color:#667eea;font-weight:700;border-radius:12px;padding:0.5rem 1.2rem;white-space:nowrap;">
+                            <i class="bi bi-controller me-1"></i> Play Now
+                        </a>
+                    </div>
+                </div>
                 <div class="mood-card p-0 overflow-hidden">
                     <div class="card-header-custom d-flex justify-content-between align-items-center">
                         <h2 class="card-section-title mb-0">
