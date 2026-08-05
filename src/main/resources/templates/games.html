@@ -436,7 +436,7 @@
                                 <div class="score-display">
                                     Score: <span id="snakeScore">0</span> &nbsp;|&nbsp; High: <span id="snakeHigh">0</span>
                                 </div>
-                                <canvas id="snakeCanvas" width="600" height="400"></canvas>
+                                <canvas id="snakeCanvas" width="780" height="450"></canvas>
                                 <div class="game-over-banner" id="snakeBanner"></div>
 
                                 <div class="game-controls mt-3">
@@ -720,7 +720,7 @@ function showBadgeToast(name) {
 /* ══════════════════════════════════════════════════════════════
    SNAKE GAME (WIDE 30x20 GRID = 600x400 Canvas)
 ══════════════════════════════════════════════════════════════ */
-const CELL = 20, COLS = 30, ROWS = 20;
+let CELL = 20, COLS = 39, ROWS = 22;
 let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
 
 function getHighScore() {
@@ -736,8 +736,8 @@ function initSnake() {
     canvas = document.getElementById('snakeCanvas');
     if (!canvas) return;
     ctx = canvas.getContext('2d');
-    canvas.width  = COLS * CELL;
-    canvas.height = ROWS * CELL;
+    COLS = Math.floor(canvas.width / CELL);
+    ROWS = Math.floor(canvas.height / CELL);
     highScore = getHighScore();
     const scoreEl = document.getElementById('snakeHigh');
     if (scoreEl) scoreEl.textContent = highScore;
