@@ -67,6 +67,11 @@
         .badge-status { font-size: 1.2rem; }
 
         /* Game tabs nav */
+        .games-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
         .games-nav .nav-link {
             border-radius: 12px !important;
             padding: 0.75rem 1.25rem;
@@ -78,9 +83,10 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            cursor: pointer;
         }
-        .games-nav .nav-link:hover   { background: #f7fafc; color: #667eea; border-color: #cbd5e0 !important; }
-        .games-nav .nav-link.active  {
+        .games-nav .nav-link:hover { background: #f7fafc; color: #667eea; border-color: #cbd5e0 !important; }
+        .games-nav .nav-link.active {
             background: linear-gradient(135deg, #667eea, #764ba2) !important;
             color: #fff !important;
             border-color: transparent !important;
@@ -139,26 +145,26 @@
         }
         .dpad {
             display: grid;
-            grid-template-columns: repeat(3, 52px);
-            grid-template-rows: repeat(3, 52px);
+            grid-template-columns: repeat(3, 54px);
+            grid-template-rows: repeat(3, 54px);
             gap: 6px;
             margin: 1rem auto 0;
             width: fit-content;
         }
         .dpad button {
-            width: 52px; height: 52px;
+            width: 54px; height: 54px;
             border-radius: 12px;
             border: none;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: #fff;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             cursor: pointer;
             transition: transform 0.1s, opacity 0.1s;
             display: flex; align-items: center; justify-content: center;
             user-select: none;
-            box-shadow: 0 2px 8px rgba(102,126,234,0.25);
+            box-shadow: 0 3px 10px rgba(102,126,234,0.3);
         }
-        .dpad button:active { transform: scale(0.92); opacity: 0.85; }
+        .dpad button:active { transform: scale(0.9); opacity: 0.85; }
         .dpad .empty { background: transparent; pointer-events: none; box-shadow: none; }
 
         /* ── TIC TAC TOE ─────────────────────────────────────── */
@@ -172,8 +178,8 @@
         .ttt-cell {
             aspect-ratio: 1;
             border-radius: 16px;
-            border: 2px solid #e2e8f0;
-            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
             font-size: 2.8rem;
             font-weight: 900;
             cursor: pointer;
@@ -181,7 +187,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
             user-select: none;
             line-height: 1;
         }
@@ -190,10 +196,10 @@
             color: #ffffff !important;
             border-color: transparent;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102,126,234,0.3);
+            box-shadow: 0 6px 18px rgba(102,126,234,0.35);
         }
         .ttt-cell.taken { cursor: default; }
-        .ttt-cell.x-cell { color: #667eea !important; background: #f0f4ff; border-color: #c7d2fe; }
+        .ttt-cell.x-cell { color: #4f46e5 !important; background: #eef2ff; border-color: #c7d2fe; }
         .ttt-cell.o-cell { color: #ec4899 !important; background: #fdf2f8; border-color: #fbcfe8; }
         .ttt-cell.winner {
             background: linear-gradient(135deg, #10b981, #059669) !important;
@@ -276,8 +282,8 @@
         .mem-card .card-front {
             background: #ffffff;
             transform: rotateY(180deg);
-            font-size: 2rem;
-            border-color: #e2e8f0;
+            font-size: 2.2rem;
+            border-color: #cbd5e1;
         }
         .mem-card.matched .card-front {
             background: linear-gradient(135deg, #10b981, #059669);
@@ -306,6 +312,7 @@
             font-size: 0.95rem;
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+            cursor: pointer;
         }
         .btn-game-primary:hover { opacity: 0.92; transform: translateY(-1px); color: #fff; box-shadow: 0 6px 18px rgba(102,126,234,0.4); }
         .btn-game-primary:active { transform: translateY(0); }
@@ -367,24 +374,21 @@
                 <!-- Nav Tabs -->
                 <ul class="nav games-nav gap-2 mb-3" id="gameTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="snake-tab" data-bs-toggle="tab"
-                                data-bs-target="#snake-pane" type="button" role="tab" aria-selected="true">
+                        <button type="button" class="nav-link active" id="snake-tab">
                             🐍 Snake
                             <span class="game-plays-badge" id="snakePlaysPill"
                                   th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="tictactoe-tab" data-bs-toggle="tab"
-                                data-bs-target="#tictactoe-pane" type="button" role="tab" aria-selected="false">
+                        <button type="button" class="nav-link" id="tictactoe-tab">
                             ❌ Tic-Tac-Toe
                             <span class="game-plays-badge" id="tictactoePlaysPill"
                                   th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="memory-tab" data-bs-toggle="tab"
-                                data-bs-target="#memory-pane" type="button" role="tab" aria-selected="false">
+                        <button type="button" class="nav-link" id="memory-tab">
                             🃏 Memory Match
                             <span class="game-plays-badge" id="memoryPlaysPill"
                                   th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
@@ -410,7 +414,7 @@
                                 <div class="game-over-banner" id="snakeBanner"></div>
 
                                 <div class="game-controls mt-3">
-                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn" onclick="snakeStart()">
+                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn">
                                         <i class="bi bi-play-fill me-1"></i>Start Game
                                     </button>
                                 </div>
@@ -418,13 +422,13 @@
                                 <!-- D-Pad Controls -->
                                 <div class="dpad mt-3">
                                     <div class="empty"></div>
-                                    <button type="button" onclick="snakeChangeDir(0,-1)" title="Up"><i class="bi bi-arrow-up"></i></button>
+                                    <button type="button" id="dpadUp" title="Up"><i class="bi bi-arrow-up"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" onclick="snakeChangeDir(-1,0)" title="Left"><i class="bi bi-arrow-left"></i></button>
+                                    <button type="button" id="dpadLeft" title="Left"><i class="bi bi-arrow-left"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" onclick="snakeChangeDir(1,0)" title="Right"><i class="bi bi-arrow-right"></i></button>
+                                    <button type="button" id="dpadRight" title="Right"><i class="bi bi-arrow-right"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" onclick="snakeChangeDir(0,1)" title="Down"><i class="bi bi-arrow-down"></i></button>
+                                    <button type="button" id="dpadDown" title="Down"><i class="bi bi-arrow-down"></i></button>
                                     <div class="empty"></div>
                                 </div>
                             </div>
@@ -455,18 +459,18 @@
                                 </div>
                                 <div class="ttt-status" id="tttStatus">Click any square to start!</div>
                                 <div class="ttt-board" id="tttBoard">
-                                    <button type="button" class="ttt-cell" id="ttt0" onclick="tttClick(0)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt1" onclick="tttClick(1)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt2" onclick="tttClick(2)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt3" onclick="tttClick(3)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt4" onclick="tttClick(4)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt5" onclick="tttClick(5)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt6" onclick="tttClick(6)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt7" onclick="tttClick(7)"></button>
-                                    <button type="button" class="ttt-cell" id="ttt8" onclick="tttClick(8)"></button>
+                                    <div class="ttt-cell" id="ttt0"></div>
+                                    <div class="ttt-cell" id="ttt1"></div>
+                                    <div class="ttt-cell" id="ttt2"></div>
+                                    <div class="ttt-cell" id="ttt3"></div>
+                                    <div class="ttt-cell" id="ttt4"></div>
+                                    <div class="ttt-cell" id="ttt5"></div>
+                                    <div class="ttt-cell" id="ttt6"></div>
+                                    <div class="ttt-cell" id="ttt7"></div>
+                                    <div class="ttt-cell" id="ttt8"></div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-game-primary" onclick="tttReset()">
+                                    <button type="button" class="btn btn-game-primary" id="tttResetBtn">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -499,7 +503,7 @@
                                 <div class="memory-grid" id="memoryGrid"></div>
                                 <div class="game-over-banner game-over-win" id="memoryBanner"></div>
                                 <div class="text-center mt-3">
-                                    <button type="button" class="btn btn-game-primary" onclick="memoryStart()">
+                                    <button type="button" class="btn btn-game-primary" id="memoryResetBtn">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -609,19 +613,45 @@
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   ROBUST READY HELPER — runs immediately if DOM is already parsed
+   GLOBAL FUNCTIONS ATTACHED TO WINDOW (Explicit Global Scope)
 ══════════════════════════════════════════════════════════════ */
-function onReady(fn) {
-    if (document.readyState !== 'loading') {
-        fn();
-    } else {
-        document.addEventListener('DOMContentLoaded', fn);
-    }
-}
+window.switchGameTab = function(gameKey) {
+    const snakeTab = document.getElementById('snake-tab');
+    const tttTab   = document.getElementById('tictactoe-tab');
+    const memTab   = document.getElementById('memory-tab');
 
-/* ══════════════════════════════════════════════════════════════
-   SHARED UTILITIES
-══════════════════════════════════════════════════════════════ */
+    const snakePane = document.getElementById('snake-pane');
+    const tttPane   = document.getElementById('tictactoe-pane');
+    const memPane   = document.getElementById('memory-pane');
+
+    [snakeTab, tttTab, memTab].forEach(btn => {
+        if (btn) {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+        }
+    });
+
+    [snakePane, tttPane, memPane].forEach(pane => {
+        if (pane) {
+            pane.classList.remove('show', 'active');
+        }
+    });
+
+    if (gameKey === 'tictactoe') {
+        if (tttTab)  { tttTab.classList.add('active'); tttTab.setAttribute('aria-selected', 'true'); }
+        if (tttPane) { tttPane.classList.add('show', 'active'); }
+        if (window.tttReset) window.tttReset();
+    } else if (gameKey === 'memory') {
+        if (memTab)  { memTab.classList.add('active'); memTab.setAttribute('aria-selected', 'true'); }
+        if (memPane) { memPane.classList.add('show', 'active'); }
+        if (window.memoryStart) window.memoryStart();
+    } else {
+        if (snakeTab)  { snakeTab.classList.add('active'); snakeTab.setAttribute('aria-selected', 'true'); }
+        if (snakePane) { snakePane.classList.add('show', 'active'); }
+        if (window.initSnake) window.initSnake();
+    }
+};
+
 function getCsrfHeader() {
     const el = document.querySelector('meta[name="_csrf_header"]');
     return el ? el.getAttribute('content') : 'X-CSRF-TOKEN';
@@ -667,13 +697,13 @@ function showBadgeToast(name) {
 
 
 /* ══════════════════════════════════════════════════════════════
-   SNAKE GAME
+   1. SNAKE GAME
 ══════════════════════════════════════════════════════════════ */
 (function() {
     const CELL = 20, COLS = 20, ROWS = 20;
-    let canvas, ctx, snake, dir, nextDir, food, score, highScore, running = false, loopTimer = null;
+    let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
 
-    function initSnake() {
+    window.initSnake = function() {
         canvas = document.getElementById('snakeCanvas');
         if (!canvas) return;
         ctx = canvas.getContext('2d');
@@ -682,25 +712,29 @@ function showBadgeToast(name) {
         highScore = parseInt(localStorage.getItem('snakeHigh') || '0');
         document.getElementById('snakeHigh').textContent = highScore;
         drawIdle();
-    }
+    };
 
     function drawIdle() {
         if (!ctx) return;
         ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = '#667eea';
-        ctx.font = 'bold 22px Inter, sans-serif';
+        ctx.fillStyle = '#a78bfa';
+        ctx.font = 'bold 24px Inter, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Click "Start Game" to Play!', canvas.width / 2, canvas.height / 2 - 10);
+        ctx.fillText('🐍 SNAKE GAME', canvas.width / 2, canvas.height / 2 - 20);
 
-        ctx.fillStyle = '#a0aec0';
-        ctx.font = '14px Inter, sans-serif';
-        ctx.fillText('Use Arrow Keys, WASD, or D-Pad buttons', canvas.width / 2, canvas.height / 2 + 20);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '16px Inter, sans-serif';
+        ctx.fillText('Click "Start Game" below to play!', canvas.width / 2, canvas.height / 2 + 15);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '13px Inter, sans-serif';
+        ctx.fillText('Controls: Arrow Keys, WASD, or D-Pad', canvas.width / 2, canvas.height / 2 + 45);
     }
 
     window.snakeStart = function() {
-        if (!ctx) initSnake();
+        window.initSnake();
         if (loopTimer) clearInterval(loopTimer);
 
         snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
@@ -716,12 +750,13 @@ function showBadgeToast(name) {
         placeFood();
         draw();
         loopTimer = setInterval(gameLoop, 120);
-        document.getElementById('snakeStartBtn').textContent = '↺ Restart';
+
+        const btn = document.getElementById('snakeStartBtn');
+        if (btn) btn.innerHTML = '<i class="bi bi-arrow-counterclockwise me-1"></i>Restart Game';
     };
 
     window.snakeChangeDir = function(x, y) {
         if (!running) return;
-        // Prevent 180-degree immediate reversal
         if (x !== 0 && dir.x === 0) nextDir = {x, y};
         if (y !== 0 && dir.y === 0) nextDir = {x, y};
     };
@@ -754,7 +789,7 @@ function showBadgeToast(name) {
         snake.unshift(head);
 
         // Check food collision
-        if (head.x === food.x && head.y === food.y) {
+        if (food && head.x === food.x && head.y === food.y) {
             score++;
             document.getElementById('snakeScore').textContent = score;
             placeFood();
@@ -767,11 +802,11 @@ function showBadgeToast(name) {
 
     function draw() {
         if (!ctx) return;
-        // Dark Canvas background
+        // Background
         ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Grid dots
+        // Grid
         ctx.fillStyle = 'rgba(255,255,255,0.05)';
         for (let x = 0; x < COLS; x++) {
             for (let y = 0; y < ROWS; y++) {
@@ -779,7 +814,7 @@ function showBadgeToast(name) {
             }
         }
 
-        // Food (Pink Circle)
+        // Food
         if (food) {
             ctx.fillStyle = '#f093fb';
             ctx.beginPath();
@@ -787,7 +822,7 @@ function showBadgeToast(name) {
             ctx.fill();
         }
 
-        // Snake Body & Head
+        // Snake
         snake.forEach((s, i) => {
             ctx.fillStyle = (i === 0) ? '#a78bfa' : '#667eea';
             ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
@@ -807,7 +842,7 @@ function showBadgeToast(name) {
         const banner = document.getElementById('snakeBanner');
         if (banner) {
             banner.className = 'game-over-banner game-over-loss show';
-            banner.textContent = `💀 Game Over! Final Score: ${score}`;
+            banner.textContent = `💀 Game Over! Score: ${score}`;
         }
         recordPlay('snake');
     }
@@ -821,20 +856,14 @@ function showBadgeToast(name) {
         };
         if (keyMap[e.code] && running) {
             e.preventDefault();
-            snakeChangeDir(keyMap[e.code].x, keyMap[e.code].y);
+            window.snakeChangeDir(keyMap[e.code].x, keyMap[e.code].y);
         }
-    });
-
-    onReady(() => {
-        initSnake();
-        const tab = document.getElementById('snake-tab');
-        if (tab) tab.addEventListener('shown.bs.tab', initSnake);
     });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
-   TIC-TAC-TOE GAME
+   2. TIC-TAC-TOE GAME
 ══════════════════════════════════════════════════════════════ */
 (function() {
     let board = Array(9).fill(''), gameActive = true, isAiThinking = false;
@@ -973,20 +1002,14 @@ function showBadgeToast(name) {
         board = Array(9).fill('');
         gameActive = true;
         isAiThinking = false;
-        document.getElementById('tttStatus').textContent = 'Your turn (X)!';
+        document.getElementById('tttStatus').textContent = 'Click any square to start!';
         renderBoard();
     };
-
-    onReady(() => {
-        tttReset();
-        const tab = document.getElementById('tictactoe-tab');
-        if (tab) tab.addEventListener('shown.bs.tab', tttReset);
-    });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
-   MEMORY MATCH GAME
+   3. MEMORY MATCH GAME
 ══════════════════════════════════════════════════════════════ */
 (function() {
     const EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎'];
@@ -1003,7 +1026,6 @@ function showBadgeToast(name) {
         const banner = document.getElementById('memoryBanner');
         if (banner) banner.classList.remove('show');
 
-        // Create 8 duplicate pairs & shuffle
         cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
 
         const grid = document.getElementById('memoryGrid');
@@ -1044,7 +1066,6 @@ function showBadgeToast(name) {
             const [a, b] = flipped;
 
             if (cards[a] === cards[b]) {
-                // Match found!
                 setTimeout(() => {
                     [a, b].forEach(idx => {
                         const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
@@ -1065,7 +1086,6 @@ function showBadgeToast(name) {
                     }
                 }, 380);
             } else {
-                // Not a match: flip back
                 setTimeout(() => {
                     [a, b].forEach(idx => {
                         const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
@@ -1076,32 +1096,69 @@ function showBadgeToast(name) {
             }
         }
     }
-
-    onReady(() => {
-        memoryStart();
-        const tab = document.getElementById('memory-tab');
-        if (tab) tab.addEventListener('shown.bs.tab', memoryStart);
-    });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
-   TAB HIGHLIGHT — activate tab from URL query parameter
+   BOOT SEQUENCE & BINDINGS
 ══════════════════════════════════════════════════════════════ */
-onReady(function() {
-    const dataEl = document.getElementById('gameHighlightData');
-    const highlight = (dataEl && dataEl.dataset) ? dataEl.dataset.highlight : '';
-    const tabMap = { snake: 'snake-tab', tictactoe: 'tictactoe-tab', memory: 'memory-tab' };
-    const tabId  = tabMap[highlight.toLowerCase()];
+function bootGamesHub() {
+    // 1. Tab Listeners
+    const snakeTab = document.getElementById('snake-tab');
+    const tttTab   = document.getElementById('tictactoe-tab');
+    const memTab   = document.getElementById('memory-tab');
 
-    if (tabId) {
-        const tabEl = document.getElementById(tabId);
-        if (tabEl && window.bootstrap) {
-            const tab = new bootstrap.Tab(tabEl);
-            tab.show();
+    if (snakeTab) snakeTab.addEventListener('click', () => window.switchGameTab('snake'));
+    if (tttTab)   tttTab.addEventListener('click',   () => window.switchGameTab('tictactoe'));
+    if (memTab)   memTab.addEventListener('click',   () => window.switchGameTab('memory'));
+
+    // 2. Snake Buttons & D-Pad
+    const snakeStartBtn = document.getElementById('snakeStartBtn');
+    if (snakeStartBtn) snakeStartBtn.addEventListener('click', () => window.snakeStart());
+
+    const dpadUp    = document.getElementById('dpadUp');
+    const dpadDown  = document.getElementById('dpadDown');
+    const dpadLeft  = document.getElementById('dpadLeft');
+    const dpadRight = document.getElementById('dpadRight');
+
+    if (dpadUp)    dpadUp.addEventListener('click',    () => window.snakeChangeDir(0, -1));
+    if (dpadDown)  dpadDown.addEventListener('click',  () => window.snakeChangeDir(0, 1));
+    if (dpadLeft)  dpadLeft.addEventListener('click',  () => window.snakeChangeDir(-1, 0));
+    if (dpadRight) dpadRight.addEventListener('click', () => window.snakeChangeDir(1, 0));
+
+    // 3. Tic-Tac-Toe cells & Reset button
+    for (let i = 0; i < 9; i++) {
+        const cell = document.getElementById('ttt' + i);
+        if (cell) {
+            cell.addEventListener('click', () => window.tttClick(i));
         }
     }
-});
+    const tttResetBtn = document.getElementById('tttResetBtn');
+    if (tttResetBtn) tttResetBtn.addEventListener('click', () => window.tttReset());
+
+    // 4. Memory Match Reset button
+    const memResetBtn = document.getElementById('memoryResetBtn');
+    if (memResetBtn) memResetBtn.addEventListener('click', () => window.memoryStart());
+
+    // 5. Initialize game canvases/boards
+    if (window.initSnake)   window.initSnake();
+    if (window.tttReset)    window.tttReset();
+    if (window.memoryStart) window.memoryStart();
+
+    // 6. Check URL highlight parameter
+    const dataEl = document.getElementById('gameHighlightData');
+    const highlight = (dataEl && dataEl.dataset) ? dataEl.dataset.highlight : '';
+    if (highlight) {
+        window.switchGameTab(highlight.toLowerCase());
+    }
+}
+
+// Run boot sequence
+if (document.readyState !== 'loading') {
+    bootGamesHub();
+} else {
+    document.addEventListener('DOMContentLoaded', bootGamesHub);
+}
 </script>
 </body>
 </html>
