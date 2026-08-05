@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games Hub – MoodJournal</title>
+    <meta name="description" content="Play mini-games to lift your mood: Snake, Tic-Tac-Toe, and Memory Match.">
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- CSRF token for AJAX calls -->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <style>
+        /* ── Game Hub Page Styles ─────────────────────────────────────── */
+        .games-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .games-hero::before {
+            content: "🎮";
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 6rem;
+            opacity: 0.18;
+        }
+        .games-hero h1 { font-weight: 800; font-size: 2rem; margin-bottom: 0.4rem; }
+        .games-hero p  { opacity: 0.9; margin: 0; }
+
+        /* Badge progress */
+        .badge-progress-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.07);
+            margin-bottom: 0.75rem;
+            transition: background 0.2s;
+        }
+        .badge-item:last-child { margin-bottom: 0; }
+        .badge-item.earned { background: rgba(102,126,234,0.25); }
+        .badge-emoji { font-size: 1.8rem; min-width: 2.5rem; text-align: center; }
+        .badge-info { flex: 1; }
+        .badge-info .badge-name { font-weight: 600; font-size: 0.95rem; }
+        .badge-info .badge-desc { font-size: 0.78rem; opacity: 0.7; }
+        .badge-status { font-size: 1.2rem; }
+
+        /* Game tabs nav */
+        .games-nav .nav-link {
+            border-radius: 12px !important;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: #555;
+            border: 2px solid transparent !important;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .games-nav .nav-link:hover   { background: #f0f0ff; color: #667eea; }
+        .games-nav .nav-link.active  {
+            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+            color: #fff !important;
+            border: 2px solid transparent !important;
+        }
+        .game-plays-badge {
+            background: rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 1px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .games-nav .nav-link:not(.active) .game-plays-badge {
+            background: rgba(102,126,234,0.15);
+            color: #667eea;
+        }
+
+        /* Game card wrapper */
+        .game-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(102,126,234,0.10);
+            overflow: hidden;
+        }
+        .game-card-header {
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(90deg, #f8f9ff, #f0f0ff);
+            border-bottom: 1px solid rgba(102,126,234,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .game-card-header h2 { font-weight: 700; font-size: 1.2rem; margin: 0; color: #333; }
+        .game-body { padding: 1.5rem; }
+
+        /* ── SNAKE GAME ─────────────────────────────────────── */
+        #snakeCanvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 12px;
+            border: 3px solid rgba(102,126,234,0.2);
+            background: #1a1a2e;
+            max-width: 100%;
+        }
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .score-display {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 48px);
+            grid-template-rows: repeat(3, 48px);
+            gap: 4px;
+            margin: 1rem auto 0;
+            width: fit-content;
+        }
+        .dpad button {
+            width: 48px; height: 48px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.1s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .dpad button:active { transform: scale(0.9); }
+        .dpad .empty { background: transparent; pointer-events: none; }
+
+        /* ── TIC TAC TOE ─────────────────────────────────────── */
+        .ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 280px;
+            margin: 0 auto 1.25rem;
+        }
+        .ttt-cell {
+            aspect-ratio: 1;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #f0f0ff, #e8e8ff);
+            font-size: 2.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+            color: #333;
+        }
+        .ttt-cell:hover:not(:disabled) { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; transform: scale(1.05); }
+        .ttt-cell:disabled { cursor: default; }
+        .ttt-cell.x-cell { color: #667eea; }
+        .ttt-cell.o-cell { color: #f093fb; }
+        .ttt-cell.winner { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff !important; animation: pop 0.3s ease; }
+        @keyframes pop { 0%{ transform:scale(1) } 50%{ transform:scale(1.15) } 100%{ transform:scale(1) } }
+        .ttt-status {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            min-height: 1.6rem;
+            color: #667eea;
+        }
+        .ttt-scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .ttt-score-box {
+            text-align: center;
+            padding: 0.5rem 1.5rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f0f0ff, #e8e8ff);
+        }
+        .ttt-score-box .score-val { font-size: 1.6rem; font-weight: 800; color: #667eea; }
+        .ttt-score-box .score-label { font-size: 0.72rem; color: #888; font-weight: 600; }
+
+        /* ── MEMORY MATCH ─────────────────────────────────────── */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 380px;
+            margin: 0 auto 1.25rem;
+        }
+        .mem-card {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.6rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease;
+            background: transparent;
+        }
+        .mem-card.flipped  { transform: rotateY(180deg); }
+        .mem-card.matched  { transform: rotateY(180deg); cursor: default; }
+        .mem-card .card-face {
+            position: absolute; inset: 0;
+            border-radius: 12px;
+            backface-visibility: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .mem-card .card-back {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .mem-card .card-front {
+            background: linear-gradient(135deg, #f8f9ff, #ededff);
+            transform: rotateY(180deg);
+            font-size: 1.8rem;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.15);
+        }
+        .mem-card.matched .card-front {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+        .memory-stats {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .mem-stat { text-align: center; }
+        .mem-stat .val { font-size: 1.5rem; font-weight: 800; color: #667eea; }
+        .mem-stat .lbl { font-size: 0.72rem; color: #888; font-weight: 600; }
+
+        /* Shared game UI */
+        .btn-game-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: #fff;
+            border-radius: 12px;
+            padding: 0.55rem 1.5rem;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .btn-game-primary:hover { opacity: 0.88; transform: translateY(-1px); color: #fff; }
+        .game-over-banner {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 14px;
+            margin-top: 1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .game-over-banner.show { display: block; }
+        .game-over-loss { background: linear-gradient(135deg, #ff6b6b, #feca57); color: #fff; }
+        .game-over-win  { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #fff; }
+
+        /* Toast notification */
+        #badgeToast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            min-width: 260px;
+        }
+        .toast-badge-body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 32px rgba(102,126,234,0.35);
+        }
+        .toast-badge-emoji { font-size: 2rem; }
+        .toast-badge-text .title  { font-weight: 700; font-size: 0.85rem; opacity: 0.85; }
+        .toast-badge-text .name   { font-weight: 800; font-size: 1rem; }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="flex-grow-1 py-4">
+    <div class="container">
+
+        <!-- Hero Banner -->
+        <div class="games-hero">
+            <h1>🎮 Games Hub</h1>
+            <p>Take a break and play a mini-game to lift your mood!</p>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Left: Game Tabs -->
+            <div class="col-lg-8">
+                <!-- Nav Tabs -->
+                <ul class="nav games-nav gap-2 mb-3" id="gameTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="snake-tab" data-bs-toggle="tab"
+                                data-bs-target="#snake-pane" type="button" role="tab">
+                            🐍 Snake
+                            <span class="game-plays-badge"
+                                  th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0} + ' plays'">0 plays</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="tictactoe-tab" data-bs-toggle="tab"
+                                data-bs-target="#tictactoe-pane" type="button" role="tab">
+                            ❌ Tic-Tac-Toe
+                            <span class="game-plays-badge"
+                                  th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0} + ' plays'">0 plays</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="memory-tab" data-bs-toggle="tab"
+                                data-bs-target="#memory-pane" type="button" role="tab">
+                            🃏 Memory Match
+                            <span class="game-plays-badge"
+                                  th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+
+                    <!-- ════════════════════════════════════════════ SNAKE -->
+                    <div class="tab-pane fade" id="snake-pane" role="tabpanel">
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <h2>🐍 Snake</h2>
+                                <span class="text-muted" style="font-size:0.82rem;">Arrow keys or D-pad to move</span>
+                            </div>
+                            <div class="game-body text-center">
+                                <div class="score-display">Score: <span id="snakeScore">0</span>
+                                    &nbsp;|&nbsp; High: <span id="snakeHigh">0</span></div>
+                                <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                                <div class="game-over-banner" id="snakeBanner"></div>
+                                <div class="game-controls">
+                                    <button class="btn btn-game-primary" id="snakeStartBtn" onclick="snakeStart()">
+                                        <i class="bi bi-play-fill me-1"></i>Start Game
+                                    </button>
+                                </div>
+                                <!-- D-pad for mobile -->
+                                <div class="dpad mt-3 d-md-none">
+                                    <div class="empty"></div>
+                                    <button onclick="snakeChangeDir(0,-1)"><i class="bi bi-arrow-up"></i></button>
+                                    <div class="empty"></div>
+                                    <button onclick="snakeChangeDir(-1,0)"><i class="bi bi-arrow-left"></i></button>
+                                    <div class="empty"></div>
+                                    <button onclick="snakeChangeDir(1,0)"><i class="bi bi-arrow-right"></i></button>
+                                    <div class="empty"></div>
+                                    <button onclick="snakeChangeDir(0,1)"><i class="bi bi-arrow-down"></i></button>
+                                    <div class="empty"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ════════════════════════════════════════════ TIC-TAC-TOE -->
+                    <div class="tab-pane fade" id="tictactoe-pane" role="tabpanel">
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <h2>❌ Tic-Tac-Toe</h2>
+                                <span class="text-muted" style="font-size:0.82rem;">You are X — play against the AI</span>
+                            </div>
+                            <div class="game-body">
+                                <div class="ttt-scoreboard">
+                                    <div class="ttt-score-box">
+                                        <div class="score-val" id="tttWins">0</div>
+                                        <div class="score-label">You (X) Wins</div>
+                                    </div>
+                                    <div class="ttt-score-box">
+                                        <div class="score-val" id="tttDraws">0</div>
+                                        <div class="score-label">Draws</div>
+                                    </div>
+                                    <div class="ttt-score-box">
+                                        <div class="score-val" id="tttLosses">0</div>
+                                        <div class="score-label">AI (O) Wins</div>
+                                    </div>
+                                </div>
+                                <div class="ttt-status" id="tttStatus">Click a cell to start!</div>
+                                <div class="ttt-board" id="tttBoard">
+                                    <button class="ttt-cell" id="ttt0" onclick="tttClick(0)"></button>
+                                    <button class="ttt-cell" id="ttt1" onclick="tttClick(1)"></button>
+                                    <button class="ttt-cell" id="ttt2" onclick="tttClick(2)"></button>
+                                    <button class="ttt-cell" id="ttt3" onclick="tttClick(3)"></button>
+                                    <button class="ttt-cell" id="ttt4" onclick="tttClick(4)"></button>
+                                    <button class="ttt-cell" id="ttt5" onclick="tttClick(5)"></button>
+                                    <button class="ttt-cell" id="ttt6" onclick="tttClick(6)"></button>
+                                    <button class="ttt-cell" id="ttt7" onclick="tttClick(7)"></button>
+                                    <button class="ttt-cell" id="ttt8" onclick="tttClick(8)"></button>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-game-primary" onclick="tttReset()">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ════════════════════════════════════════════ MEMORY MATCH -->
+                    <div class="tab-pane fade" id="memory-pane" role="tabpanel">
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <h2>🃏 Memory Match</h2>
+                                <span class="text-muted" style="font-size:0.82rem;">Find all matching pairs!</span>
+                            </div>
+                            <div class="game-body">
+                                <div class="memory-stats">
+                                    <div class="mem-stat">
+                                        <div class="val" id="memMoves">0</div>
+                                        <div class="lbl">Moves</div>
+                                    </div>
+                                    <div class="mem-stat">
+                                        <div class="val" id="memMatched">0</div>
+                                        <div class="lbl">Matched</div>
+                                    </div>
+                                    <div class="mem-stat">
+                                        <div class="val" id="memTime">0s</div>
+                                        <div class="lbl">Time</div>
+                                    </div>
+                                </div>
+                                <div class="memory-grid" id="memoryGrid"></div>
+                                <div class="game-over-banner game-over-win" id="memoryBanner"></div>
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-game-primary" onclick="memoryStart()">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /tab-content -->
+            </div><!-- /col-lg-8 -->
+
+            <!-- Right: Progress Sidebar -->
+            <div class="col-lg-4">
+                <!-- Badge Progress -->
+                <div class="badge-progress-card">
+                    <h2 class="fw-700 mb-3" style="font-size:1.1rem;color:#fff;">
+                        <i class="bi bi-trophy-fill me-2" style="color:#ffd700;"></i>Game Badges
+                    </h2>
+                    <div class="badge-item" th:classappend="${explorerEarned} ? 'earned' : ''">
+                        <div class="badge-emoji">🎮</div>
+                        <div class="badge-info">
+                            <div class="badge-name">Game Explorer</div>
+                            <div class="badge-desc">Play your first game</div>
+                        </div>
+                        <div class="badge-status">
+                            <span th:if="${explorerEarned}">✅</span>
+                            <span th:unless="${explorerEarned}">🔒</span>
+                        </div>
+                    </div>
+                    <div class="badge-item" th:classappend="${masterEarned} ? 'earned' : ''">
+                        <div class="badge-emoji">🧩</div>
+                        <div class="badge-info">
+                            <div class="badge-name">Puzzle Master</div>
+                            <div class="badge-desc">
+                                Play 5 games total
+                                <span th:unless="${masterEarned}">
+                                    (<span th:text="${masterProgress}">0</span>/5)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="badge-status">
+                            <span th:if="${masterEarned}">✅</span>
+                            <span th:unless="${masterEarned}">🔒</span>
+                        </div>
+                    </div>
+                    <!-- Progress bar -->
+                    <div th:unless="${masterEarned}" class="mt-3">
+                        <div class="d-flex justify-content-between mb-1"
+                             style="font-size:0.75rem;color:rgba(255,255,255,0.7);">
+                            <span>Puzzle Master progress</span>
+                            <span th:text="${masterProgress} + '/5'">0/5</span>
+                        </div>
+                        <div class="progress" style="height:8px;border-radius:8px;background:rgba(255,255,255,0.15);">
+                            <div class="progress-bar" role="progressbar"
+                                 style="background:linear-gradient(90deg,#667eea,#f093fb);border-radius:8px;"
+                                 th:style="'width:' + (${masterProgress} * 20) + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Plays Card -->
+                <div class="mood-card p-4 mb-4 text-center">
+                    <div style="font-size:2.5rem;line-height:1;">🕹️</div>
+                    <div style="font-size:2rem;font-weight:800;color:#667eea;" th:text="${totalPlays}">0</div>
+                    <div style="font-size:0.85rem;color:#888;font-weight:600;">Total Games Played</div>
+                </div>
+
+                <!-- Per-game stats -->
+                <div class="mood-card p-4">
+                    <h2 class="card-section-title mb-3">
+                        <i class="bi bi-bar-chart me-2"></i>Your Stats
+                    </h2>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>🐍 Snake</span>
+                        <strong th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0}">0</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>❌ Tic-Tac-Toe</span>
+                        <strong th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0}">0</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>🃏 Memory Match</span>
+                        <strong th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0}">0</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /row -->
+    </div><!-- /container -->
+</main>
+
+<!-- Badge Toast -->
+<div id="badgeToast">
+    <div class="toast-badge-body" style="display:none;" id="badgeToastInner">
+        <div class="toast-badge-emoji" id="toastEmoji">🏆</div>
+        <div class="toast-badge-text">
+            <div class="title">New Badge Earned!</div>
+            <div class="name" id="toastBadgeName"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Pass server-side 'highlight' value to JS safely via data attribute (avoids th:inline issues) -->
+<span id="gameHighlightData" th:data-highlight="${highlight}" style="display:none;"></span>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   SHARED UTILITIES
+══════════════════════════════════════════════════════════════ */
+const CSRF_TOKEN  = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+/** POST a play record to the server */
+function recordPlay(gameName) {
+    return fetch('/games/play', {
+        method:  'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [CSRF_HEADER]: CSRF_TOKEN
+        },
+        body: JSON.stringify({ game: gameName })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.newBadge) showBadgeToast(data.newBadge);
+        // Refresh play-count badges in nav tabs (simple increment)
+        const tabId = gameName === 'tictactoe' ? 'tictactoe-tab' : gameName + '-tab';
+        const pill = document.querySelector('#' + tabId + ' .game-plays-badge');
+        if (pill) {
+            const n = parseInt(pill.textContent) + 1;
+            pill.textContent = n + ' play' + (n !== 1 ? 's' : '');
+        }
+    })
+    .catch(() => {}); // silent on network error
+}
+
+function showBadgeToast(name) {
+    const inner = document.getElementById('badgeToastInner');
+    document.getElementById('toastBadgeName').textContent = name;
+    inner.style.display = 'flex';
+    setTimeout(() => { inner.style.display = 'none'; }, 4000);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SNAKE GAME
+══════════════════════════════════════════════════════════════ */
+(function() {
+    const CELL = 20, COLS = 20, ROWS = 20;
+    let canvas, ctx, snake, dir, nextDir, food, score, highScore, running, loopTimer;
+
+    function init() {
+        canvas = document.getElementById('snakeCanvas');
+        ctx    = canvas.getContext('2d');
+        canvas.width  = COLS * CELL;
+        canvas.height = ROWS * CELL;
+        highScore = parseInt(localStorage.getItem('snakeHigh') || '0');
+        document.getElementById('snakeHigh').textContent = highScore;
+        drawIdle();
+    }
+
+    function drawIdle() {
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#667eea';
+        ctx.font = '700 22px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Press Start to Play!', canvas.width / 2, canvas.height / 2);
+    }
+
+    window.snakeStart = function() {
+        clearInterval(loopTimer);
+        snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
+        dir     = {x:1, y:0};
+        nextDir = {x:1, y:0};
+        score   = 0;
+        running = true;
+        document.getElementById('snakeScore').textContent = 0;
+        document.getElementById('snakeBanner').classList.remove('show');
+        placeFood();
+        loopTimer = setInterval(gameLoop, 130);
+        document.getElementById('snakeStartBtn').textContent = '↺ Restart';
+    };
+
+    window.snakeChangeDir = function(x, y) {
+        // Prevent 180° reversal
+        if (x !== 0 && dir.x === 0) nextDir = {x, y};
+        if (y !== 0 && dir.y === 0) nextDir = {x, y};
+    };
+
+    function placeFood() {
+        let pos;
+        do { pos = {x: Math.floor(Math.random()*COLS), y: Math.floor(Math.random()*ROWS)}; }
+        while (snake.some(s => s.x === pos.x && s.y === pos.y));
+        food = pos;
+    }
+
+    function gameLoop() {
+        dir = nextDir;
+        const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+        // Wall collision
+        if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) { return endGame(); }
+        // Self collision
+        if (snake.some(s => s.x === head.x && s.y === head.y)) { return endGame(); }
+
+        snake.unshift(head);
+        if (head.x === food.x && head.y === food.y) {
+            score++;
+            document.getElementById('snakeScore').textContent = score;
+            placeFood();
+        } else {
+            snake.pop();
+        }
+        draw();
+    }
+
+    function draw() {
+        ctx.fillStyle = '#1a1a2e';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Grid dots
+        ctx.fillStyle = 'rgba(255,255,255,0.04)';
+        for (let x = 0; x < COLS; x++)
+            for (let y = 0; y < ROWS; y++)
+                ctx.fillRect(x*CELL+CELL/2-1, y*CELL+CELL/2-1, 2, 2);
+        // Food
+        ctx.fillStyle = '#f093fb';
+        ctx.beginPath();
+        ctx.arc(food.x*CELL+CELL/2, food.y*CELL+CELL/2, CELL/2-2, 0, Math.PI*2);
+        ctx.fill();
+        // Snake
+        snake.forEach((s, i) => {
+            const grad = ctx.createRadialGradient(
+                s.x*CELL+CELL/2, s.y*CELL+CELL/2, 1,
+                s.x*CELL+CELL/2, s.y*CELL+CELL/2, CELL/2-1);
+            grad.addColorStop(0, i===0 ? '#a78bfa' : '#667eea');
+            grad.addColorStop(1, i===0 ? '#667eea' : '#4c51bf');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.roundRect(s.x*CELL+2, s.y*CELL+2, CELL-4, CELL-4, 4);
+            ctx.fill();
+        });
+    }
+
+    function endGame() {
+        clearInterval(loopTimer);
+        running = false;
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('snakeHigh', highScore);
+            document.getElementById('snakeHigh').textContent = highScore;
+        }
+        const banner = document.getElementById('snakeBanner');
+        banner.className = 'game-over-banner game-over-loss show';
+        banner.textContent = `💀 Game Over! Score: ${score}`;
+        recordPlay('snake');
+    }
+
+    document.addEventListener('keydown', e => {
+        const map = {ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0}};
+        if (map[e.key] && running) {
+            e.preventDefault();
+            snakeChangeDir(map[e.key].x, map[e.key].y);
+        }
+    });
+
+    document.getElementById('snake-tab').addEventListener('shown.bs.tab', init);
+    // Init if snake tab is already active on load
+    if (document.getElementById('snake-pane').classList.contains('active')) init();
+})();
+
+
+/* ══════════════════════════════════════════════════════════════
+   TIC-TAC-TOE  (vs Smart AI using minimax)
+══════════════════════════════════════════════════════════════ */
+(function() {
+    let board, gameActive;
+    let wins = 0, draws = 0, losses = 0;
+    const WIN_LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+    function checkWinner(b) {
+        for (const [a,c,d] of WIN_LINES) {
+            if (b[a] && b[a]===b[c] && b[a]===b[d]) return b[a];
+        }
+        return b.includes('') ? null : 'draw';
+    }
+
+    function minimax(b, isMax) {
+        const result = checkWinner(b);
+        if (result === 'O') return 10;
+        if (result === 'X') return -10;
+        if (result === 'draw') return 0;
+        let best = isMax ? -Infinity : Infinity;
+        for (let i = 0; i < 9; i++) {
+            if (!b[i]) {
+                b[i] = isMax ? 'O' : 'X';
+                const val = minimax(b, !isMax);
+                b[i] = '';
+                best = isMax ? Math.max(best, val) : Math.min(best, val);
+            }
+        }
+        return best;
+    }
+
+    function bestMove(b) {
+        let best = -Infinity, move = -1;
+        for (let i = 0; i < 9; i++) {
+            if (!b[i]) {
+                b[i] = 'O';
+                const val = minimax(b, false);
+                b[i] = '';
+                if (val > best) { best = val; move = i; }
+            }
+        }
+        return move;
+    }
+
+    window.tttClick = function(i) {
+        if (!gameActive || board[i]) return;
+        board[i] = 'X';
+        renderBoard();
+        const result = checkWinner(board);
+        if (result) { endTTT(result); return; }
+        // AI move
+        setTimeout(() => {
+            const ai = bestMove(board);
+            if (ai >= 0) {
+                board[ai] = 'O';
+                renderBoard();
+                const r2 = checkWinner(board);
+                if (r2) endTTT(r2);
+            }
+        }, 250);
+    };
+
+    function renderBoard() {
+        board.forEach((v, i) => {
+            const cell = document.getElementById('ttt' + i);
+            cell.textContent = v;
+            cell.className = 'ttt-cell' + (v === 'X' ? ' x-cell' : v === 'O' ? ' o-cell' : '');
+            cell.disabled = !!v || !gameActive;
+        });
+    }
+
+    function endTTT(result) {
+        gameActive = false;
+        let status;
+        if (result === 'X')         { wins++;   status = '🎉 You Win!';  highlightWinner('X'); recordPlay('tictactoe'); }
+        else if (result === 'O')    { losses++;  status = '🤖 AI Wins!'; highlightWinner('O'); recordPlay('tictactoe'); }
+        else                        { draws++;   status = '🤝 Draw!';    recordPlay('tictactoe'); }
+        document.getElementById('tttStatus').textContent = status;
+        document.getElementById('tttWins').textContent   = wins;
+        document.getElementById('tttDraws').textContent  = draws;
+        document.getElementById('tttLosses').textContent = losses;
+    }
+
+    function highlightWinner(mark) {
+        for (const [a,b,c] of WIN_LINES) {
+            if (board[a]===mark && board[b]===mark && board[c]===mark) {
+                [a,b,c].forEach(i => document.getElementById('ttt'+i).classList.add('winner'));
+                break;
+            }
+        }
+    }
+
+    window.tttReset = function() {
+        board = Array(9).fill('');
+        gameActive = true;
+        document.getElementById('tttStatus').textContent = 'Your turn (X)!';
+        renderBoard();
+    };
+
+    tttReset();
+})();
+
+
+/* ══════════════════════════════════════════════════════════════
+   MEMORY MATCH
+══════════════════════════════════════════════════════════════ */
+(function() {
+    const EMOJIS = ['🌸','🌈','🦋','🎸','🍕','🚀','🐬','💎'];
+    let cards, flipped, matched, moves, timer, elapsed;
+
+    window.memoryStart = function() {
+        clearInterval(timer);
+        moves = 0; matched = 0; elapsed = 0; flipped = [];
+        document.getElementById('memMoves').textContent   = 0;
+        document.getElementById('memMatched').textContent = 0;
+        document.getElementById('memTime').textContent    = '0s';
+        document.getElementById('memoryBanner').classList.remove('show');
+
+        // Shuffle pairs
+        cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
+        const grid = document.getElementById('memoryGrid');
+        grid.innerHTML = '';
+        cards.forEach((emoji, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'mem-card';
+            btn.dataset.index = i;
+            btn.innerHTML = `<div class="card-face card-back">❓</div><div class="card-face card-front">${emoji}</div>`;
+            btn.onclick = () => memFlip(i);
+            grid.appendChild(btn);
+        });
+
+        timer = setInterval(() => {
+            elapsed++;
+            document.getElementById('memTime').textContent = elapsed + 's';
+        }, 1000);
+    };
+
+    function memFlip(i) {
+        const card = document.querySelector(`.mem-card[data-index="${i}"]`);
+        if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length === 2) return;
+
+        card.classList.add('flipped');
+        flipped.push(i);
+
+        if (flipped.length === 2) {
+            moves++;
+            document.getElementById('memMoves').textContent = moves;
+            const [a, b] = flipped;
+            if (cards[a] === cards[b]) {
+                setTimeout(() => {
+                    [a, b].forEach(idx => document.querySelector(`.mem-card[data-index="${idx}"]`).classList.add('matched'));
+                    matched++;
+                    document.getElementById('memMatched').textContent = matched;
+                    flipped = [];
+                    if (matched === EMOJIS.length) {
+                        clearInterval(timer);
+                        const banner = document.getElementById('memoryBanner');
+                        banner.className = 'game-over-banner game-over-win show';
+                        banner.textContent = `🎉 Solved in ${moves} moves & ${elapsed}s!`;
+                        recordPlay('memory');
+                    }
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    [a, b].forEach(idx => {
+                        const c = document.querySelector(`.mem-card[data-index="${idx}"]`);
+                        if (c) c.classList.remove('flipped');
+                    });
+                    flipped = [];
+                }, 1000);
+            }
+        }
+    }
+
+    memoryStart();
+})();
+
+
+/* ══════════════════════════════════════════════════════════════
+   TAB HIGHLIGHT — activate tab from URL param
+══════════════════════════════════════════════════════════════ */
+(function() {
+    const highlight = document.getElementById('gameHighlightData').dataset.highlight || '';
+    const tabMap = { snake: 'snake-tab', tictactoe: 'tictactoe-tab', memory: 'memory-tab' };
+    const tabId  = tabMap[highlight.toLowerCase()] || 'snake-tab';
+    const tab    = document.getElementById(tabId);
+    if (tab) new bootstrap.Tab(tab).show();
+})();
+</script>
+</body>
+</html>
