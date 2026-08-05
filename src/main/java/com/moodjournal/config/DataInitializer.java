@@ -46,6 +46,9 @@ public class DataInitializer implements CommandLineRunner {
     private void initGameBadges() {
         seedBadgeIfMissing("🎮 Game Explorer", "Play your very first mini-game!",        "GAME_EXPLORER");
         seedBadgeIfMissing("🧩 Puzzle Master",  "Play 5 mini-games to unlock this badge!", "PUZZLE_MASTER");
+        seedBadgeIfMissing("🫁 Zen Master",     "Complete 3 deep breathing sessions!",      "BREATHING_ZEN");
+        seedBadgeIfMissing("🐍 Snake Charmer",  "Play 3 Snake games to unlock this!",      "SNAKE_MASTER");
+        seedBadgeIfMissing("👑 Arcade Champ",   "Play 10 total activities to unlock!",     "ARCADE_CHAMPION");
     }
 
     private void seedBadgeIfMissing(String name, String description, String criteria) {

@@ -31,6 +31,9 @@ public class GameController {
         long totalPlays             = gameService.getPlayCount(user);
         Map<String, Long> gameStats = gameService.getGameStats(user);
 
+        long breathingPlays = gameStats.getOrDefault("breathing", 0L);
+        long snakePlays     = gameStats.getOrDefault("snake", 0L);
+
         model.addAttribute("highlight",   highlight);
         model.addAttribute("totalPlays",  totalPlays);
         model.addAttribute("gameStats",   gameStats);
@@ -39,6 +42,12 @@ public class GameController {
         model.addAttribute("explorerEarned", totalPlays >= 1);
         model.addAttribute("masterEarned",   totalPlays >= 5);
         model.addAttribute("masterProgress", Math.min(totalPlays, 5));
+        model.addAttribute("champEarned",    totalPlays >= 10);
+        model.addAttribute("champProgress",  Math.min(totalPlays, 10));
+        model.addAttribute("zenEarned",      breathingPlays >= 3);
+        model.addAttribute("zenProgress",    Math.min(breathingPlays, 3));
+        model.addAttribute("snakeEarned",    snakePlays >= 3);
+        model.addAttribute("snakeProgress",  Math.min(snakePlays, 3));
 
         return "games";
     }

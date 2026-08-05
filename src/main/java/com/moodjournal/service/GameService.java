@@ -27,7 +27,7 @@ public class GameService {
     @Autowired private UserBadgeRepository userBadgeRepository;
 
     /** Valid game identifiers accepted from the front-end. */
-    public static final List<String> VALID_GAMES = List.of("snake", "tictactoe", "memory");
+    public static final List<String> VALID_GAMES = List.of("snake", "tictactoe", "memory", "breathing");
 
     /**
      * Records a completed game play and triggers badge checks.
@@ -38,17 +38,17 @@ public class GameService {
         userGameRepository.save(new UserGame(user, gameName, LocalDateTime.now()));
 
         // Check badges and return the first newly awarded badge name (if any)
-        return checkAndAwardGameBadges(user);
+        return checkAndAwardGameBadges(user, gameName);
     }
 
     /**
      * Evaluates game-related badge criteria.
      * @return newly awarded badge display name, or null.
      */
-    private String checkAndAwardGameBadges(User user) {
+    private String checkAndAwardGameBadges(User user, String gameName) {
         long totalPlays = userGameRepository.countByUser(user);
 
-        // GAME_EXPLORER — first play ever
+        // GAME_EXPLORER — 1st play
         if (totalPlays >= 1) {
             String awarded = awardIfNotEarned(user, "GAME_EXPLORER");
             if (awarded != null) return awarded;
@@ -58,6 +58,30 @@ public class GameService {
         if (totalPlays >= 5) {
             String awarded = awardIfNotEarned(user, "PUZZLE_MASTER");
             if (awarded != null) return awarded;
+        }
+
+        // ARCADE_CHAMPION — 10 total plays
+        if (totalPlays >= 10) {
+            String awarded = awardIfNotEarned(user, "ARCADE_CHAMPION");
+            if (awarded != null) return awarded;
+        }
+
+        // BREATHING_ZEN — 3 breathing sessions
+        if ("breathing".equals(gameName)) {
+            long breathingCount = userGameRepository.countByUserAndGameName(user, "breathing");
+            if (breathingCount >= 3) {
+                String awarded = awardIfNotEarned(user, "BREATHING_ZEN");
+                if (awarded != null) return awarded;
+            }
+        }
+
+        // SNAKE_MASTER — 3 snake plays
+        if ("snake".equals(gameName)) {
+            long snakeCount = userGameRepository.countByUserAndGameName(user, "snake");
+            if (snakeCount >= 3) {
+                String awarded = awardIfNotEarned(user, "SNAKE_MASTER");
+                if (awarded != null) return awarded;
+            }
         }
 
         return null;

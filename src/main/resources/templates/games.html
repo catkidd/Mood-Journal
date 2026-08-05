@@ -191,12 +191,18 @@
                             </div>
                             <div class="game-body text-center">
                                 <!-- Mode Selector -->
-                                <div class="d-flex justify-content-center gap-2 mb-2">
+                                <div class="d-flex justify-content-center flex-wrap gap-2 mb-2">
                                     <button type="button" class="breath-mode-btn active" id="btnMode478" onclick="setBreathMode('478')">
-                                        🌿 4-7-8 Relaxing Breath
+                                        🌿 4-7-8 Relaxing
                                     </button>
                                     <button type="button" class="breath-mode-btn" id="btnModeBox" onclick="setBreathMode('box')">
-                                        📦 4-4-4-4 Box Breathing
+                                        📦 4-4-4-4 Box
+                                    </button>
+                                    <button type="button" class="breath-mode-btn" id="btnMode711" onclick="setBreathMode('711')">
+                                        🌊 7-11 Deep Calm
+                                    </button>
+                                    <button type="button" class="breath-mode-btn" id="btnMode424" onclick="setBreathMode('424')">
+                                        ⚡ 4-2-4 Focus
                                     </button>
                                 </div>
 
@@ -271,16 +277,54 @@
                         </div>
                     </div>
 
-                    <div th:unless="${masterEarned}" class="mt-3">
-                        <div class="d-flex justify-content-between mb-1"
-                             style="font-size:0.75rem;color:rgba(255,255,255,0.75);">
-                            <span>Puzzle Master Progress</span>
-                            <span th:text="${masterProgress} + '/5'">0/5</span>
+                    <div class="badge-item" th:classappend="${zenEarned} ? 'earned' : ''">
+                        <div class="badge-emoji">🫁</div>
+                        <div class="badge-info">
+                            <div class="badge-name">Zen Master</div>
+                            <div class="badge-desc">
+                                Complete 3 breathing sessions
+                                <span th:unless="${zenEarned}">
+                                    (<span th:text="${zenProgress}">0</span>/3)
+                                </span>
+                            </div>
                         </div>
-                        <div class="progress" style="height:8px;border-radius:8px;background:rgba(255,255,255,0.15);">
-                            <div class="progress-bar" role="progressbar"
-                                 style="background:linear-gradient(90deg,#5B8FBF,#9B7DB5);border-radius:8px;"
-                                 th:style="'width:' + (${masterProgress} * 20) + '%'"></div>
+                        <div class="badge-status">
+                            <span th:if="${zenEarned}">✅</span>
+                            <span th:unless="${zenEarned}">🔒</span>
+                        </div>
+                    </div>
+
+                    <div class="badge-item" th:classappend="${snakeEarned} ? 'earned' : ''">
+                        <div class="badge-emoji">🐍</div>
+                        <div class="badge-info">
+                            <div class="badge-name">Snake Charmer</div>
+                            <div class="badge-desc">
+                                Play 3 Snake games
+                                <span th:unless="${snakeEarned}">
+                                    (<span th:text="${snakeProgress}">0</span>/3)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="badge-status">
+                            <span th:if="${snakeEarned}">✅</span>
+                            <span th:unless="${snakeEarned}">🔒</span>
+                        </div>
+                    </div>
+
+                    <div class="badge-item" th:classappend="${champEarned} ? 'earned' : ''">
+                        <div class="badge-emoji">👑</div>
+                        <div class="badge-info">
+                            <div class="badge-name">Arcade Champ</div>
+                            <div class="badge-desc">
+                                Play 10 total activities
+                                <span th:unless="${champEarned}">
+                                    (<span th:text="${champProgress}">0</span>/10)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="badge-status">
+                            <span th:if="${champEarned}">✅</span>
+                            <span th:unless="${champEarned}">🔒</span>
                         </div>
                     </div>
                 </div>

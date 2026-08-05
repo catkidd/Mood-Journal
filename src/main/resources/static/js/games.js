@@ -510,6 +510,15 @@ const BREATH_PATTERNS = {
         { name: 'Hold',   duration: 4, class: 'hold',   text: 'Hold your breath calmly...', scale: 'scale(1.58)' },
         { name: 'Exhale', duration: 4, class: 'exhale', text: 'Exhale smoothly & completely...', scale: 'scale(1.0)' },
         { name: 'Hold',   duration: 4, class: 'hold',   text: 'Rest quietly in empty breath...', scale: 'scale(1.0)' }
+    ],
+    '711': [
+        { name: 'Inhale', duration: 7, class: 'inhale', text: 'Deeply inhale through your nose...', scale: 'scale(1.58)' },
+        { name: 'Exhale', duration: 11, class: 'exhale', text: 'Long, slow exhale releasing panic & stress...', scale: 'scale(1.0)' }
+    ],
+    '424': [
+        { name: 'Inhale', duration: 4, class: 'inhale', text: 'Breathe in fresh energy & focus...', scale: 'scale(1.58)' },
+        { name: 'Hold',   duration: 2, class: 'hold',   text: 'Brief pause for balance...', scale: 'scale(1.58)' },
+        { name: 'Exhale', duration: 4, class: 'exhale', text: 'Smooth, steady exhale...', scale: 'scale(1.0)' }
     ]
 };
 
@@ -517,16 +526,13 @@ function setBreathMode(mode) {
     if (breathActive) resetBreathing();
     breathMode = mode;
     
-    const btn478 = document.getElementById('btnMode478');
-    const btnBox = document.getElementById('btnModeBox');
-    
-    if (mode === '478') {
-        if (btn478) btn478.classList.add('active');
-        if (btnBox) btnBox.classList.remove('active');
-    } else {
-        if (btnBox) btnBox.classList.add('active');
-        if (btn478) btn478.classList.remove('active');
-    }
+    ['478', 'box', '711', '424'].forEach(m => {
+        const btn = document.getElementById('btnMode' + (m === 'box' ? 'Box' : m));
+        if (btn) {
+            if (m === mode) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
 }
 window.setBreathMode = setBreathMode;
 
