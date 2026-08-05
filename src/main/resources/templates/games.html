@@ -123,6 +123,7 @@
             border: 3px solid rgba(102,126,234,0.2);
             background: #1a1a2e;
             max-width: 100%;
+            touch-action: none;
         }
         .game-controls {
             display: flex;
@@ -142,7 +143,7 @@
             display: grid;
             grid-template-columns: repeat(3, 48px);
             grid-template-rows: repeat(3, 48px);
-            gap: 4px;
+            gap: 6px;
             margin: 1rem auto 0;
             width: fit-content;
         }
@@ -152,10 +153,11 @@
             border: none;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: transform 0.1s, opacity 0.1s;
             display: flex; align-items: center; justify-content: center;
+            user-select: none;
         }
         .dpad button:active { transform: scale(0.9); }
         .dpad .empty { background: transparent; pointer-events: none; }
@@ -164,8 +166,8 @@
         .ttt-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-width: 280px;
+            gap: 10px;
+            max-width: 290px;
             margin: 0 auto 1.25rem;
         }
         .ttt-cell {
@@ -219,6 +221,7 @@
             gap: 10px;
             max-width: 380px;
             margin: 0 auto 1.25rem;
+            perspective: 1000px;
         }
         .mem-card {
             aspect-ratio: 1;
@@ -230,6 +233,7 @@
             transform-style: preserve-3d;
             transition: transform 0.4s ease;
             background: transparent;
+            padding: 0;
         }
         .mem-card.flipped  { transform: rotateY(180deg); }
         .mem-card.matched  { transform: rotateY(180deg); cursor: default; }
@@ -237,6 +241,7 @@
             position: absolute; inset: 0;
             border-radius: 12px;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             display: flex; align-items: center; justify-content: center;
         }
         .mem-card .card-back {
@@ -330,8 +335,8 @@
                 <!-- Nav Tabs -->
                 <ul class="nav games-nav gap-2 mb-3" id="gameTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="snake-tab" data-bs-toggle="tab"
-                                data-bs-target="#snake-pane" type="button" role="tab">
+                        <button class="nav-link active" id="snake-tab" data-bs-toggle="tab"
+                                data-bs-target="#snake-pane" type="button" role="tab" aria-selected="true">
                             🐍 Snake
                             <span class="game-plays-badge"
                                   th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0} + ' plays'">0 plays</span>
@@ -339,7 +344,7 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="tictactoe-tab" data-bs-toggle="tab"
-                                data-bs-target="#tictactoe-pane" type="button" role="tab">
+                                data-bs-target="#tictactoe-pane" type="button" role="tab" aria-selected="false">
                             ❌ Tic-Tac-Toe
                             <span class="game-plays-badge"
                                   th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0} + ' plays'">0 plays</span>
@@ -347,7 +352,7 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="memory-tab" data-bs-toggle="tab"
-                                data-bs-target="#memory-pane" type="button" role="tab">
+                                data-bs-target="#memory-pane" type="button" role="tab" aria-selected="false">
                             🃏 Memory Match
                             <span class="game-plays-badge"
                                   th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
@@ -359,11 +364,11 @@
                 <div class="tab-content">
 
                     <!-- ════════════════════════════════════════════ SNAKE -->
-                    <div class="tab-pane fade" id="snake-pane" role="tabpanel">
+                    <div class="tab-pane fade show active" id="snake-pane" role="tabpanel">
                         <div class="game-card">
                             <div class="game-card-header">
                                 <h2>🐍 Snake</h2>
-                                <span class="text-muted" style="font-size:0.82rem;">Arrow keys or D-pad to move</span>
+                                <span class="text-muted" style="font-size:0.82rem;">Use Arrow Keys / WASD or D-Pad</span>
                             </div>
                             <div class="game-body text-center">
                                 <div class="score-display">Score: <span id="snakeScore">0</span>
@@ -375,16 +380,16 @@
                                         <i class="bi bi-play-fill me-1"></i>Start Game
                                     </button>
                                 </div>
-                                <!-- D-pad for mobile -->
-                                <div class="dpad mt-3 d-md-none">
+                                <!-- D-pad for mobile / quick click controls -->
+                                <div class="dpad mt-3">
                                     <div class="empty"></div>
-                                    <button onclick="snakeChangeDir(0,-1)"><i class="bi bi-arrow-up"></i></button>
+                                    <button type="button" onclick="snakeChangeDir(0,-1)" title="Up"><i class="bi bi-arrow-up"></i></button>
                                     <div class="empty"></div>
-                                    <button onclick="snakeChangeDir(-1,0)"><i class="bi bi-arrow-left"></i></button>
+                                    <button type="button" onclick="snakeChangeDir(-1,0)" title="Left"><i class="bi bi-arrow-left"></i></button>
                                     <div class="empty"></div>
-                                    <button onclick="snakeChangeDir(1,0)"><i class="bi bi-arrow-right"></i></button>
+                                    <button type="button" onclick="snakeChangeDir(1,0)" title="Right"><i class="bi bi-arrow-right"></i></button>
                                     <div class="empty"></div>
-                                    <button onclick="snakeChangeDir(0,1)"><i class="bi bi-arrow-down"></i></button>
+                                    <button type="button" onclick="snakeChangeDir(0,1)" title="Down"><i class="bi bi-arrow-down"></i></button>
                                     <div class="empty"></div>
                                 </div>
                             </div>
@@ -415,18 +420,18 @@
                                 </div>
                                 <div class="ttt-status" id="tttStatus">Click a cell to start!</div>
                                 <div class="ttt-board" id="tttBoard">
-                                    <button class="ttt-cell" id="ttt0" onclick="tttClick(0)"></button>
-                                    <button class="ttt-cell" id="ttt1" onclick="tttClick(1)"></button>
-                                    <button class="ttt-cell" id="ttt2" onclick="tttClick(2)"></button>
-                                    <button class="ttt-cell" id="ttt3" onclick="tttClick(3)"></button>
-                                    <button class="ttt-cell" id="ttt4" onclick="tttClick(4)"></button>
-                                    <button class="ttt-cell" id="ttt5" onclick="tttClick(5)"></button>
-                                    <button class="ttt-cell" id="ttt6" onclick="tttClick(6)"></button>
-                                    <button class="ttt-cell" id="ttt7" onclick="tttClick(7)"></button>
-                                    <button class="ttt-cell" id="ttt8" onclick="tttClick(8)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt0" onclick="tttClick(0)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt1" onclick="tttClick(1)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt2" onclick="tttClick(2)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt3" onclick="tttClick(3)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt4" onclick="tttClick(4)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt5" onclick="tttClick(5)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt6" onclick="tttClick(6)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt7" onclick="tttClick(7)"></button>
+                                    <button type="button" class="ttt-cell" id="ttt8" onclick="tttClick(8)"></button>
                                 </div>
                                 <div class="text-center">
-                                    <button class="btn btn-game-primary" onclick="tttReset()">
+                                    <button type="button" class="btn btn-game-primary" onclick="tttReset()">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -459,7 +464,7 @@
                                 <div class="memory-grid" id="memoryGrid"></div>
                                 <div class="game-over-banner game-over-win" id="memoryBanner"></div>
                                 <div class="text-center mt-3">
-                                    <button class="btn btn-game-primary" onclick="memoryStart()">
+                                    <button type="button" class="btn btn-game-primary" onclick="memoryStart()">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -561,7 +566,7 @@
     </div>
 </div>
 
-<!-- Pass server-side 'highlight' value to JS safely via data attribute (avoids th:inline issues) -->
+<!-- Pass server-side 'highlight' value to JS safely via data attribute -->
 <span id="gameHighlightData" th:data-highlight="${highlight}" style="display:none;"></span>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
@@ -571,23 +576,33 @@
 /* ══════════════════════════════════════════════════════════════
    SHARED UTILITIES
 ══════════════════════════════════════════════════════════════ */
-const CSRF_TOKEN  = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-const CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+function getCsrfHeader() {
+    const metaHeader = document.querySelector('meta[name="_csrf_header"]');
+    return metaHeader ? metaHeader.getAttribute('content') : 'X-CSRF-TOKEN';
+}
+function getCsrfToken() {
+    const metaToken = document.querySelector('meta[name="_csrf"]');
+    return metaToken ? metaToken.getAttribute('content') : '';
+}
 
 /** POST a play record to the server */
 function recordPlay(gameName) {
+    const token = getCsrfToken();
+    const header = getCsrfHeader();
+    if (!token) return Promise.resolve();
+
     return fetch('/games/play', {
         method:  'POST',
         headers: {
             'Content-Type': 'application/json',
-            [CSRF_HEADER]: CSRF_TOKEN
+            [header]: token
         },
         body: JSON.stringify({ game: gameName })
     })
     .then(r => r.json())
     .then(data => {
-        if (data.newBadge) showBadgeToast(data.newBadge);
-        // Refresh play-count badges in nav tabs (simple increment)
+        if (data && data.newBadge) showBadgeToast(data.newBadge);
+        // Refresh play-count badges in nav tabs
         const tabId = gameName === 'tictactoe' ? 'tictactoe-tab' : gameName + '-tab';
         const pill = document.querySelector('#' + tabId + ' .game-plays-badge');
         if (pill) {
@@ -595,7 +610,7 @@ function recordPlay(gameName) {
             pill.textContent = n + ' play' + (n !== 1 ? 's' : '');
         }
     })
-    .catch(() => {}); // silent on network error
+    .catch(err => console.error('Play recording error:', err));
 }
 
 function showBadgeToast(name) {
@@ -612,9 +627,10 @@ function showBadgeToast(name) {
     const CELL = 20, COLS = 20, ROWS = 20;
     let canvas, ctx, snake, dir, nextDir, food, score, highScore, running, loopTimer;
 
-    function init() {
+    function snakeInit() {
         canvas = document.getElementById('snakeCanvas');
-        ctx    = canvas.getContext('2d');
+        if (!canvas) return;
+        ctx = canvas.getContext('2d');
         canvas.width  = COLS * CELL;
         canvas.height = ROWS * CELL;
         highScore = parseInt(localStorage.getItem('snakeHigh') || '0');
@@ -623,15 +639,17 @@ function showBadgeToast(name) {
     }
 
     function drawIdle() {
+        if (!ctx) return;
         ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#667eea';
         ctx.font = '700 22px Inter, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Press Start to Play!', canvas.width / 2, canvas.height / 2);
+        ctx.fillText('Click Start to Play!', canvas.width / 2, canvas.height / 2);
     }
 
     window.snakeStart = function() {
+        if (!ctx) snakeInit();
         clearInterval(loopTimer);
         snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
         dir     = {x:1, y:0};
@@ -641,11 +659,12 @@ function showBadgeToast(name) {
         document.getElementById('snakeScore').textContent = 0;
         document.getElementById('snakeBanner').classList.remove('show');
         placeFood();
-        loopTimer = setInterval(gameLoop, 130);
+        loopTimer = setInterval(gameLoop, 120);
         document.getElementById('snakeStartBtn').textContent = '↺ Restart';
     };
 
     window.snakeChangeDir = function(x, y) {
+        if (!running) return;
         // Prevent 180° reversal
         if (x !== 0 && dir.x === 0) nextDir = {x, y};
         if (y !== 0 && dir.y === 0) nextDir = {x, y};
@@ -678,13 +697,16 @@ function showBadgeToast(name) {
     }
 
     function draw() {
+        if (!ctx) return;
         ctx.fillStyle = '#1a1a2e';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         // Grid dots
-        ctx.fillStyle = 'rgba(255,255,255,0.04)';
-        for (let x = 0; x < COLS; x++)
-            for (let y = 0; y < ROWS; y++)
+        ctx.fillStyle = 'rgba(255,255,255,0.05)';
+        for (let x = 0; x < COLS; x++) {
+            for (let y = 0; y < ROWS; y++) {
                 ctx.fillRect(x*CELL+CELL/2-1, y*CELL+CELL/2-1, 2, 2);
+            }
+        }
         // Food
         ctx.fillStyle = '#f093fb';
         ctx.beginPath();
@@ -692,14 +714,13 @@ function showBadgeToast(name) {
         ctx.fill();
         // Snake
         snake.forEach((s, i) => {
-            const grad = ctx.createRadialGradient(
-                s.x*CELL+CELL/2, s.y*CELL+CELL/2, 1,
-                s.x*CELL+CELL/2, s.y*CELL+CELL/2, CELL/2-1);
-            grad.addColorStop(0, i===0 ? '#a78bfa' : '#667eea');
-            grad.addColorStop(1, i===0 ? '#667eea' : '#4c51bf');
-            ctx.fillStyle = grad;
+            ctx.fillStyle = i === 0 ? '#a78bfa' : '#667eea';
             ctx.beginPath();
-            ctx.roundRect(s.x*CELL+2, s.y*CELL+2, CELL-4, CELL-4, 4);
+            if (ctx.roundRect) {
+                ctx.roundRect(s.x*CELL+2, s.y*CELL+2, CELL-4, CELL-4, 4);
+            } else {
+                ctx.rect(s.x*CELL+2, s.y*CELL+2, CELL-4, CELL-4);
+            }
             ctx.fill();
         });
     }
@@ -719,16 +740,23 @@ function showBadgeToast(name) {
     }
 
     document.addEventListener('keydown', e => {
-        const map = {ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0}};
-        if (map[e.key] && running) {
+        const keyMap = {
+            ArrowUp: {x:0, y:-1}, KeyW: {x:0, y:-1},
+            ArrowDown: {x:0, y:1}, KeyS: {x:0, y:1},
+            ArrowLeft: {x:-1, y:0}, KeyA: {x:-1, y:0},
+            ArrowRight: {x:1, y:0}, KeyD: {x:1, y:0}
+        };
+        if (keyMap[e.code] && running) {
             e.preventDefault();
-            snakeChangeDir(map[e.key].x, map[e.key].y);
+            snakeChangeDir(keyMap[e.code].x, keyMap[e.code].y);
         }
     });
 
-    document.getElementById('snake-tab').addEventListener('shown.bs.tab', init);
-    // Init if snake tab is already active on load
-    if (document.getElementById('snake-pane').classList.contains('active')) init();
+    document.addEventListener('DOMContentLoaded', () => {
+        snakeInit();
+        const snakeTab = document.getElementById('snake-tab');
+        if (snakeTab) snakeTab.addEventListener('shown.bs.tab', snakeInit);
+    });
 })();
 
 
@@ -736,7 +764,7 @@ function showBadgeToast(name) {
    TIC-TAC-TOE  (vs Smart AI using minimax)
 ══════════════════════════════════════════════════════════════ */
 (function() {
-    let board, gameActive;
+    let board, gameActive, isAiThinking = false;
     let wins = 0, draws = 0, losses = 0;
     const WIN_LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
@@ -778,34 +806,45 @@ function showBadgeToast(name) {
     }
 
     window.tttClick = function(i) {
-        if (!gameActive || board[i]) return;
+        if (!gameActive || isAiThinking || board[i]) return;
         board[i] = 'X';
         renderBoard();
         const result = checkWinner(board);
         if (result) { endTTT(result); return; }
+
         // AI move
+        isAiThinking = true;
+        document.getElementById('tttStatus').textContent = 'AI is thinking...';
         setTimeout(() => {
             const ai = bestMove(board);
             if (ai >= 0) {
                 board[ai] = 'O';
                 renderBoard();
                 const r2 = checkWinner(board);
-                if (r2) endTTT(r2);
+                if (r2) {
+                    endTTT(r2);
+                } else {
+                    document.getElementById('tttStatus').textContent = 'Your turn (X)!';
+                }
             }
-        }, 250);
+            isAiThinking = false;
+        }, 300);
     };
 
     function renderBoard() {
+        if (!board) return;
         board.forEach((v, i) => {
             const cell = document.getElementById('ttt' + i);
+            if (!cell) return;
             cell.textContent = v;
             cell.className = 'ttt-cell' + (v === 'X' ? ' x-cell' : v === 'O' ? ' o-cell' : '');
-            cell.disabled = !!v || !gameActive;
+            cell.disabled = !!v || !gameActive || isAiThinking;
         });
     }
 
     function endTTT(result) {
         gameActive = false;
+        isAiThinking = false;
         let status;
         if (result === 'X')         { wins++;   status = '🎉 You Win!';  highlightWinner('X'); recordPlay('tictactoe'); }
         else if (result === 'O')    { losses++;  status = '🤖 AI Wins!'; highlightWinner('O'); recordPlay('tictactoe'); }
@@ -819,7 +858,10 @@ function showBadgeToast(name) {
     function highlightWinner(mark) {
         for (const [a,b,c] of WIN_LINES) {
             if (board[a]===mark && board[b]===mark && board[c]===mark) {
-                [a,b,c].forEach(i => document.getElementById('ttt'+i).classList.add('winner'));
+                [a,b,c].forEach(i => {
+                    const el = document.getElementById('ttt'+i);
+                    if (el) el.classList.add('winner');
+                });
                 break;
             }
         }
@@ -828,11 +870,16 @@ function showBadgeToast(name) {
     window.tttReset = function() {
         board = Array(9).fill('');
         gameActive = true;
+        isAiThinking = false;
         document.getElementById('tttStatus').textContent = 'Your turn (X)!';
         renderBoard();
     };
 
-    tttReset();
+    document.addEventListener('DOMContentLoaded', () => {
+        tttReset();
+        const tttTab = document.getElementById('tictactoe-tab');
+        if (tttTab) tttTab.addEventListener('shown.bs.tab', tttReset);
+    });
 })();
 
 
@@ -846,17 +893,25 @@ function showBadgeToast(name) {
     window.memoryStart = function() {
         clearInterval(timer);
         moves = 0; matched = 0; elapsed = 0; flipped = [];
-        document.getElementById('memMoves').textContent   = 0;
-        document.getElementById('memMatched').textContent = 0;
-        document.getElementById('memTime').textContent    = '0s';
-        document.getElementById('memoryBanner').classList.remove('show');
+        const movesEl = document.getElementById('memMoves');
+        const matchedEl = document.getElementById('memMatched');
+        const timeEl = document.getElementById('memTime');
+        const bannerEl = document.getElementById('memoryBanner');
+        const grid = document.getElementById('memoryGrid');
+
+        if (!movesEl || !grid) return;
+
+        movesEl.textContent   = 0;
+        matchedEl.textContent = 0;
+        timeEl.textContent    = '0s';
+        if (bannerEl) bannerEl.classList.remove('show');
 
         // Shuffle pairs
         cards = [...EMOJIS, ...EMOJIS].sort(() => Math.random() - 0.5);
-        const grid = document.getElementById('memoryGrid');
         grid.innerHTML = '';
         cards.forEach((emoji, i) => {
             const btn = document.createElement('button');
+            btn.type = 'button';
             btn.className = 'mem-card';
             btn.dataset.index = i;
             btn.innerHTML = `<div class="card-face card-back">❓</div><div class="card-face card-front">${emoji}</div>`;
@@ -866,7 +921,7 @@ function showBadgeToast(name) {
 
         timer = setInterval(() => {
             elapsed++;
-            document.getElementById('memTime').textContent = elapsed + 's';
+            if (timeEl) timeEl.textContent = elapsed + 's';
         }, 1000);
     };
 
@@ -883,18 +938,23 @@ function showBadgeToast(name) {
             const [a, b] = flipped;
             if (cards[a] === cards[b]) {
                 setTimeout(() => {
-                    [a, b].forEach(idx => document.querySelector(`.mem-card[data-index="${idx}"]`).classList.add('matched'));
+                    [a, b].forEach(idx => {
+                        const el = document.querySelector(`.mem-card[data-index="${idx}"]`);
+                        if (el) el.classList.add('matched');
+                    });
                     matched++;
                     document.getElementById('memMatched').textContent = matched;
                     flipped = [];
                     if (matched === EMOJIS.length) {
                         clearInterval(timer);
                         const banner = document.getElementById('memoryBanner');
-                        banner.className = 'game-over-banner game-over-win show';
-                        banner.textContent = `🎉 Solved in ${moves} moves & ${elapsed}s!`;
+                        if (banner) {
+                            banner.className = 'game-over-banner game-over-win show';
+                            banner.textContent = `🎉 Solved in ${moves} moves & ${elapsed}s!`;
+                        }
                         recordPlay('memory');
                     }
-                }, 500);
+                }, 400);
             } else {
                 setTimeout(() => {
                     [a, b].forEach(idx => {
@@ -902,25 +962,35 @@ function showBadgeToast(name) {
                         if (c) c.classList.remove('flipped');
                     });
                     flipped = [];
-                }, 1000);
+                }, 900);
             }
         }
     }
 
-    memoryStart();
+    document.addEventListener('DOMContentLoaded', () => {
+        memoryStart();
+        const memTab = document.getElementById('memory-tab');
+        if (memTab) memTab.addEventListener('shown.bs.tab', memoryStart);
+    });
 })();
 
 
 /* ══════════════════════════════════════════════════════════════
    TAB HIGHLIGHT — activate tab from URL param
 ══════════════════════════════════════════════════════════════ */
-(function() {
-    const highlight = document.getElementById('gameHighlightData').dataset.highlight || '';
+document.addEventListener('DOMContentLoaded', function() {
+    const dataEl = document.getElementById('gameHighlightData');
+    const highlight = (dataEl && dataEl.dataset) ? dataEl.dataset.highlight : '';
     const tabMap = { snake: 'snake-tab', tictactoe: 'tictactoe-tab', memory: 'memory-tab' };
-    const tabId  = tabMap[highlight.toLowerCase()] || 'snake-tab';
-    const tab    = document.getElementById(tabId);
-    if (tab) new bootstrap.Tab(tab).show();
-})();
+    const tabId  = tabMap[highlight.toLowerCase()];
+    if (tabId) {
+        const tabEl = document.getElementById(tabId);
+        if (tabEl && window.bootstrap) {
+            const tab = new bootstrap.Tab(tabEl);
+            tab.show();
+        }
+    }
+});
 </script>
 </body>
 </html>
