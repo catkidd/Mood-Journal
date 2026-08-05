@@ -126,47 +126,63 @@
         .game-card-header h2 { font-weight: 700; font-size: 1.25rem; margin: 0; color: #2d3748; }
         .game-body { padding: 1.5rem; }
 
-        /* ── SNAKE GAME ─────────────────────────────────────── */
+        /* ── SNAKE GAME (WIDE PLAYING AREA) ─────────────────── */
         #snakeCanvas {
             display: block;
             margin: 0 auto;
-            border-radius: 12px;
-            border: 3px solid #667eea;
-            background: #1a1a2e;
+            border-radius: 16px;
+            border: 3px solid #4f46e5;
+            background: #0f172a;
             max-width: 100%;
+            height: auto;
             touch-action: none;
-            box-shadow: 0 4px 16px rgba(26,26,46,0.3);
+            box-shadow: 0 8px 24px rgba(15,23,42,0.35);
         }
         .score-display {
             text-align: center;
             margin-bottom: 1rem;
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            color: #667eea;
+            color: #4f46e5;
         }
+        
+        /* ── Sleek Modern Controller D-Pad Buttons ─────────── */
         .dpad {
             display: grid;
-            grid-template-columns: repeat(3, 54px);
-            grid-template-rows: repeat(3, 54px);
-            gap: 6px;
-            margin: 1rem auto 0;
+            grid-template-columns: repeat(3, 58px);
+            grid-template-rows: repeat(3, 58px);
+            gap: 8px;
+            margin: 1.25rem auto 0;
             width: fit-content;
         }
         .dpad button {
-            width: 54px; height: 54px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            font-size: 1.4rem;
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            border: 1px solid rgba(99,102,241,0.3);
+            background: linear-gradient(145deg, #1e1b4b, #312e81);
+            color: #c7d2fe;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.1s;
-            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             user-select: none;
-            box-shadow: 0 3px 10px rgba(102,126,234,0.3);
+            box-shadow: 0 4px 12px rgba(30,27,75,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
         }
-        .dpad button:active { transform: scale(0.9); opacity: 0.85; }
-        .dpad .empty { background: transparent; pointer-events: none; box-shadow: none; }
+        .dpad button:hover {
+            background: linear-gradient(145deg, #3730a3, #4338ca);
+            color: #ffffff;
+            border-color: #818cf8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(99,102,241,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        .dpad button:active {
+            transform: translateY(1px) scale(0.94);
+            box-shadow: 0 2px 6px rgba(30,27,75,0.4);
+        }
+        .dpad .empty { background: transparent; pointer-events: none; border: none; box-shadow: none; }
 
         /* ── TIC TAC TOE ─────────────────────────────────────── */
         .ttt-board {
@@ -302,21 +318,30 @@
         .mem-stat .val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
         .mem-stat .lbl { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
 
-        /* Shared Game UI */
+        /* Sleek Game Primary Action Button */
         .btn-game-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             border: none;
             color: #fff;
-            border-radius: 12px;
-            padding: 0.65rem 1.6rem;
+            border-radius: 50px;
+            padding: 0.75rem 2.2rem;
             font-weight: 700;
-            font-size: 0.95rem;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+            font-size: 1.05rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(79,70,229,0.35);
             cursor: pointer;
+            letter-spacing: 0.3px;
         }
-        .btn-game-primary:hover { opacity: 0.92; transform: translateY(-1px); color: #fff; box-shadow: 0 6px 18px rgba(102,126,234,0.4); }
-        .btn-game-primary:active { transform: translateY(0); }
+        .btn-game-primary:hover {
+            background: linear-gradient(135deg, #4338ca, #6d28d9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(79,70,229,0.45);
+            color: #fff;
+        }
+        .btn-game-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+        }
 
         .game-over-banner {
             display: none;
@@ -400,7 +425,7 @@
                 <!-- Tab Content -->
                 <div class="tab-content">
 
-                    <!-- ════════════════════════════════════════════ SNAKE -->
+                    <!-- ════════════════════════════════════════════ SNAKE (WIDE CANVAS) -->
                     <div class="tab-pane active" id="snake-pane" style="display: block;">
                         <div class="game-card">
                             <div class="game-card-header">
@@ -411,7 +436,7 @@
                                 <div class="score-display">
                                     Score: <span id="snakeScore">0</span> &nbsp;|&nbsp; High: <span id="snakeHigh">0</span>
                                 </div>
-                                <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                                <canvas id="snakeCanvas" width="600" height="400"></canvas>
                                 <div class="game-over-banner" id="snakeBanner"></div>
 
                                 <div class="game-controls mt-3">
@@ -693,9 +718,9 @@ function showBadgeToast(name) {
 
 
 /* ══════════════════════════════════════════════════════════════
-   SNAKE GAME
+   SNAKE GAME (WIDE 30x20 GRID = 600x400 Canvas)
 ══════════════════════════════════════════════════════════════ */
-const CELL = 20, COLS = 20, ROWS = 20;
+const CELL = 20, COLS = 30, ROWS = 20;
 let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
 
 function getHighScore() {
@@ -722,11 +747,11 @@ window.initSnake = initSnake;
 
 function drawIdle() {
     if (!ctx) return;
-    ctx.fillStyle = '#1a1a2e';
+    ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#a78bfa';
-    ctx.font = 'bold 24px Inter, sans-serif';
+    ctx.fillStyle = '#818cf8';
+    ctx.font = 'bold 26px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('🐍 SNAKE GAME', canvas.width / 2, canvas.height / 2 - 20);
 
@@ -743,7 +768,7 @@ function snakeStart() {
     initSnake();
     if (loopTimer) clearInterval(loopTimer);
 
-    snake   = [{x:10, y:10}, {x:9, y:10}, {x:8, y:10}];
+    snake   = [{x:15, y:10}, {x:14, y:10}, {x:13, y:10}];
     dir     = {x:1, y:0};
     nextDir = {x:1, y:0};
     score   = 0;
@@ -756,7 +781,7 @@ function snakeStart() {
 
     placeFood();
     draw();
-    loopTimer = setInterval(gameLoop, 120);
+    loopTimer = setInterval(gameLoop, 110);
 
     const btn = document.getElementById('snakeStartBtn');
     if (btn) btn.innerHTML = '<i class="bi bi-arrow-counterclockwise me-1"></i>Restart Game';
@@ -812,9 +837,11 @@ function gameLoop() {
 
 function draw() {
     if (!ctx) return;
-    ctx.fillStyle = '#1a1a2e';
+    // Dark Canvas background
+    ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Grid dots
     ctx.fillStyle = 'rgba(255,255,255,0.05)';
     for (let x = 0; x < COLS; x++) {
         for (let y = 0; y < ROWS; y++) {
@@ -822,6 +849,7 @@ function draw() {
         }
     }
 
+    // Food (Bright Glowing Pink Circle)
     if (food) {
         ctx.fillStyle = '#f093fb';
         ctx.beginPath();
@@ -829,8 +857,9 @@ function draw() {
         ctx.fill();
     }
 
+    // Snake Body & Head
     snake.forEach((s, i) => {
-        ctx.fillStyle = (i === 0) ? '#a78bfa' : '#667eea';
+        ctx.fillStyle = (i === 0) ? '#a78bfa' : '#6366f1';
         ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
     });
 }
