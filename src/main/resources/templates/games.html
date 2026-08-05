@@ -374,21 +374,21 @@
                 <!-- Nav Tabs -->
                 <ul class="nav games-nav gap-2 mb-3" id="gameTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link active" id="snake-tab">
+                        <button type="button" class="nav-link active" id="snake-tab" onclick="window.switchGameTab('snake')">
                             🐍 Snake
                             <span class="game-plays-badge" id="snakePlaysPill"
                                   th:text="${gameStats['snake'] != null ? gameStats['snake'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" id="tictactoe-tab">
+                        <button type="button" class="nav-link" id="tictactoe-tab" onclick="window.switchGameTab('tictactoe')">
                             ❌ Tic-Tac-Toe
                             <span class="game-plays-badge" id="tictactoePlaysPill"
                                   th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button type="button" class="nav-link" id="memory-tab">
+                        <button type="button" class="nav-link" id="memory-tab" onclick="window.switchGameTab('memory')">
                             🃏 Memory Match
                             <span class="game-plays-badge" id="memoryPlaysPill"
                                   th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
@@ -414,7 +414,7 @@
                                 <div class="game-over-banner" id="snakeBanner"></div>
 
                                 <div class="game-controls mt-3">
-                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn">
+                                    <button type="button" class="btn btn-game-primary" id="snakeStartBtn" onclick="window.snakeStart()">
                                         <i class="bi bi-play-fill me-1"></i>Start Game
                                     </button>
                                 </div>
@@ -422,13 +422,13 @@
                                 <!-- D-Pad Controls -->
                                 <div class="dpad mt-3">
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadUp" title="Up"><i class="bi bi-arrow-up"></i></button>
+                                    <button type="button" id="dpadUp" onclick="window.snakeChangeDir(0,-1)" title="Up"><i class="bi bi-arrow-up"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadLeft" title="Left"><i class="bi bi-arrow-left"></i></button>
+                                    <button type="button" id="dpadLeft" onclick="window.snakeChangeDir(-1,0)" title="Left"><i class="bi bi-arrow-left"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadRight" title="Right"><i class="bi bi-arrow-right"></i></button>
+                                    <button type="button" id="dpadRight" onclick="window.snakeChangeDir(1,0)" title="Right"><i class="bi bi-arrow-right"></i></button>
                                     <div class="empty"></div>
-                                    <button type="button" id="dpadDown" title="Down"><i class="bi bi-arrow-down"></i></button>
+                                    <button type="button" id="dpadDown" onclick="window.snakeChangeDir(0,1)" title="Down"><i class="bi bi-arrow-down"></i></button>
                                     <div class="empty"></div>
                                 </div>
                             </div>
@@ -459,18 +459,18 @@
                                 </div>
                                 <div class="ttt-status" id="tttStatus">Click any square to start!</div>
                                 <div class="ttt-board" id="tttBoard">
-                                    <div class="ttt-cell" id="ttt0"></div>
-                                    <div class="ttt-cell" id="ttt1"></div>
-                                    <div class="ttt-cell" id="ttt2"></div>
-                                    <div class="ttt-cell" id="ttt3"></div>
-                                    <div class="ttt-cell" id="ttt4"></div>
-                                    <div class="ttt-cell" id="ttt5"></div>
-                                    <div class="ttt-cell" id="ttt6"></div>
-                                    <div class="ttt-cell" id="ttt7"></div>
-                                    <div class="ttt-cell" id="ttt8"></div>
+                                    <div class="ttt-cell" id="ttt0" onclick="window.tttClick(0)"></div>
+                                    <div class="ttt-cell" id="ttt1" onclick="window.tttClick(1)"></div>
+                                    <div class="ttt-cell" id="ttt2" onclick="window.tttClick(2)"></div>
+                                    <div class="ttt-cell" id="ttt3" onclick="window.tttClick(3)"></div>
+                                    <div class="ttt-cell" id="ttt4" onclick="window.tttClick(4)"></div>
+                                    <div class="ttt-cell" id="ttt5" onclick="window.tttClick(5)"></div>
+                                    <div class="ttt-cell" id="ttt6" onclick="window.tttClick(6)"></div>
+                                    <div class="ttt-cell" id="ttt7" onclick="window.tttClick(7)"></div>
+                                    <div class="ttt-cell" id="ttt8" onclick="window.tttClick(8)"></div>
                                 </div>
                                 <div class="text-center">
-                                    <button type="button" class="btn btn-game-primary" id="tttResetBtn">
+                                    <button type="button" class="btn btn-game-primary" id="tttResetBtn" onclick="window.tttReset()">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -503,7 +503,7 @@
                                 <div class="memory-grid" id="memoryGrid"></div>
                                 <div class="game-over-banner game-over-win" id="memoryBanner"></div>
                                 <div class="text-center mt-3">
-                                    <button type="button" class="btn btn-game-primary" id="memoryResetBtn">
+                                    <button type="button" class="btn btn-game-primary" id="memoryResetBtn" onclick="window.memoryStart()">
                                         <i class="bi bi-arrow-counterclockwise me-1"></i>New Game
                                     </button>
                                 </div>
@@ -703,14 +703,24 @@ function showBadgeToast(name) {
     const CELL = 20, COLS = 20, ROWS = 20;
     let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
 
+    function getHighScore() {
+        try { return parseInt(localStorage.getItem('snakeHigh') || '0'); }
+        catch (e) { return 0; }
+    }
+    function setHighScore(val) {
+        try { localStorage.setItem('snakeHigh', val.toString()); }
+        catch (e) {}
+    }
+
     window.initSnake = function() {
         canvas = document.getElementById('snakeCanvas');
         if (!canvas) return;
         ctx = canvas.getContext('2d');
         canvas.width  = COLS * CELL;
         canvas.height = ROWS * CELL;
-        highScore = parseInt(localStorage.getItem('snakeHigh') || '0');
-        document.getElementById('snakeHigh').textContent = highScore;
+        highScore = getHighScore();
+        const scoreEl = document.getElementById('snakeHigh');
+        if (scoreEl) scoreEl.textContent = highScore;
         drawIdle();
     };
 
@@ -743,7 +753,8 @@ function showBadgeToast(name) {
         score   = 0;
         running = true;
 
-        document.getElementById('snakeScore').textContent = '0';
+        const scoreEl = document.getElementById('snakeScore');
+        if (scoreEl) scoreEl.textContent = '0';
         const banner = document.getElementById('snakeBanner');
         if (banner) banner.classList.remove('show');
 
@@ -791,7 +802,8 @@ function showBadgeToast(name) {
         // Check food collision
         if (food && head.x === food.x && head.y === food.y) {
             score++;
-            document.getElementById('snakeScore').textContent = score;
+            const scoreEl = document.getElementById('snakeScore');
+            if (scoreEl) scoreEl.textContent = score;
             placeFood();
         } else {
             snake.pop();
@@ -835,8 +847,9 @@ function showBadgeToast(name) {
 
         if (score > highScore) {
             highScore = score;
-            localStorage.setItem('snakeHigh', highScore.toString());
-            document.getElementById('snakeHigh').textContent = highScore;
+            setHighScore(highScore);
+            const highEl = document.getElementById('snakeHigh');
+            if (highEl) highEl.textContent = highScore;
         }
 
         const banner = document.getElementById('snakeBanner');
@@ -925,7 +938,8 @@ function showBadgeToast(name) {
 
         // AI turn
         isAiThinking = true;
-        document.getElementById('tttStatus').textContent = '🤖 AI is thinking...';
+        const statusEl = document.getElementById('tttStatus');
+        if (statusEl) statusEl.textContent = '🤖 AI is thinking...';
 
         setTimeout(() => {
             const aiMove = getBestMove(board);
@@ -935,8 +949,8 @@ function showBadgeToast(name) {
                 const aiResult = checkWinner(board);
                 if (aiResult) {
                     endTTT(aiResult);
-                } else {
-                    document.getElementById('tttStatus').textContent = 'Your turn (X)!';
+                } else if (statusEl) {
+                    statusEl.textContent = 'Your turn (X)!';
                 }
             }
             isAiThinking = false;
@@ -980,10 +994,14 @@ function showBadgeToast(name) {
             recordPlay('tictactoe');
         }
 
-        document.getElementById('tttStatus').textContent = statusMsg;
-        document.getElementById('tttWins').textContent   = wins;
-        document.getElementById('tttDraws').textContent  = draws;
-        document.getElementById('tttLosses').textContent = losses;
+        const statusEl = document.getElementById('tttStatus');
+        if (statusEl) statusEl.textContent = statusMsg;
+        const winsEl = document.getElementById('tttWins');
+        if (winsEl) winsEl.textContent = wins;
+        const drawsEl = document.getElementById('tttDraws');
+        if (drawsEl) drawsEl.textContent = draws;
+        const lossesEl = document.getElementById('tttLosses');
+        if (lossesEl) lossesEl.textContent = losses;
     }
 
     function highlightWinner(mark) {
@@ -1002,7 +1020,8 @@ function showBadgeToast(name) {
         board = Array(9).fill('');
         gameActive = true;
         isAiThinking = false;
-        document.getElementById('tttStatus').textContent = 'Click any square to start!';
+        const statusEl = document.getElementById('tttStatus');
+        if (statusEl) statusEl.textContent = 'Click any square to start!';
         renderBoard();
     };
 })();
@@ -1019,9 +1038,13 @@ function showBadgeToast(name) {
         if (timer) clearInterval(timer);
         moves = 0; matchedCount = 0; elapsed = 0; flipped = [];
 
-        document.getElementById('memMoves').textContent   = '0';
-        document.getElementById('memMatched').textContent = '0';
-        document.getElementById('memTime').textContent    = '0s';
+        const movesEl   = document.getElementById('memMoves');
+        const matchedEl = document.getElementById('memMatched');
+        const timeEl    = document.getElementById('memTime');
+
+        if (movesEl)   movesEl.textContent   = '0';
+        if (matchedEl) matchedEl.textContent = '0';
+        if (timeEl)    timeEl.textContent    = '0s';
 
         const banner = document.getElementById('memoryBanner');
         if (banner) banner.classList.remove('show');
@@ -1047,7 +1070,8 @@ function showBadgeToast(name) {
 
         timer = setInterval(() => {
             elapsed++;
-            document.getElementById('memTime').textContent = elapsed + 's';
+            const tEl = document.getElementById('memTime');
+            if (tEl) tEl.textContent = elapsed + 's';
         }, 1000);
     };
 
@@ -1062,7 +1086,8 @@ function showBadgeToast(name) {
 
         if (flipped.length === 2) {
             moves++;
-            document.getElementById('memMoves').textContent = moves;
+            const movesEl = document.getElementById('memMoves');
+            if (movesEl) movesEl.textContent = moves;
             const [a, b] = flipped;
 
             if (cards[a] === cards[b]) {
@@ -1072,7 +1097,8 @@ function showBadgeToast(name) {
                         if (el) el.classList.add('matched');
                     });
                     matchedCount++;
-                    document.getElementById('memMatched').textContent = matchedCount;
+                    const matchedEl = document.getElementById('memMatched');
+                    if (matchedEl) matchedEl.textContent = matchedCount;
                     flipped = [];
 
                     if (matchedCount === EMOJIS.length) {
