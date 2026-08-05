@@ -30,24 +30,12 @@ public class GameController {
 
         long totalPlays             = gameService.getPlayCount(user);
         Map<String, Long> gameStats = gameService.getGameStats(user);
+        java.util.Set<String> earned = gameService.getEarnedCriteriaSet(user);
 
-        long breathingPlays = gameStats.getOrDefault("breathing", 0L);
-        long snakePlays     = gameStats.getOrDefault("snake", 0L);
-
-        model.addAttribute("highlight",   highlight);
-        model.addAttribute("totalPlays",  totalPlays);
-        model.addAttribute("gameStats",   gameStats);
-
-        // Badge progress hints
-        model.addAttribute("explorerEarned", totalPlays >= 1);
-        model.addAttribute("masterEarned",   totalPlays >= 5);
-        model.addAttribute("masterProgress", Math.min(totalPlays, 5));
-        model.addAttribute("champEarned",    totalPlays >= 10);
-        model.addAttribute("champProgress",  Math.min(totalPlays, 10));
-        model.addAttribute("zenEarned",      breathingPlays >= 3);
-        model.addAttribute("zenProgress",    Math.min(breathingPlays, 3));
-        model.addAttribute("snakeEarned",    snakePlays >= 3);
-        model.addAttribute("snakeProgress",  Math.min(snakePlays, 3));
+        model.addAttribute("highlight",    highlight);
+        model.addAttribute("totalPlays",   totalPlays);
+        model.addAttribute("gameStats",    gameStats);
+        model.addAttribute("earnedBadges", earned);
 
         return "games";
     }
@@ -58,9 +46,9 @@ public class GameController {
      */
     @PostMapping("/games/play")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> recordPlay(@RequestBody Map<String, String> body,
+    public ResponseEntity<Map<String, Object>> recordPlay(@RequestBody Map<String, Object> body,
                                                           Principal principal) {
-        String gameName = body.getOrDefault("game", "").trim().toLowerCase();
+        String gameName = String.valueOf(body.getOrDefault("game", "")).trim().toLowerCase();
 
         // Validate game name
         if (!GameService.VALID_GAMES.contains(gameName)) {
@@ -69,7 +57,7 @@ public class GameController {
         }
 
         User user = userService.findByUsername(principal.getName());
-        String newBadge = gameService.recordPlay(user, gameName);
+        String newBadge = gameService.recordPlay(user, gameName, body);
 
         return ResponseEntity.ok(Map.of(
                 "success",  true,

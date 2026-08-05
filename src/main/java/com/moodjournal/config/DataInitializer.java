@@ -44,11 +44,29 @@ public class DataInitializer implements CommandLineRunner {
 
     /** Seeds game badges individually (safe to run even when other badges already exist). */
     private void initGameBadges() {
-        seedBadgeIfMissing("🎮 Game Explorer", "Play your very first mini-game!",        "GAME_EXPLORER");
-        seedBadgeIfMissing("🧩 Puzzle Master",  "Play 5 mini-games to unlock this badge!", "PUZZLE_MASTER");
-        seedBadgeIfMissing("🫁 Zen Master",     "Complete 3 deep breathing sessions!",      "BREATHING_ZEN");
+        // Overall Activity Badges
+        seedBadgeIfMissing("🎮 Game Explorer", "Play your very first mini-game!",          "GAME_EXPLORER");
+        seedBadgeIfMissing("🧩 Puzzle Master",  "Play 5 activities to unlock this badge!",  "PUZZLE_MASTER");
+        seedBadgeIfMissing("👑 Arcade Champ",   "Play 10 total activities to unlock!",      "ARCADE_CHAMPION");
+        seedBadgeIfMissing("🏆 Gaming Legend",  "Play 25 total activities — true master!", "ARCADE_LEGEND");
+
+        // Snake Game Badges
         seedBadgeIfMissing("🐍 Snake Charmer",  "Play 3 Snake games to unlock this!",      "SNAKE_MASTER");
-        seedBadgeIfMissing("👑 Arcade Champ",   "Play 10 total activities to unlock!",     "ARCADE_CHAMPION");
+        seedBadgeIfMissing("⚡ Slither Speedster","Score 10+ points in a Snake game!",     "SNAKE_HIGH_10");
+        seedBadgeIfMissing("👑 Serpent King",   "Score 20+ points in a Snake game!",        "SNAKE_HIGH_20");
+
+        // Tic-Tac-Toe Badges
+        seedBadgeIfMissing("❌ Tactician",      "Play 3 Tic-Tac-Toe matches!",              "TTT_MASTER");
+        seedBadgeIfMissing("🤖 Grandmaster",    "Defeat the AI in Tic-Tac-Toe!",            "TTT_VICTORY");
+
+        // Memory Match Badges
+        seedBadgeIfMissing("🃏 Memory Novice",  "Play 3 Memory Match games!",              "MEM_MASTER");
+        seedBadgeIfMissing("⚡ Mind Master",     "Solve Memory Match in under 45s!",        "MEM_SPEED");
+        seedBadgeIfMissing("🎯 Flawless Recall","Solve Memory Match in under 12 moves!",   "MEM_FLAWLESS");
+
+        // Breathing Exercise Badges
+        seedBadgeIfMissing("🫁 Zen Master",     "Complete 3 deep breathing sessions!",      "BREATHING_ZEN");
+        seedBadgeIfMissing("🧘 Nirvana Explorer","Complete 10 total breathing cycles!",     "BREATHING_CYCLES_10");
     }
 
     private void seedBadgeIfMissing(String name, String description, String criteria) {

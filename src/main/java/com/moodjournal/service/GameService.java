@@ -33,58 +33,81 @@ public class GameService {
      * Records a completed game play and triggers badge checks.
      * @return the name of a newly awarded badge, or null if none was earned this call.
      */
-    public String recordPlay(User user, String gameName) {
+    public String recordPlay(User user, String gameName, Map<String, Object> metrics) {
         // Persist the play record
         userGameRepository.save(new UserGame(user, gameName, LocalDateTime.now()));
 
         // Check badges and return the first newly awarded badge name (if any)
-        return checkAndAwardGameBadges(user, gameName);
+        return checkAndAwardGameBadges(user, gameName, metrics);
     }
 
     /**
      * Evaluates game-related badge criteria.
      * @return newly awarded badge display name, or null.
      */
-    private String checkAndAwardGameBadges(User user, String gameName) {
+    private String checkAndAwardGameBadges(User user, String gameName, Map<String, Object> metrics) {
         long totalPlays = userGameRepository.countByUser(user);
 
-        // GAME_EXPLORER — 1st play
-        if (totalPlays >= 1) {
-            String awarded = awardIfNotEarned(user, "GAME_EXPLORER");
-            if (awarded != null) return awarded;
-        }
+        // Overall Activity Badges
+        if (totalPlays >= 1)  { String a = awardIfNotEarned(user, "GAME_EXPLORER");   if (a != null) return a; }
+        if (totalPlays >= 5)  { String a = awardIfNotEarned(user, "PUZZLE_MASTER");   if (a != null) return a; }
+        if (totalPlays >= 10) { String a = awardIfNotEarned(user, "ARCADE_CHAMPION"); if (a != null) return a; }
+        if (totalPlays >= 25) { String a = awardIfNotEarned(user, "ARCADE_LEGEND");   if (a != null) return a; }
 
-        // PUZZLE_MASTER — 5 total plays
-        if (totalPlays >= 5) {
-            String awarded = awardIfNotEarned(user, "PUZZLE_MASTER");
-            if (awarded != null) return awarded;
-        }
-
-        // ARCADE_CHAMPION — 10 total plays
-        if (totalPlays >= 10) {
-            String awarded = awardIfNotEarned(user, "ARCADE_CHAMPION");
-            if (awarded != null) return awarded;
-        }
-
-        // BREATHING_ZEN — 3 breathing sessions
-        if ("breathing".equals(gameName)) {
-            long breathingCount = userGameRepository.countByUserAndGameName(user, "breathing");
-            if (breathingCount >= 3) {
-                String awarded = awardIfNotEarned(user, "BREATHING_ZEN");
-                if (awarded != null) return awarded;
-            }
-        }
-
-        // SNAKE_MASTER — 3 snake plays
+        // Snake Badges
         if ("snake".equals(gameName)) {
             long snakeCount = userGameRepository.countByUserAndGameName(user, "snake");
-            if (snakeCount >= 3) {
-                String awarded = awardIfNotEarned(user, "SNAKE_MASTER");
-                if (awarded != null) return awarded;
+            if (snakeCount >= 3) { String a = awardIfNotEarned(user, "SNAKE_MASTER"); if (a != null) return a; }
+
+            int score = getIntMetric(metrics, "score");
+            if (score >= 10) { String a = awardIfNotEarned(user, "SNAKE_HIGH_10"); if (a != null) return a; }
+            if (score >= 20) { String a = awardIfNotEarned(user, "SNAKE_HIGH_20"); if (a != null) return a; }
+        }
+
+        // Tic-Tac-Toe Badges
+        if ("tictactoe".equals(gameName)) {
+            long tttCount = userGameRepository.countByUserAndGameName(user, "tictactoe");
+            if (tttCount >= 3) { String a = awardIfNotEarned(user, "TTT_MASTER"); if (a != null) return a; }
+
+            String result = getStringMetric(metrics, "result");
+            if ("win".equalsIgnoreCase(result) || "X".equalsIgnoreCase(result)) {
+                String a = awardIfNotEarned(user, "TTT_VICTORY"); if (a != null) return a;
             }
+        }
+
+        // Memory Match Badges
+        if ("memory".equals(gameName)) {
+            long memCount = userGameRepository.countByUserAndGameName(user, "memory");
+            if (memCount >= 3) { String a = awardIfNotEarned(user, "MEM_MASTER"); if (a != null) return a; }
+
+            int moves = getIntMetric(metrics, "moves");
+            int time  = getIntMetric(metrics, "time");
+            if (moves > 0 && moves <= 12) { String a = awardIfNotEarned(user, "MEM_FLAWLESS"); if (a != null) return a; }
+            if (time > 0 && time <= 45)   { String a = awardIfNotEarned(user, "MEM_SPEED");    if (a != null) return a; }
+        }
+
+        // Breathing Badges
+        if ("breathing".equals(gameName)) {
+            long breathCount = userGameRepository.countByUserAndGameName(user, "breathing");
+            if (breathCount >= 3) { String a = awardIfNotEarned(user, "BREATHING_ZEN"); if (a != null) return a; }
+
+            int cycles = getIntMetric(metrics, "cycles");
+            if (cycles >= 5) { String a = awardIfNotEarned(user, "BREATHING_CYCLES_10"); if (a != null) return a; }
         }
 
         return null;
+    }
+
+    private int getIntMetric(Map<String, Object> map, String key) {
+        if (map == null || !map.containsKey(key)) return 0;
+        Object val = map.get(key);
+        if (val instanceof Number) return ((Number) val).intValue();
+        try { return Integer.parseInt(val.toString()); } catch (Exception e) { return 0; }
+    }
+
+    private String getStringMetric(Map<String, Object> map, String key) {
+        if (map == null || !map.containsKey(key)) return "";
+        return String.valueOf(map.get(key));
     }
 
     /**
@@ -103,7 +126,14 @@ public class GameService {
         return null;
     }
 
-    /** Total number of games played by the user. */
+    /** Set of criteria strings for all badges earned by the user. */
+    @Transactional(readOnly = true)
+    public java.util.Set<String> getEarnedCriteriaSet(User user) {
+        List<UserBadge> userBadges = userBadgeRepository.findByUserOrderByDateAwardedDesc(user);
+        return userBadges.stream()
+                .map(ub -> ub.getBadge().getCriteria())
+                .collect(java.util.stream.Collectors.toSet());
+    }
     @Transactional(readOnly = true)
     public long getPlayCount(User user) {
         return userGameRepository.countByUser(user);

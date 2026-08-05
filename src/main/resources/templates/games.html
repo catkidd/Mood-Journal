@@ -251,93 +251,199 @@
                                         <i class="bi bi-play-fill me-1"></i>Start Breathing
                                     </button>
                                     <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="resetBreathing()">
-                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!-- /tab-content -->
-            </div><!-- /col-lg-8 -->
-
-            <!-- Right Column: Badges & Stats Sidebar -->
-            <div class="col-lg-4">
-                <!-- Badge Progress Card -->
+                                        <i class=                <!-- Badge Progress Card -->
                 <div class="badge-progress-card">
                     <h2 class="fw-700 mb-3" style="font-size:1.1rem;color:#fff;">
-                        <i class="bi bi-trophy-fill me-2" style="color:#ffd700;"></i>Game Badges
+                        <i class="bi bi-trophy-fill me-2" style="color:#ffd700;"></i>Game & Activity Badges
                     </h2>
-                    <div class="badge-item" th:classappend="${explorerEarned} ? 'earned' : ''">
-                        <div class="badge-emoji">🎮</div>
-                        <div class="badge-info">
-                            <div class="badge-name">Game Explorer</div>
-                            <div class="badge-desc">Play your first mini-game</div>
-                        </div>
-                        <div class="badge-status">
-                            <span th:if="${explorerEarned}">✅</span>
-                            <span th:unless="${explorerEarned}">🔒</span>
-                        </div>
-                    </div>
-                    <div class="badge-item" th:classappend="${masterEarned} ? 'earned' : ''">
-                        <div class="badge-emoji">🧩</div>
-                        <div class="badge-info">
-                            <div class="badge-name">Puzzle Master</div>
-                            <div class="badge-desc">
-                                Play 5 games total
-                                <span th:unless="${masterEarned}">
-                                    (<span th:text="${masterProgress}">0</span>/5)
-                                </span>
+
+                    <div style="max-height: 520px; overflow-y: auto; padding-right: 4px;">
+
+                        <!-- CATEGORY 1: ARCADE & OVERALL -->
+                        <div class="small fw-bold text-uppercase mb-2" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #a5b4fc;">🕹️ Arcade Milestones</div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('GAME_EXPLORER')} ? 'earned' : ''">
+                            <div class="badge-emoji">🎮</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Game Explorer</div>
+                                <div class="badge-desc">Play your 1st mini-game</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('GAME_EXPLORER')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('GAME_EXPLORER')}">🔒</span>
                             </div>
                         </div>
-                        <div class="badge-status">
-                            <span th:if="${masterEarned}">✅</span>
-                            <span th:unless="${masterEarned}">🔒</span>
-                        </div>
-                    </div>
 
-                    <div class="badge-item" th:classappend="${zenEarned} ? 'earned' : ''">
-                        <div class="badge-emoji">🫁</div>
-                        <div class="badge-info">
-                            <div class="badge-name">Zen Master</div>
-                            <div class="badge-desc">
-                                Complete 3 breathing sessions
-                                <span th:unless="${zenEarned}">
-                                    (<span th:text="${zenProgress}">0</span>/3)
-                                </span>
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('PUZZLE_MASTER')} ? 'earned' : ''">
+                            <div class="badge-emoji">🧩</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Puzzle Master</div>
+                                <div class="badge-desc">Play 5 activities total</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('PUZZLE_MASTER')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('PUZZLE_MASTER')}">🔒</span>
                             </div>
                         </div>
-                        <div class="badge-status">
-                            <span th:if="${zenEarned}">✅</span>
-                            <span th:unless="${zenEarned}">🔒</span>
-                        </div>
-                    </div>
 
-                    <div class="badge-item" th:classappend="${snakeEarned} ? 'earned' : ''">
-                        <div class="badge-emoji">🐍</div>
-                        <div class="badge-info">
-                            <div class="badge-name">Snake Charmer</div>
-                            <div class="badge-desc">
-                                Play 3 Snake games
-                                <span th:unless="${snakeEarned}">
-                                    (<span th:text="${snakeProgress}">0</span>/3)
-                                </span>
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('ARCADE_CHAMPION')} ? 'earned' : ''">
+                            <div class="badge-emoji">👑</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Arcade Champ</div>
+                                <div class="badge-desc">Play 10 activities total</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('ARCADE_CHAMPION')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('ARCADE_CHAMPION')}">🔒</span>
                             </div>
                         </div>
-                        <div class="badge-status">
-                            <span th:if="${snakeEarned}">✅</span>
-                            <span th:unless="${snakeEarned}">🔒</span>
-                        </div>
-                    </div>
 
-                    <div class="badge-item" th:classappend="${champEarned} ? 'earned' : ''">
-                        <div class="badge-emoji">👑</div>
-                        <div class="badge-info">
-                            <div class="badge-name">Arcade Champ</div>
-                            <div class="badge-desc">
-                                Play 10 total activities
-                                <span th:unless="${champEarned}">
-                                    (<span th:text="${champProgress}">0</span>/10)
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('ARCADE_LEGEND')} ? 'earned' : ''">
+                            <div class="badge-emoji">🏆</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Gaming Legend</div>
+                                <div class="badge-desc">Play 25 activities total</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('ARCADE_LEGEND')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('ARCADE_LEGEND')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORY 2: SNAKE -->
+                        <div class="small fw-bold text-uppercase my-2" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #a5b4fc;">🐍 Snake Trophies</div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('SNAKE_MASTER')} ? 'earned' : ''">
+                            <div class="badge-emoji">🐍</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Snake Charmer</div>
+                                <div class="badge-desc">Play 3 Snake games</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('SNAKE_MASTER')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('SNAKE_MASTER')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('SNAKE_HIGH_10')} ? 'earned' : ''">
+                            <div class="badge-emoji">⚡</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Slither Speedster</div>
+                                <div class="badge-desc">Score 10+ points in Snake</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('SNAKE_HIGH_10')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('SNAKE_HIGH_10')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('SNAKE_HIGH_20')} ? 'earned' : ''">
+                            <div class="badge-emoji">👑</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Serpent King</div>
+                                <div class="badge-desc">Score 20+ points in Snake</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('SNAKE_HIGH_20')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('SNAKE_HIGH_20')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORY 3: TIC-TAC-TOE -->
+                        <div class="small fw-bold text-uppercase my-2" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #a5b4fc;">❌ Tic-Tac-Toe Trophies</div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('TTT_MASTER')} ? 'earned' : ''">
+                            <div class="badge-emoji">❌</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Tactician</div>
+                                <div class="badge-desc">Play 3 Tic-Tac-Toe matches</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('TTT_MASTER')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('TTT_MASTER')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('TTT_VICTORY')} ? 'earned' : ''">
+                            <div class="badge-emoji">🤖</div>
+                            <div class="badge-info">
+                                <div class="badge-name">AI Grandmaster</div>
+                                <div class="badge-desc">Defeat the AI in Tic-Tac-Toe</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('TTT_VICTORY')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('TTT_VICTORY')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORY 4: MEMORY MATCH -->
+                        <div class="small fw-bold text-uppercase my-2" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #a5b4fc;">🃏 Memory Trophies</div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('MEM_MASTER')} ? 'earned' : ''">
+                            <div class="badge-emoji">🃏</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Memory Novice</div>
+                                <div class="badge-desc">Play 3 Memory games</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('MEM_MASTER')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('MEM_MASTER')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('MEM_SPEED')} ? 'earned' : ''">
+                            <div class="badge-emoji">⚡</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Mind Master</div>
+                                <div class="badge-desc">Solve Memory in under 45s</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('MEM_SPEED')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('MEM_SPEED')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('MEM_FLAWLESS')} ? 'earned' : ''">
+                            <div class="badge-emoji">🎯</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Flawless Recall</div>
+                                <div class="badge-desc">Solve Memory in &le; 12 moves</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('MEM_FLAWLESS')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('MEM_FLAWLESS')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <!-- CATEGORY 5: BREATHING -->
+                        <div class="small fw-bold text-uppercase my-2" style="font-size: 0.72rem; letter-spacing: 0.5px; color: #a5b4fc;">🫁 Wellness Trophies</div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('BREATHING_ZEN')} ? 'earned' : ''">
+                            <div class="badge-emoji">🫁</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Zen Master</div>
+                                <div class="badge-desc">Complete 3 breathing sessions</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('BREATHING_ZEN')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('BREATHING_ZEN')}">🔒</span>
+                            </div>
+                        </div>
+
+                        <div class="badge-item" th:classappend="${earnedBadges != null and earnedBadges.contains('BREATHING_CYCLES_10')} ? 'earned' : ''">
+                            <div class="badge-emoji">🧘</div>
+                            <div class="badge-info">
+                                <div class="badge-name">Nirvana Explorer</div>
+                                <div class="badge-desc">Complete 10 breath cycles</div>
+                            </div>
+                            <div class="badge-status">
+                                <span th:if="${earnedBadges != null and earnedBadges.contains('BREATHING_CYCLES_10')}">✅</span>
+                                <span th:unless="${earnedBadges != null and earnedBadges.contains('BREATHING_CYCLES_10')}">🔒</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>               (<span th:text="${champProgress}">0</span>/10)
                                 </span>
                             </div>
                         </div>

@@ -45,10 +45,12 @@ function getCsrfToken() {
     return el ? el.getAttribute('content') : '';
 }
 
-function recordPlay(gameName) {
+function recordPlay(gameName, extraMetrics = {}) {
     const token = getCsrfToken();
     const header = getCsrfHeader();
     if (!token) return Promise.resolve();
+
+    const payload = Object.assign({ game: gameName }, extraMetrics);
 
     return fetch('/games/play', {
         method:  'POST',
@@ -56,7 +58,7 @@ function recordPlay(gameName) {
             'Content-Type': 'application/json',
             [header]: token
         },
-        body: JSON.stringify({ game: gameName })
+        body: JSON.stringify(payload)
     })
     .then(r => r.json())
     .then(data => {
@@ -232,7 +234,7 @@ function endGame() {
         banner.className = 'game-over-banner game-over-loss show';
         banner.textContent = `💀 Game Over! Score: ${score}`;
     }
-    recordPlay('snake');
+    recordPlay('snake', { score: score });
 }
 
 document.addEventListener('keydown', function(e) {
@@ -352,16 +354,16 @@ function endTTT(result) {
         wins++;
         statusMsg = '🎉 You Win!';
         highlightWinner('X');
-        recordPlay('tictactoe');
+        recordPlay('tictactoe', { result: 'win' });
     } else if (result === 'O') {
         losses++;
         statusMsg = '🤖 AI Wins!';
         highlightWinner('O');
-        recordPlay('tictactoe');
+        recordPlay('tictactoe', { result: 'loss' });
     } else {
         draws++;
         statusMsg = '🤝 It\'s a Draw!';
-        recordPlay('tictactoe');
+        recordPlay('tictactoe', { result: 'draw' });
     }
 
     const statusEl = document.getElementById('tttStatus');
@@ -504,7 +506,7 @@ function memFlip(i) {
                         banner.className = 'game-over-banner game-over-win show';
                         banner.textContent = `🎉 Solved in ${moves} moves and ${elapsed} seconds!`;
                     }
-                    recordPlay('memory');
+                    recordPlay('memory', { moves: moves, time: elapsed });
                 }
             }, 380);
         } else {
@@ -680,7 +682,7 @@ function tickBreathing() {
             
             if (breathCycles >= 2 && !playLoggedForSession) {
                 playLoggedForSession = true;
-                recordPlay('breathing');
+                recordPlay('breathing', { cycles: breathCycles });
             }
         }
         
