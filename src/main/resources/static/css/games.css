@@ -1,0 +1,444 @@
+/* ============================================================
+   Games Hub Stylesheet — MoodJournal
+   ============================================================ */
+
+/* ── Hero Banner ───────────────────────────────────────────── */
+.games-hero {
+    background: linear-gradient(135deg, #5B8FBF 0%, #7D90CC 50%, #9B7DB5 100%);
+    border-radius: 20px;
+    padding: 2.2rem 2rem;
+    color: #fff;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(91,143,191,0.25);
+}
+.games-hero::before {
+    content: "🎮";
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 5.5rem;
+    opacity: 0.18;
+}
+.games-hero h1 { font-weight: 800; font-size: 2rem; margin-bottom: 0.3rem; }
+.games-hero p  { opacity: 0.92; margin: 0; font-size: 1rem; }
+
+/* ── Badge Progress Sidebar ─────────────────────────────────── */
+.badge-progress-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.07);
+    margin-bottom: 0.75rem;
+    transition: background 0.2s;
+}
+.badge-item:last-child { margin-bottom: 0; }
+.badge-item.earned { background: rgba(102,126,234,0.3); border: 1px solid rgba(102,126,234,0.5); }
+.badge-emoji { font-size: 1.8rem; min-width: 2.5rem; text-align: center; }
+.badge-info { flex: 1; }
+.badge-info .badge-name { font-weight: 700; font-size: 0.95rem; }
+.badge-info .badge-desc { font-size: 0.78rem; opacity: 0.75; }
+.badge-status { font-size: 1.2rem; }
+
+/* ── Game Tabs Nav ─────────────────────────────────────────── */
+.games-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.games-nav .nav-link {
+    border-radius: 12px !important;
+    padding: 0.75rem 1.25rem;
+    font-weight: 700;
+    color: #4a5568;
+    background: #ffffff;
+    border: 2px solid #e2e8f0 !important;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+.games-nav .nav-link:hover { background: #f7fafc; color: #5B8FBF; border-color: #cbd5e0 !important; }
+.games-nav .nav-link.active {
+    background: linear-gradient(135deg, #5B8FBF, #9B7DB5) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 12px rgba(91,143,191,0.25);
+}
+.game-plays-badge {
+    background: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    pointer-events: none;
+}
+.games-nav .nav-link:not(.active) .game-plays-badge {
+    background: rgba(91,143,191,0.12);
+    color: #5B8FBF;
+}
+
+/* ── Game Card Wrapper ───────────────────────────────────────── */
+.game-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(91,143,191,0.10);
+    border: 1px solid rgba(91,143,191,0.12);
+    overflow: hidden;
+}
+.game-card-header {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(90deg, #f8f9ff, #f0f0ff);
+    border-bottom: 1px solid rgba(91,143,191,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.game-card-header h2 { font-weight: 700; font-size: 1.25rem; margin: 0; color: #2d3748; }
+.game-body { padding: 1.5rem; }
+
+/* ── SNAKE GAME ─────────────────────────────────────────────── */
+#snakeCanvas {
+    display: block;
+    margin: 0 auto;
+    border-radius: 16px;
+    border: 3px solid #4f46e5;
+    background: #0f172a;
+    max-width: 100%;
+    height: auto;
+    touch-action: none;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.35);
+}
+.score-display {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #4f46e5;
+}
+
+/* ── Controller D-Pad Buttons ──────────────────────────────── */
+.dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(3, 58px);
+    gap: 8px;
+    margin: 1.25rem auto 0;
+    width: fit-content;
+}
+.dpad button {
+    width: 58px;
+    height: 58px;
+    border-radius: 16px;
+    border: 1px solid rgba(99,102,241,0.3);
+    background: linear-gradient(145deg, #1e1b4b, #312e81);
+    color: #c7d2fe;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    box-shadow: 0 4px 12px rgba(30,27,75,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.dpad button:hover {
+    background: linear-gradient(145deg, #3730a3, #4338ca);
+    color: #ffffff;
+    border-color: #818cf8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(99,102,241,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.dpad button:active {
+    transform: translateY(1px) scale(0.94);
+    box-shadow: 0 2px 6px rgba(30,27,75,0.4);
+}
+.dpad .empty { background: transparent; pointer-events: none; border: none; box-shadow: none; }
+
+/* ── TIC TAC TOE ─────────────────────────────────────────────── */
+.ttt-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto 1.25rem;
+}
+.ttt-cell {
+    aspect-ratio: 1;
+    border-radius: 16px;
+    border: 2px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 2.8rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    user-select: none;
+    line-height: 1;
+}
+.ttt-cell:hover:not(.taken) {
+    background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
+    color: #ffffff !important;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(91,143,191,0.35);
+}
+.ttt-cell.taken { cursor: default; }
+.ttt-cell.x-cell { color: #4f46e5 !important; background: #eef2ff; border-color: #c7d2fe; }
+.ttt-cell.o-cell { color: #ec4899 !important; background: #fdf2f8; border-color: #fbcfe8; }
+.ttt-cell.winner {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    animation: tttWinPulse 0.4s ease infinite alternate;
+}
+@keyframes tttWinPulse { 0% { transform: scale(1); } 100% { transform: scale(1.06); } }
+
+.ttt-status {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    min-height: 1.7rem;
+    color: #4f46e5;
+}
+.ttt-scoreboard {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+.ttt-score-box {
+    text-align: center;
+    padding: 0.6rem 1.4rem;
+    border-radius: 14px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+.ttt-score-box .score-val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
+.ttt-score-box .score-label { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
+
+/* ── MEMORY MATCH ─────────────────────────────────────────────── */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto 1.25rem;
+    perspective: 1000px;
+}
+.mem-card {
+    aspect-ratio: 1;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    padding: 0;
+    user-select: none;
+}
+.mem-card.flipped, .mem-card.matched { transform: rotateY(180deg); }
+.mem-card.matched { cursor: default; }
+
+.mem-card .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 2px solid transparent;
+}
+.mem-card .card-back {
+    background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
+    color: #ffffff;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+.mem-card:hover:not(.flipped):not(.matched) .card-back {
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(91,143,191,0.35);
+}
+.mem-card .card-front {
+    background: #ffffff;
+    transform: rotateY(180deg);
+    font-size: 2.2rem;
+    border-color: #cbd5e1;
+}
+.mem-card.matched .card-front {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.memory-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.2rem;
+}
+.mem-stat { text-align: center; }
+.mem-stat .val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
+.mem-stat .lbl { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
+
+/* ── ANIMATIC BREATHING EXERCISE STYLES ────────────────── */
+.breath-container {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.breath-aura-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid rgba(91,143,191,0.25);
+    pointer-events: none;
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.breath-aura-1 { width: 210px; height: 210px; opacity: 0.6; }
+.breath-aura-2 { width: 260px; height: 260px; opacity: 0.4; }
+.breath-aura-3 { width: 310px; height: 310px; opacity: 0.2; }
+
+.breath-container.active .breath-aura-1 { animation: auraExpand1 4s ease-in-out infinite alternate; }
+.breath-container.active .breath-aura-2 { animation: auraExpand2 4s ease-in-out infinite alternate 0.5s; }
+.breath-container.active .breath-aura-3 { animation: auraExpand3 4s ease-in-out infinite alternate 1.0s; }
+
+@keyframes auraExpand1 { 0% { transform: scale(0.9); opacity: 0.3; } 100% { transform: scale(1.15); opacity: 0.7; } }
+@keyframes auraExpand2 { 0% { transform: scale(0.95); opacity: 0.2; } 100% { transform: scale(1.22); opacity: 0.5; } }
+@keyframes auraExpand3 { 0% { transform: scale(1.0); opacity: 0.1; } 100% { transform: scale(1.30); opacity: 0.45; } }
+
+.breath-circle {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5B8FBF 0%, #7DBD7D 50%, #9B7DB5 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    box-shadow: 0 12px 40px rgba(91,143,191,0.45), inset 0 -4px 12px rgba(0,0,0,0.15);
+    transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1), background 1.5s ease, box-shadow 1.5s ease;
+    z-index: 5;
+    text-align: center;
+    user-select: none;
+}
+
+.breath-circle.inhale {
+    background: linear-gradient(135deg, #7DBD7D, #5B8FBF);
+    box-shadow: 0 16px 50px rgba(125,189,125,0.65), inset 0 -4px 12px rgba(0,0,0,0.1);
+}
+.breath-circle.hold {
+    background: linear-gradient(135deg, #9B7DB5, #7D90CC);
+    box-shadow: 0 16px 50px rgba(155,125,181,0.65), inset 0 -4px 12px rgba(0,0,0,0.1);
+}
+.breath-circle.exhale {
+    background: linear-gradient(135deg, #5B8FBF, #3A6B9F);
+    box-shadow: 0 8px 30px rgba(91,143,191,0.4), inset 0 -4px 12px rgba(0,0,0,0.2);
+}
+
+.breath-phase-text { font-size: 1.45rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.2rem; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.breath-timer-text { font-size: 1.6rem; font-weight: 900; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.breath-subtext    { font-size: 0.95rem; font-weight: 600; color: #5B8FBF; font-style: italic; min-height: 1.5rem; transition: opacity 0.4s ease; }
+
+.breath-mode-btn {
+    border-radius: 25px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border: 2px solid #e2e8f0;
+    background: #ffffff;
+    color: #4a5568;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.breath-mode-btn:hover { border-color: #5B8FBF; color: #5B8FBF; }
+.breath-mode-btn.active { background: linear-gradient(135deg, #5B8FBF, #9B7DB5); color: #ffffff; border-color: transparent; box-shadow: 0 4px 12px rgba(91,143,191,0.3); }
+
+/* ── Shared Game UI Buttons & Banners ───────────────────────── */
+.btn-game-primary {
+    background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
+    border: none;
+    color: #fff;
+    border-radius: 50px;
+    padding: 0.75rem 2.2rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(91,143,191,0.35);
+    cursor: pointer;
+    letter-spacing: 0.3px;
+}
+.btn-game-primary:hover {
+    background: linear-gradient(135deg, #3A6B9F, #7A5C94);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(91,143,191,0.45);
+    color: #fff;
+}
+.btn-game-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(91,143,191,0.3);
+}
+
+.game-over-banner {
+    display: none;
+    text-align: center;
+    padding: 0.9rem 1.2rem;
+    border-radius: 14px;
+    margin-top: 1rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+.game-over-banner.show { display: block; }
+.game-over-loss { background: linear-gradient(135deg, #ef4444, #f59e0b); color: #fff; }
+.game-over-win  { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+
+/* ── Toast Notification ──────────────────────────────────────── */
+#badgeToast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    min-width: 280px;
+}
+.toast-badge-body {
+    background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
+    color: #fff;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    box-shadow: 0 10px 32px rgba(91,143,191,0.4);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.toast-badge-emoji { font-size: 2.2rem; }
+.toast-badge-text .title { font-weight: 700; font-size: 0.82rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.5px; }
+.toast-badge-text .name  { font-weight: 800; font-size: 1.05rem; }
