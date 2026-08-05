@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Games Hub – MoodJournal</title>
-    <meta name="description" content="Play mini-games to lift your mood: Snake, Tic-Tac-Toe, and Memory Match.">
+    <meta name="description" content="Play mini-games and relaxation exercises to lift your mood: Snake, Tic-Tac-Toe, Memory Match, and Breathing Exercise.">
     <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -70,6 +70,7 @@
         /* Game tabs nav */
         .games-nav {
             display: flex;
+            flex-wrap: wrap;
             gap: 0.5rem;
             margin-bottom: 1rem;
         }
@@ -86,12 +87,12 @@
             gap: 0.5rem;
             cursor: pointer;
         }
-        .games-nav .nav-link:hover { background: #f7fafc; color: #667eea; border-color: #cbd5e0 !important; }
+        .games-nav .nav-link:hover { background: #f7fafc; color: #5B8FBF; border-color: #cbd5e0 !important; }
         .games-nav .nav-link.active {
-            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+            background: linear-gradient(135deg, #5B8FBF, #9B7DB5) !important;
             color: #fff !important;
             border-color: transparent !important;
-            box-shadow: 0 4px 12px rgba(102,126,234,0.25);
+            box-shadow: 0 4px 12px rgba(91,143,191,0.25);
         }
         .game-plays-badge {
             background: rgba(255,255,255,0.3);
@@ -102,22 +103,22 @@
             pointer-events: none;
         }
         .games-nav .nav-link:not(.active) .game-plays-badge {
-            background: rgba(102,126,234,0.12);
-            color: #667eea;
+            background: rgba(91,143,191,0.12);
+            color: #5B8FBF;
         }
 
         /* Game card wrapper */
         .game-card {
             background: #fff;
             border-radius: 20px;
-            box-shadow: 0 4px 24px rgba(102,126,234,0.10);
-            border: 1px solid rgba(102,126,234,0.12);
+            box-shadow: 0 4px 24px rgba(91,143,191,0.10);
+            border: 1px solid rgba(91,143,191,0.12);
             overflow: hidden;
         }
         .game-card-header {
             padding: 1.25rem 1.5rem;
             background: linear-gradient(90deg, #f8f9ff, #f0f0ff);
-            border-bottom: 1px solid rgba(102,126,234,0.12);
+            border-bottom: 1px solid rgba(91,143,191,0.12);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -127,7 +128,7 @@
         .game-card-header h2 { font-weight: 700; font-size: 1.25rem; margin: 0; color: #2d3748; }
         .game-body { padding: 1.5rem; }
 
-        /* ── SNAKE GAME (WIDE PLAYING AREA) ─────────────────── */
+        /* ── SNAKE GAME ─────────────────────────────────────── */
         #snakeCanvas {
             display: block;
             margin: 0 auto;
@@ -147,7 +148,7 @@
             color: #4f46e5;
         }
         
-        /* ── Sleek Modern Controller D-Pad Buttons ─────────── */
+        /* ── Controller D-Pad Buttons ──────────────────────── */
         .dpad {
             display: grid;
             grid-template-columns: repeat(3, 58px);
@@ -210,11 +211,11 @@
             line-height: 1;
         }
         .ttt-cell:hover:not(.taken) {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
             color: #ffffff !important;
             border-color: transparent;
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(102,126,234,0.35);
+            box-shadow: 0 6px 18px rgba(91,143,191,0.35);
         }
         .ttt-cell.taken { cursor: default; }
         .ttt-cell.x-cell { color: #4f46e5 !important; background: #eef2ff; border-color: #c7d2fe; }
@@ -288,14 +289,14 @@
             border: 2px solid transparent;
         }
         .mem-card .card-back {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
             color: #ffffff;
             font-size: 1.6rem;
             font-weight: 800;
         }
         .mem-card:hover:not(.flipped):not(.matched) .card-back {
             transform: scale(1.03);
-            box-shadow: 0 6px 16px rgba(102,126,234,0.35);
+            box-shadow: 0 6px 16px rgba(91,143,191,0.35);
         }
         .mem-card .card-front {
             background: #ffffff;
@@ -319,9 +320,66 @@
         .mem-stat .val { font-size: 1.6rem; font-weight: 800; color: #4f46e5; }
         .mem-stat .lbl { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; }
 
-        /* Sleek Game Primary Action Button */
+        /* ── BREATHING EXERCISE STYLES ────────────────────────── */
+        .breath-container {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 2rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .breath-outer-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(91,143,191,0.2) 0%, rgba(155,125,181,0.05) 70%, transparent 100%);
+            animation: breathPulseWave 4s ease-in-out infinite alternate;
+        }
+        @keyframes breathPulseWave {
+            0%   { transform: scale(0.9); opacity: 0.4; }
+            100% { transform: scale(1.15); opacity: 0.8; }
+        }
+        .breath-circle {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5B8FBF 0%, #7DBD7D 50%, #9B7DB5 100%);
+            display: flex;
+            flex-column: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 12px 36px rgba(91,143,191,0.4), inset 0 -4px 12px rgba(0,0,0,0.15);
+            transition: transform 1s ease-in-out, background 1s ease-in-out;
+            z-index: 2;
+            text-align: center;
+            user-select: none;
+        }
+        .breath-circle.inhale  { transform: scale(1.4); background: linear-gradient(135deg, #7DBD7D, #5B8FBF); }
+        .breath-circle.hold    { transform: scale(1.4); background: linear-gradient(135deg, #9B7DB5, #7D90CC); }
+        .breath-circle.exhale  { transform: scale(1.0); background: linear-gradient(135deg, #5B8FBF, #3A6B9F); }
+        .breath-phase-text     { font-size: 1.45rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.2rem; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .breath-timer-text     { font-size: 1.6rem; font-weight: 900; text-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+
+        .breath-mode-btn {
+            border-radius: 25px;
+            padding: 0.45rem 1.1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            color: #4a5568;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .breath-mode-btn:hover { border-color: #5B8FBF; color: #5B8FBF; }
+        .breath-mode-btn.active { background: linear-gradient(135deg, #5B8FBF, #9B7DB5); color: #ffffff; border-color: transparent; }
+
+        /* Shared Game UI */
         .btn-game-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
             border: none;
             color: #fff;
             border-radius: 50px;
@@ -329,19 +387,19 @@
             font-weight: 700;
             font-size: 1.05rem;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+            box-shadow: 0 4px 16px rgba(91,143,191,0.35);
             cursor: pointer;
             letter-spacing: 0.3px;
         }
         .btn-game-primary:hover {
-            background: linear-gradient(135deg, #4338ca, #6d28d9);
+            background: linear-gradient(135deg, #3A6B9F, #7A5C94);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(79,70,229,0.45);
+            box-shadow: 0 8px 24px rgba(91,143,191,0.45);
             color: #fff;
         }
         .btn-game-primary:active {
             transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+            box-shadow: 0 2px 8px rgba(91,143,191,0.3);
         }
 
         .game-over-banner {
@@ -366,14 +424,14 @@
             min-width: 280px;
         }
         .toast-badge-body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #5B8FBF, #9B7DB5);
             color: #fff;
             border-radius: 16px;
             padding: 1rem 1.25rem;
             display: flex;
             align-items: center;
             gap: 0.85rem;
-            box-shadow: 0 10px 32px rgba(102,126,234,0.4);
+            box-shadow: 0 10px 32px rgba(91,143,191,0.4);
             border: 1px solid rgba(255,255,255,0.2);
         }
         .toast-badge-emoji { font-size: 2.2rem; }
@@ -391,7 +449,7 @@
         <!-- Hero Banner -->
         <div class="games-hero">
             <h1>🎮 Games Hub</h1>
-            <p>Take a relaxing break! Play a mini-game to boost your mood and earn badges.</p>
+            <p>Take a relaxing break! Play a mini-game or breathing exercise to boost your mood and earn badges.</p>
         </div>
 
         <div class="row g-4">
@@ -421,12 +479,19 @@
                                   th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0} + ' plays'">0 plays</span>
                         </button>
                     </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" id="breathing-tab" onclick="openTab('breathing')">
+                            🫁 Breathing Exercise
+                            <span class="game-plays-badge" id="breathingPlaysPill"
+                                  th:text="${gameStats['breathing'] != null ? gameStats['breathing'] : 0} + ' plays'">0 plays</span>
+                        </button>
+                    </li>
                 </ul>
 
                 <!-- Tab Content -->
                 <div class="tab-content">
 
-                    <!-- ════════════════════════════════════════════ SNAKE (WIDE CANVAS) -->
+                    <!-- ════════════════════════════════════════════ SNAKE -->
                     <div class="tab-pane active" id="snake-pane" style="display: block;">
                         <div class="game-card">
                             <div class="game-card-header">
@@ -538,6 +603,51 @@
                         </div>
                     </div>
 
+                    <!-- ════════════════════════════════════════════ BREATHING EXERCISE -->
+                    <div class="tab-pane" id="breathing-pane" style="display: none;">
+                        <div class="game-card">
+                            <div class="game-card-header">
+                                <h2>🫁 Deep Breathing Exercise</h2>
+                                <span class="text-muted" style="font-size:0.85rem;">Follow the circle to relax and reduce stress</span>
+                            </div>
+                            <div class="game-body text-center">
+                                <!-- Mode Selector -->
+                                <div class="d-flex justify-content-center gap-2 mb-3">
+                                    <button type="button" class="breath-mode-btn active" id="btnMode478" onclick="setBreathMode('478')">
+                                        🌿 4-7-8 Relaxing
+                                    </button>
+                                    <button type="button" class="breath-mode-btn" id="btnModeBox" onclick="setBreathMode('box')">
+                                        📦 4-4-4-4 Box Breathing
+                                    </button>
+                                </div>
+
+                                <!-- Animated Breathing Circle -->
+                                <div class="breath-container">
+                                    <div class="breath-outer-glow"></div>
+                                    <div class="breath-circle" id="breathCircle">
+                                        <div class="breath-phase-text" id="breathPhase">Ready</div>
+                                        <div class="breath-timer-text" id="breathTimer">0s</div>
+                                    </div>
+                                </div>
+
+                                <!-- Cycles Counter -->
+                                <div class="fw-bold mb-3" style="color:#5B8FBF;font-size:1.05rem;">
+                                    Completed Cycles: <span id="breathCycles">0</span>
+                                </div>
+
+                                <!-- Start / Pause Controls -->
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-game-primary" id="breathToggleBtn" onclick="toggleBreathing()">
+                                        <i class="bi bi-play-fill me-1"></i>Start Breathing
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="resetBreathing()">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div><!-- /tab-content -->
             </div><!-- /col-lg-8 -->
 
@@ -584,7 +694,7 @@
                         </div>
                         <div class="progress" style="height:8px;border-radius:8px;background:rgba(255,255,255,0.15);">
                             <div class="progress-bar" role="progressbar"
-                                 style="background:linear-gradient(90deg,#667eea,#f093fb);border-radius:8px;"
+                                 style="background:linear-gradient(90deg,#5B8FBF,#9B7DB5);border-radius:8px;"
                                  th:style="'width:' + (${masterProgress} * 20) + '%'"></div>
                         </div>
                     </div>
@@ -593,14 +703,14 @@
                 <!-- Total Plays Card -->
                 <div class="mood-card p-4 mb-4 text-center">
                     <div style="font-size:2.5rem;line-height:1;margin-bottom:0.5rem;">🕹️</div>
-                    <div style="font-size:2.2rem;font-weight:800;color:#4f46e5;line-height:1.1;" th:text="${totalPlays}">0</div>
-                    <div style="font-size:0.85rem;color:#64748b;font-weight:700;margin-top:0.3rem;">Total Games Played</div>
+                    <div style="font-size:2.2rem;font-weight:800;color:#5B8FBF;line-height:1.1;" th:text="${totalPlays}">0</div>
+                    <div style="font-size:0.85rem;color:#64748b;font-weight:700;margin-top:0.3rem;">Total Activities Played</div>
                 </div>
 
                 <!-- Per-game Stats -->
                 <div class="mood-card p-4">
                     <h2 class="card-section-title mb-3">
-                        <i class="bi bi-bar-chart-fill me-2"></i>Your Play Counts
+                        <i class="bi bi-bar-chart-fill me-2"></i>Your Activity Counts
                     </h2>
                     <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                         <span class="fw-semibold">🐍 Snake</span>
@@ -610,9 +720,13 @@
                         <span class="fw-semibold">❌ Tic-Tac-Toe</span>
                         <strong class="text-primary" th:text="${gameStats['tictactoe'] != null ? gameStats['tictactoe'] : 0}">0</strong>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                         <span class="fw-semibold">🃏 Memory Match</span>
                         <strong class="text-primary" th:text="${gameStats['memory'] != null ? gameStats['memory'] : 0}">0</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold">🫁 Breathing</span>
+                        <strong class="text-primary" th:text="${gameStats['breathing'] != null ? gameStats['breathing'] : 0}">0</strong>
                     </div>
                 </div>
             </div>
@@ -643,7 +757,7 @@
    100% BULLETPROOF TAB SWITCHER
 ══════════════════════════════════════════════════════════════ */
 function openTab(tabName) {
-    const tabs = ['snake', 'tictactoe', 'memory'];
+    const tabs = ['snake', 'tictactoe', 'memory', 'breathing'];
     tabs.forEach(function(name) {
         const btn  = document.getElementById(name + '-tab');
         const pane = document.getElementById(name + '-pane');
@@ -662,6 +776,11 @@ function openTab(tabName) {
             }
         }
     });
+
+    // Pause breathing if leaving breathing tab
+    if (tabName !== 'breathing' && window.pauseBreathing) {
+        window.pauseBreathing();
+    }
 
     // Trigger game resets on tab open
     if (tabName === 'snake' && window.initSnake) window.initSnake();
@@ -719,7 +838,7 @@ function showBadgeToast(name) {
 
 
 /* ══════════════════════════════════════════════════════════════
-   SNAKE GAME (WIDE 30x20 GRID = 600x400 Canvas)
+   SNAKE GAME
 ══════════════════════════════════════════════════════════════ */
 let CELL = 20, COLS = 39, ROWS = 22;
 let canvas, ctx, snake, dir, nextDir, food, score = 0, highScore = 0, running = false, loopTimer = null;
@@ -838,11 +957,9 @@ function gameLoop() {
 
 function draw() {
     if (!ctx) return;
-    // Dark Canvas background
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Grid dots
     ctx.fillStyle = 'rgba(255,255,255,0.05)';
     for (let x = 0; x < COLS; x++) {
         for (let y = 0; y < ROWS; y++) {
@@ -850,7 +967,6 @@ function draw() {
         }
     }
 
-    // Food (Bright Glowing Pink Circle)
     if (food) {
         ctx.fillStyle = '#f093fb';
         ctx.beginPath();
@@ -858,7 +974,6 @@ function draw() {
         ctx.fill();
     }
 
-    // Snake Body & Head
     snake.forEach((s, i) => {
         ctx.fillStyle = (i === 0) ? '#a78bfa' : '#6366f1';
         ctx.fillRect(s.x * CELL + 2, s.y * CELL + 2, CELL - 4, CELL - 4);
@@ -1142,6 +1257,149 @@ function memFlip(i) {
                 flipped = [];
             }, 850);
         }
+    }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   BREATHING EXERCISE GAME LOGIC
+══════════════════════════════════════════════════════════════ */
+let breathMode = '478'; // '478' or 'box'
+let breathActive = false;
+let breathTimerId = null;
+let breathCycles = 0;
+let breathPhaseIndex = 0;
+let secondsRemaining = 0;
+let playLoggedForSession = false;
+
+// 4-7-8 Pattern: Inhale 4s, Hold 7s, Exhale 8s
+// Box Pattern:   Inhale 4s, Hold 4s, Exhale 4s, Hold 4s
+const BREATH_PATTERNS = {
+    '478': [
+        { name: 'Inhale', duration: 4, class: 'inhale' },
+        { name: 'Hold',   duration: 7, class: 'hold' },
+        { name: 'Exhale', duration: 8, class: 'exhale' }
+    ],
+    'box': [
+        { name: 'Inhale', duration: 4, class: 'inhale' },
+        { name: 'Hold',   duration: 4, class: 'hold' },
+        { name: 'Exhale', duration: 4, class: 'exhale' },
+        { name: 'Hold',   duration: 4, class: 'hold' }
+    ]
+};
+
+function setBreathMode(mode) {
+    if (breathActive) resetBreathing();
+    breathMode = mode;
+    
+    const btn478 = document.getElementById('btnMode478');
+    const btnBox = document.getElementById('btnModeBox');
+    
+    if (mode === '478') {
+        if (btn478) btn478.classList.add('active');
+        if (btnBox) btnBox.classList.remove('active');
+    } else {
+        if (btnBox) btnBox.classList.add('active');
+        if (btn478) btn478.classList.remove('active');
+    }
+}
+window.setBreathMode = setBreathMode;
+
+function toggleBreathing() {
+    if (breathActive) {
+        pauseBreathing();
+    } else {
+        startBreathing();
+    }
+}
+window.toggleBreathing = toggleBreathing;
+
+function startBreathing() {
+    breathActive = true;
+    const btn = document.getElementById('breathToggleBtn');
+    if (btn) btn.innerHTML = '<i class="bi bi-pause-fill me-1"></i>Pause Exercise';
+    
+    runBreathPhase();
+    breathTimerId = setInterval(tickBreathing, 1000);
+}
+window.startBreathing = startBreathing;
+
+function pauseBreathing() {
+    breathActive = false;
+    if (breathTimerId) clearInterval(breathTimerId);
+    
+    const btn = document.getElementById('breathToggleBtn');
+    if (btn) btn.innerHTML = '<i class="bi bi-play-fill me-1"></i>Resume Exercise';
+    
+    const circle = document.getElementById('breathCircle');
+    if (circle) circle.className = 'breath-circle';
+}
+window.pauseBreathing = pauseBreathing;
+
+function resetBreathing() {
+    pauseBreathing();
+    breathPhaseIndex = 0;
+    breathCycles = 0;
+    secondsRemaining = 0;
+    playLoggedForSession = false;
+
+    const cyclesEl = document.getElementById('breathCycles');
+    if (cyclesEl) cyclesEl.textContent = '0';
+
+    const phaseEl = document.getElementById('breathPhase');
+    if (phaseEl) phaseEl.textContent = 'Ready';
+
+    const timerEl = document.getElementById('breathTimer');
+    if (timerEl) timerEl.textContent = '0s';
+
+    const btn = document.getElementById('breathToggleBtn');
+    if (btn) btn.innerHTML = '<i class="bi bi-play-fill me-1"></i>Start Breathing';
+}
+window.resetBreathing = resetBreathing;
+
+function runBreathPhase() {
+    const pattern = BREATH_PATTERNS[breathMode];
+    const currentPhase = pattern[breathPhaseIndex];
+    
+    secondsRemaining = currentPhase.duration;
+    
+    const phaseEl = document.getElementById('breathPhase');
+    if (phaseEl) phaseEl.textContent = currentPhase.name;
+    
+    const timerEl = document.getElementById('breathTimer');
+    if (timerEl) timerEl.textContent = secondsRemaining + 's';
+    
+    const circle = document.getElementById('breathCircle');
+    if (circle) {
+        circle.className = 'breath-circle ' + currentPhase.class;
+    }
+}
+
+function tickBreathing() {
+    if (!breathActive) return;
+    
+    secondsRemaining--;
+    const timerEl = document.getElementById('breathTimer');
+    if (timerEl) timerEl.textContent = secondsRemaining + 's';
+    
+    if (secondsRemaining <= 0) {
+        const pattern = BREATH_PATTERNS[breathMode];
+        breathPhaseIndex = (breathPhaseIndex + 1) % pattern.length;
+        
+        // When cycle completes (returns to index 0)
+        if (breathPhaseIndex === 0) {
+            breathCycles++;
+            const cyclesEl = document.getElementById('breathCycles');
+            if (cyclesEl) cyclesEl.textContent = breathCycles.toString();
+            
+            // Log play after 2 completed cycles
+            if (breathCycles >= 2 && !playLoggedForSession) {
+                playLoggedForSession = true;
+                recordPlay('breathing');
+            }
+        }
+        
+        runBreathPhase();
     }
 }
 

@@ -63,10 +63,10 @@ public class DashboardController {
 
         // Mood-based game suggestion
         String recommendedGame = switch (todaysMood != null ? todaysMood : "") {
-            case "SAD",     "BORED"   -> "memory";
-            case "STRESSED","ANXIOUS" -> "snake";
-            case "ANGRY"              -> "tictactoe";
-            default                   -> null;
+            case "SAD", "BORED"                   -> "memory";
+            case "STRESSED", "ANXIOUS", "OVERWHELMED" -> "breathing";
+            case "ANGRY"                          -> "tictactoe";
+            default                               -> null;
         };
         model.addAttribute("recommendedGame", recommendedGame);
 
